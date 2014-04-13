@@ -4,7 +4,7 @@
   <title><![CDATA[Philippos Blue Book]]></title>
   <link href="http://philippos2.github.io/atom.xml" rel="self"/>
   <link href="http://philippos2.github.io/"/>
-  <updated>2014-04-13T11:52:21+09:00</updated>
+  <updated>2014-04-13T11:54:50+09:00</updated>
   <id>http://philippos2.github.io/</id>
   <author>
     <name><![CDATA[Philippos]]></name>
@@ -83,11 +83,11 @@ SBT公式サイトの勧めに従い、起動用スクリプトを作成する�
 
 <hr />
 
-<p>参考サイト：
-<a href="https://gist.github.com/kmizu/1876800">https://gist.github.com/kmizu/1876800</a>
-<a href="http://scalajp.github.io/sbt-getting-started-guide-ja/">http://scalajp.github.io/sbt-getting-started-guide-ja/</a>
-<a href="http://qiita.com/k_ui/items/65def414bd7ec54aedeb">http://qiita.com/k_ui/items/65def414bd7ec54aedeb</a>
-<a href="http://diario.hatenablog.com/entry/2013/08/25/041417">http://diario.hatenablog.com/entry/2013/08/25/041417</a>
+<p>参考サイト：  <br/>
+<a href="https://gist.github.com/kmizu/1876800">https://gist.github.com/kmizu/1876800</a>  <br/>
+<a href="http://scalajp.github.io/sbt-getting-started-guide-ja/">http://scalajp.github.io/sbt-getting-started-guide-ja/</a>  <br/>
+<a href="http://qiita.com/k_ui/items/65def414bd7ec54aedeb">http://qiita.com/k_ui/items/65def414bd7ec54aedeb</a>  <br/>
+<a href="http://diario.hatenablog.com/entry/2013/08/25/041417">http://diario.hatenablog.com/entry/2013/08/25/041417</a>  <br/>
 <a href="http://sgykfjsm.github.io/blog/2013/02/22/scalatra-tutorial-001/">http://sgykfjsm.github.io/blog/2013/02/22/scalatra-tutorial-001/</a></p>
 ]]></content>
   </entry>
