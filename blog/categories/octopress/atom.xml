@@ -4,7 +4,7 @@
   <title><![CDATA[Category: octopress | Philippos Blue Book]]></title>
   <link href="http://philippos2.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://philippos2.github.io/"/>
-  <updated>2014-04-13T11:54:50+09:00</updated>
+  <updated>2014-04-13T13:20:41+09:00</updated>
   <id>http://philippos2.github.io/</id>
   <author>
     <name><![CDATA[Philippos]]></name>
@@ -136,6 +136,23 @@ $ git gc
 </code></p>
 
 <p>以上</p>
+
+<hr />
+
+<p>■追補</p>
+
+<p>次のように記事の投稿に失敗した場合は、rakeコマンドのエイリアスを設定すること。</p>
+
+<p>```
+$ rake new_post[&lsquo;new issue&rsquo;]
+zsh: no matches found: new_post[&lsquo;new issue&rsquo;]</p>
+
+<p>$ alias rake=&ldquo;noglob rake&rdquo;
+```</p>
+
+<p>参考サイト：  <br/>
+<a href="http://ackintosh.github.io/blog/2013/02/02/cant-create-post/">http://ackintosh.github.io/blog/2013/02/02/cant-create-post/</a>  <br/>
+<a href="https://github.com/imathis/octopress/issues/117">https://github.com/imathis/octopress/issues/117</a></p>
 ]]></content>
   </entry>
   
