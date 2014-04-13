@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: debian | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/debian/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ruby1.9-rails3-introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/06/30/ruby1-dot-9-rails3-introduction/"/>
+    <updated>2013-06-30T21:56:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/06/30/ruby1-dot-9-rails3-introduction</id>
+    <content type="html"><![CDATA[<p>【Ruby1.9系/Rails3導入覚書】2012/03/18～</p>
+
+<hr />
+
+<h3>0. 対象環境</h3>
+
+<p>OS：Debian 6.0 / 64bit版</p>
+
+<h4>以下でネットワーク経路確認</h4>
+
+<p><code>
+$ netstat -r
+</code></p>
+
+<p>カーネルIP経路テーブル</p>
+
+<p><code>
+受信先サイト    ゲートウェイ    ネットマスク   フラグ   MSS Window  irtt インタフェース
+10.0.2.0       *            255.255.255.0   U       0   0       0    eth0
+192.168.56.0   *            255.255.255.0   U       0   0       0    eth1
+default        10.0.2.2     0.0.0.0         UG      0   0       0    eth0
+</code></p>
+
+<hr />
+
+<h3>1. MySQL 導入</h3>
+
+<h4>以下、root権限で実行</h4>
+
+<p>```</p>
+
+<h1>aptitude -y install mysql-server</h1>
+
+<p>```</p>
+
+<p>バージョン：5.1.61</p>
+
+<p>また、libmysqlclient-dev が導入済であることを確認する
+```</p>
+
+<h1>aptitude search libmysqlclient-dev</h1>
+
+<p>```</p>
+
+<p>参考：<br/>
+<a href="http://pentan.info/server/linux/mysql.html#debianins  ">http://pentan.info/server/linux/mysql.html#debianins  </a>
+<a href="http://d.hatena.ne.jp/yyuto/20110829/1314582372">http://d.hatena.ne.jp/yyuto/20110829/1314582372</a></p>
+
+<hr />
+
+<h3>2. RVM 導入</h3>
+
+<h4>curlを導入</h4>
+
+<p>root権限で以下を実行
+```</p>
+
+<h1>aptitude -y install curl</h1>
+
+<p>```</p>
+
+<h4>RVM 導入</h4>
+
+<p>ユーザに戻って以下を実行
+<code>
+$ bash -s stable &lt; &lt;(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
+</code></p>
+
+<p>バージョン：1.10.3</p>
+
+<h4>rvm を最新に更新する</h4>
+
+<p><code>
+$ rvm get head
+</code></p>
+
+<h4>アップデートしたrvmの再読み込み</h4>
+
+<p><code>
+$ rvm reload
+</code></p>
+
+<h4>インストール可能なRuby実装の一覧を見る</h4>
+
+<p><code>
+$ rvm list known
+</code></p>
+
+<h4>インストール済パッケージリスト</h4>
+
+<p><code>
+$ rvm list
+</code></p>
+
+<p>参考：<br/>
+<a href="https://rvm.beginrescueend.com/releases/rvm-install-head  ">https://rvm.beginrescueend.com/releases/rvm-install-head  </a>
+<a href="http://qwik.jp/asakusarb/rvm.html">http://qwik.jp/asakusarb/rvm.html</a></p>
+
+<hr />
+
+<h3>3. ruby 1.9.3 導入</h3>
+
+<p>[準備]</p>
+
+<h4>root権限で g++ をインストール</h4>
+
+<p>```</p>
+
+<h1>aptitude -y install g++</h1>
+
+<p>```</p>
+
+<h4>root権限で automake をインストール</h4>
+
+<p>バージョン：1.11.1
+```</p>
+
+<h1>aptitude -y install automake</h1>
+
+<p>```</p>
+
+<h4>root権限で libreadline6-dev をインストール</h4>
+
+<p>```</p>
+
+<h1>aptitude -y install libreadline6-dev</h1>
+
+<p>```</p>
+
+<h4>root権限で zlib1g-dev をインストール</h4>
+
+<p>```</p>
+
+<h1>aptitude -y install zlib1g-dev</h1>
+
+<p>```</p>
+
+<h4>root権限で libssl-dev をインストール</h4>
+
+<p>```</p>
+
+<h1>aptitude -y install libssl-dev</h1>
+
+<p>```</p>
+
+<p>[本体]
+&ndash; ruby 1.9.3 をインストール
+&ndash; ruby1.9系をインストールすることで、同時にrubygemsもインストールできる
+<code>
+$ rvm install 1.9.3
+</code></p>
+
+<h4>~/.bashrc に以下の行を追加</h4>
+
+<p><code>
+$ [[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; source "$HOME/.rvm/scripts/rvm" # This loads RVM
+</code></p>
+
+<h4>規定バージョン設定　例）ruby1.9.3 を規定バージョンとして設定する</h4>
+
+<p><code>
+$ rvm use 1.9.3 --default
+</code></p>
+
+<h4>rubygemsのバージョン確認</h4>
+
+<p><code>
+$ gem -v
+1.8.21
+</code></p>
+
+<h4>root権限で ruby-dev をインストール</h4>
+
+<p>```</p>
+
+<h1>aptitude -y install ruby-dev</h1>
+
+<p>```</p>
+
+<p>参考：<br/>
+<a href="http://nzwsch.info/">http://nzwsch.info/</a> <br/>
+<a href="http://d.hatena.ne.jp/shokai/20101115/1289818334">http://d.hatena.ne.jp/shokai/20101115/1289818334</a></p>
+
+<hr />
+
+<h3>4. 動作確認用rails3アプリ作成／動作確認</h3>
+
+<h4>コントローラを追加して動作確認</h4>
+
+<p><code>
+$ rails generate controller &lt;コントローラ名&gt; &lt;アクション名&gt;
+</code></p>
+
+<p>例）
+<code>
+$ rails generate controller hello index
+</code></p>
+
+<p>以下のURLへアクセスし、railsアプリ／コントローラの動作確認を行う</p>
+
+<p><a href="http://192.168.56.101:3000/hello/index/">http://192.168.56.101:3000/hello/index/</a></p>
+
+<h4>scaffold作成例</h4>
+
+<p><code>
+$ rails g scaffold user name:string age:integer
+$ rake db:create
+$ rake db:migrate
+$ rails server
+</code></p>
+
+<p>以下のURLへアクセスし、MySQLとの連携が正常か動作確認を行う</p>
+
+<p><a href="http://192.168.56.101:3000/users/">http://192.168.56.101:3000/users/</a></p>
+
+<h4>routes.rbで定義したルートを表示</h4>
+
+<p><code>
+$ rake routes
+</code></p>
+
+<h4>railsアプリ統計情報を表示</h4>
+
+<p><code>
+$ rake stats
+</code></p>
+
+<p>参考:<br/>
+<a href="http://opentechnica.blogspot.jp/2012/01/ubuntu1110ruby-192-rails-32.html  ">http://opentechnica.blogspot.jp/2012/01/ubuntu1110ruby-192-rails-32.html  </a>
+<a href="http://d.hatena.ne.jp/InvokeTwoA/20111007">http://d.hatena.ne.jp/InvokeTwoA/20111007</a></p>
+
+<p>&mdash; Ruby1.9系/Rails3導入手順ここまで &mdash;</p>
+]]></content>
+  </entry>
+  
+</feed>

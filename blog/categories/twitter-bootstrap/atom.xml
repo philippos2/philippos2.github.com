@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: twitter-bootstrap | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/twitter-bootstrap/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[startover-twitter-bootstrap]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/06/startover-twitter-bootstrap/"/>
+    <updated>2013-07-06T14:48:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/06/startover-twitter-bootstrap</id>
+    <content type="html"><![CDATA[<h3>【Twitter bootstrap 導入手順】2013/05/29～</h3>
+
+<p>bootstrapの導入が不完全だったため、bootswatchの導入とともに改めてまとめる</p>
+
+<hr />
+
+<h4>■ruby及びrailsのバージョン</h4>
+
+<p>ruby 1.9.3p429<br/>
+Rails 3.2.13</p>
+
+<hr />
+
+<h4>■必要なGem</h4>
+
+<p>以下のふたつのgemをGemfileに記述し、bundle installすること
+<code>
+gem 'less-rails'                # less
+gem 'twitter-bootstrap-rails'   # twitter boostrap
+</code></p>
+
+<p>※ 以下のGemは何れにしても必要なので追記すること
+<code>
+gem "therubyracer"
+</code></p>
+
+<hr />
+
+<h4>■bootstrapのインストール</h4>
+
+<h4>1. bootstrapそのもののインストール</h4>
+
+<p><code>
+$ rails generate bootstrap:install less
+</code></p>
+
+<h4>2. 可変レイアウト設定生成</h4>
+
+<p><code>
+$ rails g bootstrap:layout application fluid
+</code></p>
+
+<h4>3. 以下のビューファイルを削除する（同様のslimファイルが既に生成されているため）</h4>
+
+<p>app/views/layouts/application.html.erb</p>
+
+<p>※ 以下のビューファイルも不要のため削除してよし
+public/index.html</p>
+
+<p>ルーティング設定（config/routes.rb）で他のコントローラへ誘導すること
+<code>
+root :to =&gt; 'pages#index'
+</code></p>
+
+<h4>4. 以下のスタイルシートファイルを削除する（bootswatchと変数が干渉するため）</h4>
+
+<p>app/assets/stylesheets/scaffolds.css.scss</p>
+
+<hr />
+
+<h4>■bootswatchの導入</h4>
+
+<p>ここまででデザインが適用されるか否かわかりやすいように某かのscaffoldを作成しておくこと</p>
+
+<h4>1. 下記サイトより任意のデザインのvariables.less及びbootswatch.lessを取得する</h4>
+
+<p><a href="http://bootswatch.com/">http://bootswatch.com/</a></p>
+
+<h4>2. 以下のディレクトリを作成し、上記サイトで取得したlessファイルふたつを設置する</h4>
+
+<p>vendor/assets/stylesheets/bootswatch/</p>
+
+<h4>3. 以下のファイルへ上記lessファイルふたつを読み込むように宣言を追記する</h4>
+
+<p>app/assets/stylesheets/bootstrap_and_overrides.css.less</p>
+
+<p><code>
+@import "bootswatch/variables.less";
+@import "bootswatch/bootswatch.less";
+</code></p>
+
+<hr />
+
+<h4>■ Viewテンプレートを生成</h4>
+
+<p>例）
+以下のようにしてビューbooksのbootstrapテンプレートを生成する
+<code>
+$ rails g bootstrap:themed books -f
+</code></p>
+
+<hr />
+
+<p>参考サイト:</p>
+
+<p><a href="http://qiita.com/items/260a930c5ff95aafebd1  ">http://qiita.com/items/260a930c5ff95aafebd1  </a>
+<a href="http://blog.scimpr.com/2012/08/25/rails%E3%81%ABtwitter-bootstrap%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B%EF%BD%9Etwitter-bootstrap-rails/  ">http://blog.scimpr.com/2012/08/25/rails%E3%81%ABtwitter-bootstrap%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B%EF%BD%9Etwitter-bootstrap-rails/  </a>
+<a href="http://inoccu.net/blog/2013/04/28/112225.html  ">http://inoccu.net/blog/2013/04/28/112225.html  </a>
+<a href="http://gagapi.hatenablog.jp/entry/2013/05/17/222340  ">http://gagapi.hatenablog.jp/entry/2013/05/17/222340  </a>
+<a href="http://shoheik.hatenablog.com/entry/2013/03/09/115015">http://shoheik.hatenablog.com/entry/2013/03/09/115015</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-twitter-bootstrap]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/02/about-twitter-bootstrap/"/>
+    <updated>2013-07-02T23:18:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/02/about-twitter-bootstrap</id>
+    <content type="html"><![CDATA[<h3>フロントエンドツール twitter bootstrap</h3>
+
+<p>Gemfileに以下を追加しbundle installする</p>
+
+<p><code>
+gem "twitter-bootstrap-rails"
+</code></p>
+
+<p>railsプロジェクトにbootstrapをインストールする</p>
+
+<p><code>
+$ rails g bootstrap:install
+</code></p>
+
+<p>次にレイアウトファイルを作成する
+固定(Fixed)レイアウトまたは可変(Fluid)レイアウトが選択可能</p>
+
+<p>例）
+<code>
+$ rails g bootstrap:layout application fluid
+</code></p>
+
+<p>※このときapplication.html.erbが残っていた場合は削除すること</p>
+
+<p><code>
+$ rm app/views/layouts/application.html.erb
+</code></p>
+
+<p>※メモ
+bootstrapとwill_paginateを併用すると、ページネイトのレイアウトが崩れる
+が、viewページにおいて以下のようにクラスを明示的に指定することでそれを回避可能である</p>
+
+<p>例）
+<code>
+= will_paginate @users, :class =&gt; 'pagi'
+</code></p>
+
+<p>ページネイションがKaminariの場合、以下のコードを git clone してアプリのビューに配置する</p>
+
+<p><a href="https://github.com/gabetax/twitter-bootstrap-kaminari-views">https://github.com/gabetax/twitter-bootstrap-kaminari-views</a></p>
+
+<p>参考サイト：<br/>
+<a href="http://bootswatch.com/">http://bootswatch.com/</a> <br/>
+<a href="http://kachibito.net/web-service/stylebootstrap.html">http://kachibito.net/web-service/stylebootstrap.html</a> <br/>
+<a href="http://blog.asial.co.jp/887">http://blog.asial.co.jp/887</a> <br/>
+<a href="http://mrk1869.sakura.ne.jp/?p=468">http://mrk1869.sakura.ne.jp/?p=468</a> <br/>
+<a href="http://kachibito.net/web-service/stylebootstrap.html">http://kachibito.net/web-service/stylebootstrap.html</a> <br/>
+<a href="http://d.hatena.ne.jp/replication/20120226/1330224012">http://d.hatena.ne.jp/replication/20120226/1330224012</a> <br/>
+<a href="http://d.hatena.ne.jp/end0tknr/20111016/1318732238">http://d.hatena.ne.jp/end0tknr/20111016/1318732238</a> <br/>
+<a href="http://d.hatena.ne.jp/akynd_knight/20120714/1342227600">http://d.hatena.ne.jp/akynd_knight/20120714/1342227600</a> <br/>
+<a href="http://ppworks.hatenablog.jp/entry/2012/02/19/033644">http://ppworks.hatenablog.jp/entry/2012/02/19/033644</a> <br/>
+<a href="http://coliss.com/articles/freebies/resources-that-complement-twitter-bootstrap-by-webresourcesdepot.html">http://coliss.com/articles/freebies/resources-that-complement-twitter-bootstrap-by-webresourcesdepot.html</a></p>
+]]></content>
+  </entry>
+  
+</feed>

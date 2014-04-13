@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: scalatra | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/scalatra/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[scalatra introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2014/04/13/scalatra-introduction/"/>
+    <updated>2014-04-13T11:16:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2014/04/13/scalatra-introduction</id>
+    <content type="html"><![CDATA[<p>【scalatra 環境構築メモ】</p>
+
+<p>■scalatra本体、関連ツール導入</p>
+
+<ol>
+<li>Scala本体</li>
+</ol>
+
+
+<p>Scala公式サイト（<a href="http://www.scala-lang.org/download/%EF%BC%89%E3%82%88%E3%82%8A%E3%83%90%E3%82%A4%E3%83%8A%E3%83%AA%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%88tgz%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%89%E3%82%92%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%81%97%E3%80%81/usr/bin%E4%BB%A5%E4%B8%8B%E3%81%AB%E5%B1%95%E9%96%8B%E3%80%82">http://www.scala-lang.org/download/%EF%BC%89%E3%82%88%E3%82%8A%E3%83%90%E3%82%A4%E3%83%8A%E3%83%AA%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%88tgz%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%89%E3%82%92%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%81%97%E3%80%81/usr/bin%E4%BB%A5%E4%B8%8B%E3%81%AB%E5%B1%95%E9%96%8B%E3%80%82</a></p>
+
+<ol>
+<li>SBT</li>
+</ol>
+
+
+<p>SBT公式サイト（<a href="http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html#unix%EF%BC%89%E3%81%8B%E3%82%89sbt-launch.jar%E3%82%92%E5%8F%96%E5%BE%97%E3%81%97%E3%80%81~/bin%E3%81%AB%E9%85%8D%E7%BD%AE%E3%80%82">http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html#unix%EF%BC%89%E3%81%8B%E3%82%89sbt-launch.jar%E3%82%92%E5%8F%96%E5%BE%97%E3%81%97%E3%80%81~/bin%E3%81%AB%E9%85%8D%E7%BD%AE%E3%80%82</a>
+SBT公式サイトの勧めに従い、起動用スクリプトを作成する。単に以下をコピペし、~/bin/sbtとして保存。</p>
+
+<p><code>
+SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
+java $SBT_OPTS -jar `dirname $0`/sbt-launch.jar "$@"
+</code></p>
+
+<ol>
+<li>Conscript</li>
+</ol>
+
+
+<p>以下を実行する。</p>
+
+<p><code>
+$ curl https://raw.github.com/n8han/conscript/master/setup.sh | sh
+</code></p>
+
+<p>結果、スクリプト ~/bin/cs が作成されたことを確認すること。</p>
+
+<ol>
+<li>giter8</li>
+</ol>
+
+
+<p>以下を実行する。</p>
+
+<p><code>
+$ cs n8han/giter8
+</code></p>
+
+<p>結果、スクリプト ~/bin/g8 が作成されたことを確認すること。</p>
+
+<p>■scalatraプロジェクトの作成</p>
+
+<p>任意のパスで以下を実行し、ドメイン設定、パッケージ名、プロジェクト名等を設定しscalatraプロジェクトを作成する。</p>
+
+<p><code>
+$ g8 scalatra/scalatra-sbt
+</code></p>
+
+<p>■scalatraサーバの起動</p>
+
+<p>プロジェクトディレクトリ以下に移動し、sbtを起動し、コマンド <code>container:start</code> としてscalatraサーバを起ち上げる。</p>
+
+<hr />
+
+<p>参考サイト：
+<a href="https://gist.github.com/kmizu/1876800">https://gist.github.com/kmizu/1876800</a>
+<a href="http://scalajp.github.io/sbt-getting-started-guide-ja/">http://scalajp.github.io/sbt-getting-started-guide-ja/</a>
+<a href="http://qiita.com/k_ui/items/65def414bd7ec54aedeb">http://qiita.com/k_ui/items/65def414bd7ec54aedeb</a>
+<a href="http://diario.hatenablog.com/entry/2013/08/25/041417">http://diario.hatenablog.com/entry/2013/08/25/041417</a>
+<a href="http://sgykfjsm.github.io/blog/2013/02/22/scalatra-tutorial-001/">http://sgykfjsm.github.io/blog/2013/02/22/scalatra-tutorial-001/</a></p>
+]]></content>
+  </entry>
+  
+</feed>

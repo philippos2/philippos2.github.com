@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: plugins | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/plugins/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[about-spring-the-preloader]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/28/about-spring-the-preloader/"/>
+    <updated>2013-07-28T19:43:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/28/about-spring-the-preloader</id>
+    <content type="html"><![CDATA[<h3>spring 導入</h3>
+
+<p>spork が rails 4.0 に未対応なため、spring という比較的新しいプリローダを利用することとした。</p>
+
+<p>導入は gem を利用して行う。以下を Gemfile に記載し、<code>bundle install</code> する。</p>
+
+<p><code>
+gem 'spring'
+</code></p>
+
+<p>以下のように利用する。</p>
+
+<p><code>
+$ spring rspec spec/controllers/
+</code></p>
+
+<p>rspec コマンドの他、rake コマンドその他にも対応している。</p>
+
+<p>time コマンドを利用してコマンド実行にかかる時間を計測してみたが、それなりのボリュームのある rspec を用意できなかったため、速度向上を確認できなかった。
+プリロードの対象となるコマンドがそれなり以上の規模になった場合、効力を発揮することを期待したい。</p>
+
+<hr />
+
+<p>参考サイト：<a href="https://github.com/jonleighton/spring">https://github.com/jonleighton/spring</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-byebug-for-debug-with-pry]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/28/about-byebug-for-debug-with-pry/"/>
+    <updated>2013-07-28T16:09:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/28/about-byebug-for-debug-with-pry</id>
+    <content type="html"><![CDATA[<h3>byebug 導入</h3>
+
+<p>ruby2.0環境下では、pry-nav ならびに pry-debugger のデバッグ機能に不具合があり、また例外補足のためのツール pry-exception_explorer にも不具合があるため、デバッグ用のツールとして同様の機能を持つ byebug および pry-rescue への切り替えを行った。</p>
+
+<p>また今回のタイミングで、コールスタック（バックトレース）を参照するためのツールである pry-stack_explorer の導入も行った。</p>
+
+<p>byebug は pry と同じインタフェイスを持っているとのことで使用法は pry と同じである。</p>
+
+<p>まず、以下の gem は Gemfile から削除した。</p>
+
+<p><code>
+gem 'pry-debugger' # あるいは pry-nav
+gem 'pry-exception_explorer'
+</code></p>
+
+<p>そして次の gem を導入する。</p>
+
+<p>```</p>
+
+<h1>pry for debug</h1>
+
+<p>group :development, :test do
+  gem &lsquo;pry-rails&rsquo;               # pry base
+  gem &lsquo;pry-byebug&rsquo;              # debugger for pry
+  gem &lsquo;pry-stack_explorer&rsquo;      # call stack viewer
+  gem &lsquo;pry-rescue&rsquo;              # exception event handler
+  gem &lsquo;hirb-unicode&rsquo;            # hirb
+end
+```</p>
+
+<h4>■pry-rescue使用法</h4>
+
+<p>デバッグ対象をブロックとして括り、その内部で何らかの例外が飛ばされた場合、その位置で binding.pry が起動される。</p>
+
+<p><code>
+Pry.rescue do
+  （略）
+  raise XxxException
+  （略）
+end
+</code></p>
+
+<h4>■pry-stack_explorer使用法</h4>
+
+<p>pry-stack_explorer を導入することで、binding.pry を利用したデバッグ中に、show-stack コマンドを用いてコールスタックを参照することが可能である。
+以下のコマンドを使ってコールスタックの内容を参照可能である。callerより断然便利。</p>
+
+<p>スタックを上がる</p>
+
+<blockquote><p>up</p></blockquote>
+
+<p>下がる</p>
+
+<blockquote><p>down</p></blockquote>
+
+<p>フレームを指定して移動</p>
+
+<blockquote><p>frame N</p></blockquote>
+
+<hr />
+
+<h4>参考サイト：</h4>
+
+<p><a href="https://github.com/deivid-rodriguez/byebug">https://github.com/deivid-rodriguez/byebug</a>  <br/>
+<a href="https://github.com/pry/pry-stack_explorer">https://github.com/pry/pry-stack_explorer</a>  <br/>
+<a href="http://qiita.com/joker1007/items/f132db1b4a5e3f9278e9">http://qiita.com/joker1007/items/f132db1b4a5e3f9278e9</a></p>
+
+<p>pry 関連のサブツールについて <br/>
+<a href="http://blog.uu59.org/2012-10-13-pry.html">http://blog.uu59.org/2012-10-13-pry.html</a></p>
+
+<p>ruby2.0環境下における pry-debugger の不具合について <br/>
+<a href="https://bugs.ruby-lang.org/issues/7214">https://bugs.ruby-lang.org/issues/7214</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-bootstrap-kaminari-views]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/27/about-bootstrap-kaminari-views/"/>
+    <updated>2013-07-27T10:59:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/27/about-bootstrap-kaminari-views</id>
+    <content type="html"><![CDATA[<h3>bootstrap-kaminari-views 導入</h3>
+
+<p>ruby2.0.0 / rails4.0.0 環境では、従来の方法で kaminari の bootstap view 対応ができなくなったようなので、本gemを利用して kaminari の bootstrap view 対応を行うことにした。</p>
+
+<p>Gemfileに以下を追記し、bundle install する。</p>
+
+<p><code>
+gem 'kaminari'
+gem 'bootstrap-kaminari-views'
+</code></p>
+
+<p>view ページにて以下のようにペギネイトする。</p>
+
+<p><code>
+= paginate @posts, :theme =&gt; 'twitter-bootstrap'
+</code></p>
+
+<p>次のようなオプションを指定することもできる。</p>
+
+<p>```
+= paginate @posts, :theme => &lsquo;twitter-bootstrap&rsquo;,</p>
+
+<pre><code>               :pagination_class =&gt; "pagination-small pagination-centered"
+</code></pre>
+
+<p>```</p>
+
+<p>githubページ : <a href="https://github.com/matenia/bootstrap-kaminari-views">https://github.com/matenia/bootstrap-kaminari-views</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-sorcery]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/04/about-sorcery/"/>
+    <updated>2013-07-04T07:23:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/04/about-sorcery</id>
+    <content type="html"><![CDATA[<h3>認証用GEM Saorcery 導入手順 （2012/04/20～）</h3>
+
+<p>内容については割愛</p>
+
+<p>参考サイト：<br/>
+<a href="http://selfkleptomaniac.org/archives/2068">http://selfkleptomaniac.org/archives/2068</a> <br/>
+<a href="http://blog.twiwt.org/e/63070f">http://blog.twiwt.org/e/63070f</a> <br/>
+<a href="http://railscasts.com/episodes/283-authentication-with-sorcery">http://railscasts.com/episodes/283-authentication-with-sorcery</a> <br/>
+<a href="http://railscasts.com/episodes/283-authentication-with-sorcery?language=ja&amp;view=asciicast">http://railscasts.com/episodes/283-authentication-with-sorcery?language=ja&amp;view=asciicast</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-cancan]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/04/about-cancan/"/>
+    <updated>2013-07-04T07:10:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/04/about-cancan</id>
+    <content type="html"><![CDATA[<h4>認証用GEM cancan 導入手順 （2012/04/20～）</h4>
+
+<h4>1. Gemfileに以下を追加しbundle installする</h4>
+
+<p><code>
+gem 'cancan'
+</code></p>
+
+<h4>2. Abilityクラスの生成を行う</h4>
+
+<p><code>
+$ rails g cancan:ability
+</code></p>
+
+<h4>3. User（ここでは管理者）モデルへroleカラムを追加する</h4>
+
+<p><code>
+$ rails g migration AddRoleToUser role:string
+</code></p>
+
+<h4>4. app/models/users.rbにroleの記述を追加</h4>
+
+<p>例）
+<code>
+(省略)
+attr_accessible :role
+ROLES = %w[admin member]
+(省略)
+</code></p>
+
+<h4>5. app/models/ability.rbの関数initializeを編集（ここで権限内容を制御する）</h4>
+
+<p>例）
+```
+(省略)
+def initialize(user)
+  user ||= User.new # guest user (not logged in)
+  if user.role == &ldquo;admin&rdquo;</p>
+
+<pre><code>can :manage, :all
+</code></pre>
+
+<p>  else</p>
+
+<pre><code>can :read, :all
+</code></pre>
+
+<p>  end
+end
+(省略)
+```</p>
+
+<h4>6. 管理者権限スコープ（role）の編集（管理者追加／編集時）</h4>
+
+<p>画面にセレクタコントロールを追加する</p>
+
+<p>app/views/devise/registrations/new.html.rbと <br/>
+app/views/devise/registrations/edit.html.rbに以下を追加</p>
+
+<p><code>
+(省略)
+&lt;%= f.label :role %&gt;
+&lt;%= f.collection_select :role, User::ROLES, :to_s, :humanize%&gt;
+(省略)
+</code></p>
+
+<h4>7. app/views/hoges/index.html.erbを編集（ここではadminだけにEditを表示させる）</h4>
+
+<p>&lsquo;Admin'でのユーザ登録者のみが「Edit」できるようにする<br/>
+その他のユーザは「Edit」できない</p>
+
+<p><code>
+&lt;% if can? :manage, hoge %&gt;
+&lt;%= link_to 'Edit', edit_hoge_path(hoge) %&gt;
+&lt;% end %&gt;
+</code></p>
+
+<h4>8. 管理者権限による制限を付与するコントローラに以下のフィルタを追加する</h4>
+
+<p><code>
+class TaskController &lt; ApplicationController
+  （略）
+  load_and_authorize_resource
+  （略）
+end
+</code></p>
+
+<p>参考サイト：<br/>
+<a href="http://d.hatena.ne.jp/dimros/20110326/1301145073  ">http://d.hatena.ne.jp/dimros/20110326/1301145073  </a>
+<a href="http://blog.livedoor.jp/nizoraul/archives/3711303.html  ">http://blog.livedoor.jp/nizoraul/archives/3711303.html  </a>
+<a href="http://yorunocafe.blogspot.jp/2011/08/rails-cancan.html">http://yorunocafe.blogspot.jp/2011/08/rails-cancan.html</a></p>
+]]></content>
+  </entry>
+  
+</feed>

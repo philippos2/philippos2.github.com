@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: vim | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/vim/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[vim plugins for git introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/08/04/vim-plugins-for-git-introduction/"/>
+    <updated>2013-08-04T09:45:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/08/04/vim-plugins-for-git-introduction</id>
+    <content type="html"><![CDATA[<h3>git 関連 vim プラグイン導入</h3>
+
+<p>今回 vim 上で git コマンドを実行することのできる vim プラグインをふたつ導入した。 <br/>
+理由は不明だが、BundleInstallでふたついっぺんにインストールしようとするとインストールに失敗してしまうので、ひとつずつインストールすること。</p>
+
+<h4>■fugitive 導入</h4>
+
+<p><a href="https://github.com/tpope/vim-fugitive">https://github.com/tpope/vim-fugitive</a></p>
+
+<p>~/.vimrc に以下を追記後、vim 上からBundleInstallする。</p>
+
+<p><code>
+"for git
+Bundle 'tpope/vim-fugitive'
+</code></p>
+
+<h4>■fugitive 使用方法</h4>
+
+<p>具体的な使用方法は、以下のサイトに詳しい。 <br/>
+<a href="http://vimcasts.org/episodes/fugitive-vim---a-complement-to-command-line-git/">http://vimcasts.org/episodes/fugitive-vim---a-complement-to-command-line-git/</a></p>
+
+<h5>主なコマンド</h5>
+
+<p>fugitive を導入後、vim のコマンドモードで以下のコマンドを使用することができる。</p>
+
+<blockquote><p>Gstatus (= git status : リポジトリ状態) <br/>
+Gdiff (= git diff : 差分) <br/>
+Gwrite (= git add : 追加) <br/>
+Gremove (= git rm : 削除) <br/>
+Gcommit (= git commit : コミット)</p></blockquote>
+
+<hr />
+
+<p>参考サイト： <br/>
+<a href="http://yuku-tech.hatenablog.com/entry/20110427/1303868482">http://yuku-tech.hatenablog.com/entry/20110427/1303868482</a> <br/>
+<a href="http://cohama.hateblo.jp/entry/20120317/1331978764">http://cohama.hateblo.jp/entry/20120317/1331978764</a> <br/>
+<a href="http://www.makies.com/2011/11/302/">http://www.makies.com/2011/11/302/</a></p>
+
+<h4>■gitv 導入</h4>
+
+<p>gitv は GUIによる git 用ツールである gitk と同等の目的と使用感を目指して作成された vim プラグインである。</p>
+
+<p><a href="https://github.com/gregsexton/gitv">https://github.com/gregsexton/gitv</a></p>
+
+<p>~/.vimrc に以下を追記後、vim 上からBundleInstallする。</p>
+
+<p><code>
+Bundle 'gitv'
+</code></p>
+
+<h4>■gitv 使用方法</h4>
+
+<p>vim のコマンドモードで <code>Gitv</code> とするとブラウザモードに移行する。 <br/>
+また <code>Gitv!</code> とするとファイルモードに移行する。 <br/>
+ブラウザモードでは、これまでのコミット情報を参照できる。 <br/>
+ファイルモードでは、対象とするファイルの履歴を参照できる。</p>
+
+<hr />
+
+<p>参考サイト： <br/>
+<a href="http://cohama.hateblo.jp/entry/20120417/1334679297">http://cohama.hateblo.jp/entry/20120417/1334679297</a> <br/>
+<a href="http://matsu.teraren.com/blog/2012/03/16/gitv/">http://matsu.teraren.com/blog/2012/03/16/gitv/</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-vim-settings]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/01/about-vim-settings/"/>
+    <updated>2013-07-01T23:51:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/01/about-vim-settings</id>
+    <content type="html"><![CDATA[<h3>9. vim各種プラグイン</h3>
+
+<ul>
+<li><h4>vim各種プラグイン</h4>
+
+<p>x vundle : プラグイン管理<br/>
+x neocomplcache : 単語補完機能<br/>
+x vim-ref : マニュアル参照機能<br/>
+n quickrun : vimからソースコード実行、これは不要か<br/>
+n rails.vim : vimからrails用コマンド実行、これも不要か</p></li>
+</ul>
+
+
+<p>まずはvundle導入
+<code>
+$ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+</code></p>
+
+<p>.vimrc を編集
+<code>
+$ vim ~/.vimrc
+</code></p>
+
+<p>```
+&ldquo;viとの互換性OFF
+set nocompatible
+"ファイル形式の検出を無効にする
+filetype off</p>
+
+<p>&ldquo;Vundleを初期化して
+"Vundle自身もVundleで管理
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+Bundle &lsquo;gmarik/vundle&rsquo;</p>
+
+<p>&ldquo;プラグイン各種
+Bundle &lsquo;Shougo/neocomplcache&rsquo;
+Bundle &lsquo;thinca/vim-ref&rsquo;
+"Bundle &lsquo;thinca/vim-quickrun&rsquo;
+"Bundle &lsquo;tpope/vim-rails&rsquo; "rails.vim</p>
+
+<p>&ldquo;ファイル形式検出、プラグイン、インデントをON
+filetype plugin indent on
+```</p>
+
+<p>プラグイン各種のインストールを行う</p>
+
+<p> :BundleInstall</p>
+
+<p>インストールは以上で終了、引き続き設定を行う</p>
+
+<hr />
+
+<h3>9-1. neocomplcache設定</h3>
+
+<p>設定ファイル（~/.vim/bundle/neocomplcache/doc/neocomplcache.txt）よりコピペ
+以下の記述を.vimrcへ追加する</p>
+
+<h2>```</h2>
+
+<p>&ldquo;<strong><em> for neocomplcache </em></strong>
+&rdquo; Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+&ldquo; Use neocomplcache.
+let g:neocomplcache_enable_at_startup = 1
+&rdquo; Use smartcase.
+let g:neocomplcache_enable_smart_case = 1
+&ldquo; Use camel case completion.
+let g:neocomplcache_enable_camel_case_completion = 1
+&rdquo; Use underbar completion.
+let g:neocomplcache_enable_underbar_completion = 1
+&ldquo; Set minimum syntax keyword length.
+let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_lock_buffer_name_pattern = &lsquo;*ku*&rsquo;</p>
+
+<p>&ldquo; Define dictionary.
+let g:neocomplcache_dictionary_filetype_lists = {</p>
+
+<pre><code>\ 'default' : '',
+\ 'vimshell' : $HOME.'/.vimshell_hist',
+\ 'scheme' : $HOME.'/.gosh_completions'
+    \ }
+</code></pre>
+
+<p>&ldquo; Define keyword.
+if !exists(&lsquo;g:neocomplcache_keyword_patterns&rsquo;)</p>
+
+<pre><code>let g:neocomplcache_keyword_patterns = {}
+</code></pre>
+
+<p>endif
+let g:neocomplcache_keyword_patterns[&lsquo;default&rsquo;] = &lsquo;\h\w*&rsquo;</p>
+
+<p>&ldquo; Plugin key-mappings.
+inoremap <expr>&lt;C-g>     neocomplcache#undo_completion()
+inoremap <expr>&lt;C-l>     neocomplcache#complete_common_string()</p>
+
+<p>&ldquo; Recommended key-mappings.
+&rdquo; <CR>: close popup and save indent.
+inoremap <expr><CR>  neocomplcache#close_popup() . &ldquo;&lt;CR>&rdquo;
+&ldquo; <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? &rdquo;&lt;C-n>&ldquo; : &rdquo;&lt;TAB>&ldquo;
+&rdquo; &lt;C-h>, <BS>: close popup and delete backword char.
+inoremap <expr>&lt;C-h> neocomplcache#smart_close_popup().&ldquo;&lt;C-h>&rdquo;
+inoremap <expr><BS> neocomplcache#smart_close_popup().&ldquo;&lt;C-h>&rdquo;
+inoremap <expr>&lt;C-y>  neocomplcache#close_popup()
+inoremap <expr>&lt;C-e>  neocomplcache#cancel_popup()</p>
+
+<p>&ldquo; For cursor moving in insert mode(Not recommended)
+"inoremap <expr><Left>  neocomplcache#close_popup() . &rdquo;&lt;Left>&ldquo;
+"inoremap <expr><Right> neocomplcache#close_popup() . &rdquo;&lt;Right>&ldquo;
+"inoremap <expr><Up>    neocomplcache#close_popup() . &rdquo;&lt;Up>&ldquo;
+"inoremap <expr><Down>  neocomplcache#close_popup() . &rdquo;&lt;Down>&ldquo;
+&rdquo; Or set this.
+&ldquo;let g:neocomplcache_enable_cursor_hold_i = 1</p>
+
+<p>&ldquo;<strong><em> for neocomplcache </em></strong>
+function InsertTabWrapper()
+  if pumvisible()</p>
+
+<pre><code>return "\&lt;c-n&gt;"
+</code></pre>
+
+<p>  endif
+  let col = col(&lsquo;.&rsquo;) &ndash; 1
+  if !col || getline(&lsquo;.&rsquo;)[col &ndash; 1] !~ &lsquo;\k\|&lt;\|/&rsquo;</p>
+
+<pre><code>return "\&lt;tab&gt;"
+</code></pre>
+
+<p>  elseif exists(&lsquo;&amp;omnifunc&rsquo;) &amp;&amp; &amp;omnifunc == &lsquo;&rsquo;</p>
+
+<pre><code>return "\&lt;c-n&gt;"
+</code></pre>
+
+<p>  else</p>
+
+<pre><code>return "\&lt;c-x&gt;\&lt;c-o&gt;"
+</code></pre>
+
+<p>  endif
+endfunction
+inoremap <tab> &lt;c-r>=InsertTabWrapper()<cr>
+```</p>
+
+<hr />
+
+<h3>9-2. vim-ref設定</h3>
+
+<p>vimでw3mのPATHを通すため、以下の記述を.vimrcへ追加する
+<code>
+let $PATH = $PATH . ':/usr/bin/w3m'
+</code></p>
+
+<p>vim上で「:echo $PATH」として、vimでw3mのPATHが通っているか確認する
+次にrubyリファレンスの取得と展開を行う
+<code>
+$ cd ~/Documents/Reference
+$ wget http://doc.okkez.net/archives/201106/ruby-refm-1.9.2-dynamic-20110629.tar.gz
+$ tar zxvf ruby-refm-1.9.2-dynamic-20110629.tar.gz
+$ mv ruby-refm-1.9.2-dynamic-20110629 rubyrefm
+</code></p>
+
+<p>refeファイル（コマンド）を作成する</p>
+
+<p><code>
+$ vim /usr/local/bin/refe
+</code></p>
+
+<p>```</p>
+
+<h1>!/bin/sh</h1>
+
+<p>exec ruby -Ke -I ~/Documents/Reference/rubyrefm/bitclust/lib ~/Documents/Reference/rubyrefm/bitclust/bin/refe.rb -d ~/Documents/Reference/rubyrefm/db-1_9_2 &ldquo;$@&rdquo;
+```</p>
+
+<p>refeファイル（コマンド）のパーミッションを変更する</p>
+
+<p><code>
+$ sudo chmod 755 /usr/local/bin/refe
+</code></p>
+
+<p>以上でrubyのマニュアルを引きことが可能となる</p>
+
+<p>参考：<br/>
+<a href="http://d.hatena.ne.jp/holypp/20110703/1309711799  ">http://d.hatena.ne.jp/holypp/20110703/1309711799  </a>
+<a href="http://d.hatena.ne.jp/holypp/20110515/1305443997  ">http://d.hatena.ne.jp/holypp/20110515/1305443997  </a>
+<a href="http://d.hatena.ne.jp/diffshare/20111118/1321606902  ">http://d.hatena.ne.jp/diffshare/20111118/1321606902  </a>
+<a href="http://iiidevelop.blogspot.jp/2011/07/vimvundle.html  ">http://iiidevelop.blogspot.jp/2011/07/vimvundle.html  </a>
+<a href="http://slumbers99.blogspot.jp/2012/02/vim-vundle.html  ">http://slumbers99.blogspot.jp/2012/02/vim-vundle.html  </a>
+<a href="http://blog.blueblack.net/item_133">http://blog.blueblack.net/item_133</a> <br/>
+<a href="http://masterka.seesaa.net/article/161781923.html">http://masterka.seesaa.net/article/161781923.html</a></p>
+
+<hr />
+
+<h3>vim設定補追(2013/08/02)</h3>
+
+<p>上記プラグイン関連の設定以外の設定を以下に記す。</p>
+
+<p>```
+&ldquo;行番号設定
+set number</p>
+
+<p>&ldquo;タブ文字、行末など不可視文字を表示する
+set list</p>
+
+<p>&ldquo;インクリメンタルサーチON
+set incsearch</p>
+
+<p>&ldquo;閉じ括弧が入力されたとき、対応する括弧を表示する
+set showmatch</p>
+
+<p>&ldquo;検索時に大文字を含んでいたら大/小を区別
+set smartcase</p>
+
+<p>&ldquo;シフト移動幅
+set shiftwidth=2</p>
+
+<p>&ldquo;Insertモードで: <Tab> を挿入するのに、適切な数の空白を使う
+set expandtab</p>
+
+<p>&ldquo;新しい行を作ったときに高度な自動インデントを行う
+set smartindent</p>
+
+<p>&ldquo;行頭の余白内で Tab を打ち込むと、'shiftwidth' の数だけインデントする
+set smarttab</p>
+
+<p>&ldquo;ファイル内の <Tab> が対応する空白の数
+"set tabstop=4</p>
+
+<p>&ldquo;カーソルを行頭、行末で止まらないようにする
+"set whichwrap=b,s,h,l,&lt;,>,[,]</p>
+
+<p>&ldquo;検索をファイルの先頭へループしない
+set nowrapscan</p>
+
+<p>&ldquo;色設定ON
+syntax on
+set background=dark</p>
+
+<p>&ldquo;日本語全角記号を全角として扱うよう設定
+set ambiwidth=double
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

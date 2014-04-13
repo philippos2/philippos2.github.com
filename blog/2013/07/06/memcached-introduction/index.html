@@ -1,0 +1,516 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>memcached-introduction - Philippos Blue Book</title>
+  <meta name="author" content="Philippos">
+
+  
+  <meta name="description" content="【Memcached導入に関するメモ】2012/07/11（水）～ ■memcached導入 memcached導入方法 1
+$ sudo aptitude install memcached memcachedインストール時にlibevent-1.4-2（非同期イベント通知ライブラリ） &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://philippos2.github.io/blog/2013/07/06/memcached-introduction/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Philippos Blue Book" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41954744-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:philippos2.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/">
+        <span class="blue_light">
+            Philippos Blue Book
+        </span>
+       
+           <span class="blue_dark">
+             rails introduction note
+           </span>
+       
+    </a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <!--li><a href="/about">About me</a></li-->
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Memcached-introduction</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-06T14:05:00+09:00" pubdate data-updated="true">Jul 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h3>【Memcached導入に関するメモ】2012/07/11（水）～</h3>
+
+<hr />
+
+<h4>■memcached導入</h4>
+
+<h5>memcached導入方法</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install memcached</span></code></pre></td></tr></table></div></figure>
+
+
+<p>memcachedインストール時にlibevent-1.4-2（非同期イベント通知ライブラリ）もインストールされる模様</p>
+
+<h5>memcached起動方法</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ memcached -u memcached -d</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>memcachedの主なオプション</h5>
+
+<p>・-m &lt;キャッシュメモリ容量>
+デフォルトは64(単位はMB)</p>
+
+<p>・-l &lt;待ち受けネットワークインタフェース>
+デフォルトはINDRR_ANY</p>
+
+<p>・-p ポート番号、規定値は11211</p>
+
+<p>・-u &lt;デーモン実行ユーザ>
+rootでデーモンを起動する際にデーモン実行ユーザを指定する</p>
+
+<p>例) キャッシュ = 1GB、接続許可ホスト = ローカルホスト</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ memcached -u memcached -d -m 1024 -l 127.0.0.1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>memcachedデーモンの起動を確認
+$ ps aux | grep &ldquo;memcached&rdquo;</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nobody 14955  0.0  0.3  62700  1224 ?     Sl 10:28 0:00 /usr/bin/memcached -m 64 -p 11211 -u nobody -l 127.0.0.1
+</span><span class='line'>1000   15156  0.0  0.2   7112   836 pts/0 D+ 10:50 0:00 grep memcached</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>memcached動作確認</h5>
+
+<p>まずtelnetにてmemcachedへ接続</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet localhost 11211</span></code></pre></td></tr></table></div></figure>
+
+
+<p>memcachedへ接続後、statsコマンド他で動作確認を行う
+動作確認後、quitコマンドで接続を切断する</p>
+
+<p>その他：memcachedのバージョンとヘルプを表示</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ memcached -h</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>値の格納と取得</h5>
+
+<p>setコマンドとgetコマンドにて値の格納と取得を行う
+まずsetコマンドは以下のフォーマットで指定する</p>
+
+<p>&lt;コマンド> &lt;キー> &lt;圧縮フラグ(1 or 0)> &lt;有効期間(単位:秒)> &lt;サイズ(単位:Bytes)></p>
+
+<p>例) 「foo」というキーに「123」という3バイトのデータを非圧縮(0)/無期限(0)で格納する。またそれを取り出す。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set foo 0 0 3
+</span><span class='line'>123
+</span><span class='line'>
+</span><span class='line'>=&gt; STORED
+</span><span class='line'>
+</span><span class='line'>get foo
+</span><span class='line'>
+</span><span class='line'>=&gt; VALUE foo 0 3
+</span><span class='line'>=&gt; 123
+</span><span class='line'>=&gt; END
+</span><span class='line'>
+</span><span class='line'>quit</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>その他の操作</h5>
+
+<blockquote><p>stats items ：キャシュされているレコード情報を取得<br/>
+stats cachedump ：キャッシュ内容ダンプ</p></blockquote>
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet localhost 11211
+</span><span class='line'>stats items
+</span><span class='line'>STAT items:1:number 6
+</span><span class='line'>STAT items:1:age 20505
+</span><span class='line'>STAT items:1:evicted 0
+</span><span class='line'>STAT items:1:evicted_time 0
+</span><span class='line'>STAT items:1:outofmemory 0
+</span><span class='line'>STAT items:1:tailrepairs 0
+</span><span class='line'>
+</span><span class='line'> stats cachedump 1 100
+</span><span class='line'>ITEM foo [9 b; 1264464651 s]
+</span><span class='line'>ITEM bar [9 b; 1264464649 s]</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>memcached終了方法</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo killall memcached</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■dalli（memcachedクライアント）導入</h4>
+
+<h5>dalli導入方法</h5>
+
+<p>Gemfileに「gem &lsquo;dalli&#8217;」と一行追加し、bundle installを行う</p>
+
+<h4>■キャッシュストアに設定する方法</h4>
+
+<p>例としてproduction環境で使用する場合は、config/environments/production.rb に次の行を追加する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>config.cache_store = :dalli_store</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■セッションストアに設定する方法</h4>
+
+<p>config/initializers/session_store.rb に以下の行を追加</p>
+
+<p>例）以下はセッション情報を二週間保持する例<br/>
+注）Rails3のデフォルト設定では、ブラウザからのアクセスが切断された時点でセッションも破棄される</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>require 'action_dispatch/middleware/session/dalli_store'
+</span><span class='line'>Railsアプリ名::Application.config.session_store :dalli_store
+</span><span class='line'>Railsアプリ名::Application.config.session_options = {:cookie_only =&gt; false, :expire_after =&gt; 2.weeks}</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■Railsコンソール上でのキャッシュ内容確認</h4>
+
+<h5>キャッシュ設定内容確認</h5>
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; Rails.cache
+</span><span class='line'> =&gt; #&lt;ActiveSupport::Cache::DalliStore:0x00000001e4cf68 @options={:compress=&gt;nil}, @raise_errors=false, @data=#&lt;Dalli::Client:0x00000001e4ce28 @servers=["localhost:11211"], @options={:compress=&gt;nil}, @ring=nil&gt;&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>Railsコンソール上でのsession_optionsの確認</h5>
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; Railsアプリ名::Application.config.session_options
+</span><span class='line'> =&gt; { :cookie_only=&gt;false , :memcache_server =&gt; [ 'localhost:11211']}</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>値の格納と取得</h5>
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; Rails.cache.write("test", {:message =&gt; 'Hello', :time =&gt; Time.now})
+</span><span class='line'> =&gt; true
+</span><span class='line'>&gt; Rails.cache.read("test")
+</span><span class='line'> =&gt; {:message=&gt;"Hello", :time=&gt;2010-09-15 13:26:09 +0900}
+</span><span class='line'>&gt; Rails.cache.clear
+</span><span class='line'> =&gt; [true]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上</p>
+
+<hr />
+
+<p>参考サイト:<br/>
+<a href="http://l-w-i.net/t/memcached/0install_001.txt">memcached導入手順</a><br/>
+<a href="http://l-w-i.net/t/memcached/command_001.txt">memcachedコマンド一覧</a><br/>
+<a href="http://d.hatena.ne.jp/wadap/20100125/1264435692">memcachedでキー一覧を取得したい時に</a><br/>
+<a href="http://www.trajectory.jp/tech/server/memcached.php">memcachedでパフォーマンス向上</a><br/>
+<a href="http://www.banana-systems.com/2010/09/rails3_memcached/">Rails3からmemcachedを利用する</a><br/>
+<a href="http://research.sakura.ad.jp/2010/05/18/kvs-memcached-cas/">memcachedプロトコルCAS操作について</a><br/>
+<a href="http://d.hatena.ne.jp/nobyu/20111225/1324805638">HerokuでMemcacheを使うには</a></p>
+
+<p><a href="http://d.hatena.ne.jp/ux00ff/20111128/1322495435">Ruby on Rails 3.1 でセッションを memcached に保存する</a><br/>
+<a href="http://d.hatena.ne.jp/ux00ff/20120417/1334643127">Rails 3.2 で Dalli を Session Store として利用する際の session_options の罠</a><br/>
+<a href="http://bucato.jp/2012/06/rails3-x%E7%B3%BB%E3%81%A7%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E7%8A%B6%E6%85%8B%E3%82%92%E4%BF%9D%E6%8C%81%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/">Rails3.x系でログイン状態を保持する方法</a><br/>
+<a href="http://d.hatena.ne.jp/shiba_yu36/20100907/1283820213">rails 3でmemcachedを利用する</a><br/>
+<a href="http://d.hatena.ne.jp/yune_kotomi/20101124/1290601189">Rails3系でセッション有効期限の設定</a><br/>
+<a href="http://d.hatena.ne.jp/willnet/20080531/1212239850">railsのクッキーとセッションについてまとめ</a></p>
+
+<p>その他:<br/>
+<a href="http://memo.yomukaku.net/entries/333">各種サーバ構成の速度ベンチマーク</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Philippos</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-06T14:05:00+09:00" pubdate data-updated="true">Jul 6<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/introduction/'>introduction</a>, <a class='category' href='/blog/categories/memcached/'>memcached</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://philippos2.github.io/blog/2013/07/06/memcached-introduction/" data-via="" data-counturl="http://philippos2.github.io/blog/2013/07/06/memcached-introduction/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/07/05/maintenance-postgresql/" title="Previous Post: maintenance postgresql">&laquo; maintenance postgresql</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/07/06/startover-twitter-bootstrap/" title="Next Post: startover-twitter-bootstrap">startover-twitter-bootstrap &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/13/scalatra-introduction/">scalatra introduction</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo/">vagrant + chef-solo (knife-solo)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/15/scala-play2-introduction/">scala play2 introduction</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/07/bookmarks-2013-12/">bookmarks 2013/12</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/11/rails-optimization-points/">rails optimization points</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/act-as-paranoid' style='font-size: 103.52941176470588%'>act-as-paranoid(1)</a> <a href='/blog/categories/authentication' style='font-size: 110.58823529411765%'>authentication(3)</a> <a href='/blog/categories/bookmarks' style='font-size: 103.52941176470588%'>bookmarks(1)</a> <a href='/blog/categories/byebug' style='font-size: 103.52941176470588%'>byebug(1)</a> <a href='/blog/categories/cancan' style='font-size: 103.52941176470588%'>cancan(1)</a> <a href='/blog/categories/centos' style='font-size: 103.52941176470588%'>centos(1)</a> <a href='/blog/categories/chef-solo' style='font-size: 103.52941176470588%'>chef-solo(1)</a> <a href='/blog/categories/debian' style='font-size: 103.52941176470588%'>debian(1)</a> <a href='/blog/categories/devise' style='font-size: 103.52941176470588%'>devise(1)</a> <a href='/blog/categories/git' style='font-size: 110.58823529411765%'>git(3)</a> <a href='/blog/categories/heroku' style='font-size: 103.52941176470588%'>heroku(1)</a> <a href='/blog/categories/introduction' style='font-size: 145.88235294117646%'>introduction(13)</a> <a href='/blog/categories/knife-solo' style='font-size: 103.52941176470588%'>knife-solo(1)</a> <a href='/blog/categories/logrotate' style='font-size: 103.52941176470588%'>logrotate(1)</a> <a href='/blog/categories/memcached' style='font-size: 103.52941176470588%'>memcached(1)</a> <a href='/blog/categories/mysql' style='font-size: 103.52941176470588%'>mysql(1)</a> <a href='/blog/categories/nginx' style='font-size: 107.05882352941177%'>nginx(2)</a> <a href='/blog/categories/octopress' style='font-size: 103.52941176470588%'>octopress(1)</a> <a href='/blog/categories/play2' style='font-size: 103.52941176470588%'>play2(1)</a> <a href='/blog/categories/plugins' style='font-size: 131.76470588235293%'>plugins(9)</a> <a href='/blog/categories/postgresql' style='font-size: 107.05882352941177%'>postgresql(2)</a> <a href='/blog/categories/pry' style='font-size: 110.58823529411765%'>pry(3)</a> <a href='/blog/categories/rails' style='font-size: 160.0%'>rails(17)</a> <a href='/blog/categories/rspec' style='font-size: 103.52941176470588%'>rspec(1)</a> <a href='/blog/categories/ruby' style='font-size: 142.35294117647058%'>ruby(12)</a> <a href='/blog/categories/scala' style='font-size: 107.05882352941177%'>scala(2)</a> <a href='/blog/categories/scalatra' style='font-size: 103.52941176470588%'>scalatra(1)</a> <a href='/blog/categories/slim' style='font-size: 103.52941176470588%'>slim(1)</a> <a href='/blog/categories/sorcery' style='font-size: 103.52941176470588%'>sorcery(1)</a> <a href='/blog/categories/tmux' style='font-size: 103.52941176470588%'>tmux(1)</a> <a href='/blog/categories/tools' style='font-size: 103.52941176470588%'>tools(1)</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap(2)</a> <a href='/blog/categories/unicorn' style='font-size: 107.05882352941177%'>unicorn(2)</a> <a href='/blog/categories/vagrant' style='font-size: 103.52941176470588%'>vagrant(1)</a> <a href='/blog/categories/vim' style='font-size: 107.05882352941177%'>vim(2)</a> <a href='/blog/categories/virtualbox' style='font-size: 107.05882352941177%'>virtualbox(2)</a> <a href='/blog/categories/z-shell' style='font-size: 103.52941176470588%'>z-shell(1)</a> </span>
+</section>
+
+
+
+
+
+
+<p/>
+
+<div align="center">
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4844330845/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4844330845&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4844330845&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4844330845" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798125415/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798125415&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798125415&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798125415" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4873115655/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4873115655&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873115655&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4873115655" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4873113946/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4873113946&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873113946&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4873113946" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4048687158/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4048687158&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4048687158&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4048687158" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4274068668/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4274068668&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4274068668&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4274068668" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798121932/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798121932&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798121932&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798121932" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798115169/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798115169&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798115169&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798115169" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798124702/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798124702&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798124702&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798124702" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4774143073/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4774143073&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4774143073&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4774143073" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+</div>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Philippos -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

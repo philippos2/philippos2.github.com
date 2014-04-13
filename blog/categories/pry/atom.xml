@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: pry | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/pry/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[about-byebug-for-debug-with-pry]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/28/about-byebug-for-debug-with-pry/"/>
+    <updated>2013-07-28T16:09:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/28/about-byebug-for-debug-with-pry</id>
+    <content type="html"><![CDATA[<h3>byebug 導入</h3>
+
+<p>ruby2.0環境下では、pry-nav ならびに pry-debugger のデバッグ機能に不具合があり、また例外補足のためのツール pry-exception_explorer にも不具合があるため、デバッグ用のツールとして同様の機能を持つ byebug および pry-rescue への切り替えを行った。</p>
+
+<p>また今回のタイミングで、コールスタック（バックトレース）を参照するためのツールである pry-stack_explorer の導入も行った。</p>
+
+<p>byebug は pry と同じインタフェイスを持っているとのことで使用法は pry と同じである。</p>
+
+<p>まず、以下の gem は Gemfile から削除した。</p>
+
+<p><code>
+gem 'pry-debugger' # あるいは pry-nav
+gem 'pry-exception_explorer'
+</code></p>
+
+<p>そして次の gem を導入する。</p>
+
+<p>```</p>
+
+<h1>pry for debug</h1>
+
+<p>group :development, :test do
+  gem &lsquo;pry-rails&rsquo;               # pry base
+  gem &lsquo;pry-byebug&rsquo;              # debugger for pry
+  gem &lsquo;pry-stack_explorer&rsquo;      # call stack viewer
+  gem &lsquo;pry-rescue&rsquo;              # exception event handler
+  gem &lsquo;hirb-unicode&rsquo;            # hirb
+end
+```</p>
+
+<h4>■pry-rescue使用法</h4>
+
+<p>デバッグ対象をブロックとして括り、その内部で何らかの例外が飛ばされた場合、その位置で binding.pry が起動される。</p>
+
+<p><code>
+Pry.rescue do
+  （略）
+  raise XxxException
+  （略）
+end
+</code></p>
+
+<h4>■pry-stack_explorer使用法</h4>
+
+<p>pry-stack_explorer を導入することで、binding.pry を利用したデバッグ中に、show-stack コマンドを用いてコールスタックを参照することが可能である。
+以下のコマンドを使ってコールスタックの内容を参照可能である。callerより断然便利。</p>
+
+<p>スタックを上がる</p>
+
+<blockquote><p>up</p></blockquote>
+
+<p>下がる</p>
+
+<blockquote><p>down</p></blockquote>
+
+<p>フレームを指定して移動</p>
+
+<blockquote><p>frame N</p></blockquote>
+
+<hr />
+
+<h4>参考サイト：</h4>
+
+<p><a href="https://github.com/deivid-rodriguez/byebug">https://github.com/deivid-rodriguez/byebug</a>  <br/>
+<a href="https://github.com/pry/pry-stack_explorer">https://github.com/pry/pry-stack_explorer</a>  <br/>
+<a href="http://qiita.com/joker1007/items/f132db1b4a5e3f9278e9">http://qiita.com/joker1007/items/f132db1b4a5e3f9278e9</a></p>
+
+<p>pry 関連のサブツールについて <br/>
+<a href="http://blog.uu59.org/2012-10-13-pry.html">http://blog.uu59.org/2012-10-13-pry.html</a></p>
+
+<p>ruby2.0環境下における pry-debugger の不具合について <br/>
+<a href="https://bugs.ruby-lang.org/issues/7214">https://bugs.ruby-lang.org/issues/7214</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[pry-settings-for-debug]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/27/pry-settings-for-debug/"/>
+    <updated>2013-07-27T10:29:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/27/pry-settings-for-debug</id>
+    <content type="html"><![CDATA[<h3>pry 補追</h3>
+
+<p>pry によるデバッグのための .pryrc 設定補追</p>
+
+<p>```</p>
+
+<h1><a href="https://github.com/pry/pry/wiki/FAQ#wiki-hirb">https://github.com/pry/pry/wiki/FAQ#wiki-hirb</a></h1>
+
+<p>require &lsquo;hirb&rsquo;</p>
+
+<p>Hirb.enable</p>
+
+<p>old_print = Pry.config.print
+Pry.config.print = proc do |output, value|
+  Hirb::View.view_or_page_output(value) || old_print.call(output, value)
+end</p>
+
+<p>Pry.commands.alias_command &lsquo;c&rsquo;, &lsquo;continue&rsquo;
+Pry.commands.alias_command &rsquo;s', &lsquo;step&rsquo;
+Pry.commands.alias_command &lsquo;n&rsquo;, &lsquo;next&rsquo;
+Pry.commands.alias_command &lsquo;f&rsquo;, &lsquo;finish&rsquo;
+```</p>
+
+<p>この他、binding.pry を利用したデバッグから一気に抜けたい場合、exit-process または exit-program コマンドを利用する。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ruby1.9-rails3-appendix]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/01/ruby1-dot-9-rails3-appendix/"/>
+    <updated>2013-07-01T23:07:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/01/ruby1-dot-9-rails3-appendix</id>
+    <content type="html"><![CDATA[<h3>5. 補足その他</h3>
+
+<h4>aptitude パッケージ一覧更新（root権限で実行）</h4>
+
+<p>```</p>
+
+<h1>aptitude update</h1>
+
+<p>```</p>
+
+<h4>rubygemsでのパッケージ検索</h4>
+
+<p><code>
+$ gem search --remote &lt;検索文字列&gt;
+$ gem search -r &lt;検索文字列&gt;
+</code></p>
+
+<h4>コントローラの追加</h4>
+
+<p><code>
+$ rails generate controller &lt;コントローラ名&gt; &lt;アクション名&gt;
+$ rails g controller &lt;コントローラ名&gt; &lt;アクション名&gt;
+</code></p>
+
+<h4>コントローラの削除（destroyの省略形は無し）</h4>
+
+<p><code>
+$ rails destroy controller &lt;コントローラ名&gt; &lt;アクション名&gt;
+</code></p>
+
+<hr />
+
+<h3>5-1. [補足追加] PostgreSQLの設定／動作確認</h3>
+
+<p>psql (PostgreSQL) バージョン：8.4.11</p>
+
+<h4>アクセス許可設定の変更</h4>
+
+<p>/etc/postgresql/8.4/main/pg_hba.conf をroot権限で編集する</p>
+
+<p>68 行目辺りから
+```
+77c77</p>
+
+<h2>&lt; local   all         postgres                          trust</h2>
+
+<blockquote><p>local   all         postgres                          ident
+82c82</p>
+
+<h2>&lt; local   all         all                               trust</h2>
+
+<p>local   all         all                               ident
+84c84</p>
+
+<h2>&lt; host    all         all         127.0.0.1/32          trust</h2>
+
+<p>host    all         all         127.0.0.1/32          md5
+86c86</p>
+
+<h2>&lt; host    all         all         ::1/128               trust</h2>
+
+<p>host    all         all         ::1/128               md5
+```</p></blockquote>
+
+<h4>上記を変更後、root権限にてpsqlデーモンを再起動する</h4>
+
+<p>```</p>
+
+<h1>/etc/init.d/postgresql restart</h1>
+
+<p>```</p>
+
+<h4>その後、psqlに接続しテーブル等を確認する</h4>
+
+<p><code>
+$ psql -U postgres
+</code></p>
+
+<h4>rails3 でPostgresSQLを使用可能にする</h4>
+
+<h4>root権限で postgresql-server-dev-8.4 をインストールする</h4>
+
+<p>```</p>
+
+<h1>aptitude -y install postgresql-server-dev-8.4</h1>
+
+<p>```</p>
+
+<h4>gem用Postgresパッケージをインストール</h4>
+
+<p><code>
+$ gem install pg
+</code></p>
+
+<h4>サンプルアプリを作成し、PostgreSQLとの連携テストを行う</h4>
+
+<p>例）
+<code>
+$ rails new psqldemo -d postgresql
+</code></p>
+
+<h4>アプリ内のGemfileに以下の行を追加</h4>
+
+<p><code>
+gem 'pg'
+gem 'therubyracer'
+</code></p>
+
+<h4>バンドルすべきgemパッケージをインストール</h4>
+
+<p><code>
+$ bundle intall
+</code></p>
+
+<h4>新規にrailsアプリが生成されたことを確認し、config/database.ymlのユーザ名を'postgres'に書き換える</h4>
+
+<h4>scaffoldを行う</h4>
+
+<p><code>
+$ rails g scaffold user name:string age:integer
+</code></p>
+
+<h4>データベースを作成した後、migrationを行う</h4>
+
+<p><code>
+$ rake db:create
+$ rake db:migrate
+</code></p>
+
+<h4>migrationを行った後、WEBrickを起動させ、ブラウザでアプリの挙動を確認する</h4>
+
+<p><code>
+$ rails server
+</code></p>
+
+<p>参考：<br/>
+<a href="http://honana.com/postgresql/82/setting.html  ">http://honana.com/postgresql/82/setting.html  </a>
+<a href="http://d.hatena.ne.jp/f_world21/20110601/1306944597">http://d.hatena.ne.jp/f_world21/20110601/1306944597</a></p>
+
+<hr />
+
+<h3>5-2. [補足追加] Rails3における諸オペレーション</h3>
+
+<h4>既存テーブルへのフィールド追加マイグレーション</h4>
+
+<p>例）> rails g migration AddDate_of_issueToReceipts date_of_issue:date
+文法）> rails g migration Add[追加したいカラム名]To[追加先のテーブル名] カラム名:データ型
+<code>
+$ rails g migration AddPriceToProduct price:decimal
+</code></p>
+
+<hr />
+
+<h3>5-3. [補足追加] Ruby1.9 においてマルチバイト文字を扱うためのマジックコメント</h3>
+
+<h4>Ryby1.9 においてコード中で日本語を扱う場合は、ファイルの先頭に以下のマジックコードを付加すること</h4>
+
+<p>```</p>
+
+<h1>encoding: utf-8</h1>
+
+<p>```</p>
+
+<hr />
+
+<h3>5-4. [補足追加] .rvmrc</h3>
+
+<h4>.rvmrcの設定をrailsプロジェクトのルートに置いておくこと</h4>
+
+<p>設定例）</p>
+
+<p>rvm use 1.9.3@rails32</p>
+
+<hr />
+
+<h3>6. pry導入</h3>
+
+<p>pryはruby用高機能対話環境であり、一連の関連コンポネントは機能的にirb及びruby-debugを置換するものである</p>
+
+<h4>Gemfileへの追記内容</h4>
+
+<p>下記の内、コンポネント「pry-nav」がruby-debugと同機能のデバッガである</p>
+
+<p>```
+source &lsquo;<a href="http://rubygems.org">http://rubygems.org</a>&rsquo;</p>
+
+<p>group :development do
+  gem &lsquo;pry-rails&rsquo;
+  # gem &lsquo;pry-coolline&rsquo;, :git => &lsquo;git://github.com/pry/pry-coolline.git&rsquo;
+  gem &lsquo;pry-nav&rsquo;
+  gem &lsquo;pry-exception_explorer&rsquo;
+  gem &lsquo;hirb-unicode&rsquo;
+end
+```</p>
+
+<h4>.pryrcの内容</h4>
+
+<p>レコードセットを見易くするコンポネント「Hirb」の初期設定等を行う</p>
+
+<p>```</p>
+
+<h1><a href="https://github.com/pry/pry/wiki/FAQ#wiki-hirb">https://github.com/pry/pry/wiki/FAQ#wiki-hirb</a></h1>
+
+<p>require &lsquo;hirb&rsquo;</p>
+
+<p>Hirb.enable</p>
+
+<p>old_print = Pry.config.print
+Pry.config.print = proc do |output, value|
+  Hirb::View.view_or_page_output(value) || old_print.call(output, value)
+end
+```</p>
+
+<p>参考：<br/>
+<a href="http://labs.timedia.co.jp/2011/12/rubyist-should-use-pry.html  ">http://labs.timedia.co.jp/2011/12/rubyist-should-use-pry.html  </a>
+<a href="http://m4i.hatenablog.com/entry/2012/02/22/091501  ">http://m4i.hatenablog.com/entry/2012/02/22/091501  </a>
+<a href="http://blog.kiftwi.net/2012/03/20/summary-of-pry-plugins/  ">http://blog.kiftwi.net/2012/03/20/summary-of-pry-plugins/  </a>
+<a href="http://qiita.com/items/9f7c6b68688e11e962b9">http://qiita.com/items/9f7c6b68688e11e962b9</a> <br/>
+<a href="http://d.hatena.ne.jp/joker1007/">http://d.hatena.ne.jp/joker1007/</a></p>
+
+<hr />
+
+<h3>7. RSpec（rails3.1以降の場合）</h3>
+
+<p>Gemfileに下記を追記する</p>
+
+<p><code>
+gem 'rspec-rails'
+</code></p>
+
+<p>プロジェクトへrspecを適用する
+```</p>
+
+<h1>rails g rspec:install</h1>
+
+<p>```</p>
+
+<p>導入方法は以上</p>
+
+<p>参考：<br/>
+<a href="http://ginpen.com/2012/02/14/rspec-rails/">http://ginpen.com/2012/02/14/rspec-rails/</a></p>
+
+<hr />
+
+<h3>8. git導入</h3>
+
+<p><code>
+$ sudo aptitude install git
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

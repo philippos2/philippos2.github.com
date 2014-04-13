@@ -1,0 +1,584 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>rails3-introduction - Philippos Blue Book</title>
+  <meta name="author" content="Philippos">
+
+  
+  <meta name="description" content="【Rails3開発スタートアップ】 Ryby1.9 においてコード中で日本語を扱う場合は、ファイルの先頭に以下のマジックコードを付加すること 1
+# encoding: utf-8 $HOME以下にrailsアプリを作成（DB指定を忘れないこと） 1
+$ rails new demo -d &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://philippos2.github.io/blog/2013/07/02/rails3-introduction/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Philippos Blue Book" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41954744-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:philippos2.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/">
+        <span class="blue_light">
+            Philippos Blue Book
+        </span>
+       
+           <span class="blue_dark">
+             rails introduction note
+           </span>
+       
+    </a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <!--li><a href="/about">About me</a></li-->
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Rails3-introduction</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-02T07:19:00+09:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>【Rails3開発スタートアップ】</p>
+
+<hr />
+
+<p>Ryby1.9 においてコード中で日本語を扱う場合は、ファイルの先頭に以下のマジックコードを付加すること</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># encoding: utf-8</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p>$HOME以下にrailsアプリを作成（DB指定を忘れないこと）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rails new demo -d mysql</span></code></pre></td></tr></table></div></figure>
+
+
+<p>コントローラ生成</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rails g controller &lt;コントローラ名&gt; &lt;アクション名&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>rails環境下でのスクリプト実行（コマンドラインからモデルを使用した処理を実行可能）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rails runner &lt;スクリプト名&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>モデル生成</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rails g model &lt;モデル名&gt; &lt;カラム名:型&gt; &lt;オプション&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>scaffold作成例</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake db:create
+</span><span class='line'>$ rails g scaffold user name:string age:integer
+</span><span class='line'>$ rake db:migrate
+</span><span class='line'>$ rails server</span></code></pre></td></tr></table></div></figure>
+
+
+<p>モデルへカラム追加</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rails g migration AddColnameToTablename colname:string</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h5>DB操作</h5>
+
+<p>DB削除、DB作成、テーブル作成、初期値挿入</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake db:drop
+</span><span class='line'>$ rake db:create
+</span><span class='line'>$ rake db:migrate
+</span><span class='line'>$ rake db:seed</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>ヒント</h5>
+
+<p>・レコードの内容を操作する必要があるとき、マイグレーションの内部でレコードの操作を行うことが有用な場合がある
+　その場合、マイグレーションをロールバックしてもデータに誤謬が生じないようロールバックさせるようにすること</p>
+
+<hr />
+
+<h4>Gemfile</h4>
+
+<h5>必須コンポネント</h5>
+
+<p>他にもあるが、別稿に譲る</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'pg'                        # postgresql用アダプタ
+</span><span class='line'>gem 'therubyracer'              # JavaScript
+</span><span class='line'>gem 'will_paginate', '~&gt; 3.0'   # will_paginate（バージョンに注意）
+</span><span class='line'>gem 'bcrypt-ruby'               # ハッシュ生成用
+</span><span class='line'>gem 'rspec-rails'               # rspec
+</span><span class='line'>gem "thin"                      # 開発用WebServer
+</span><span class='line'>
+</span><span class='line'># for pry
+</span><span class='line'>source 'http://rubygems.org'
+</span><span class='line'>group :development do
+</span><span class='line'>  gem 'pry-rails'
+</span><span class='line'>  # gem 'pry-coolline', :git =&gt; 'git://github.com/pry/pry-coolline.git'
+</span><span class='line'>  gem 'pry-nav'
+</span><span class='line'>  gem 'pry-exception_explorer'
+</span><span class='line'>  gem 'hirb-unicode'
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>.pryrc</h4>
+
+<p>プロジェクトディレクトリ直下に設置</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># https://github.com/pry/pry/wiki/FAQ#wiki-hirb$
+</span><span class='line'>require 'hirb'$
+</span><span class='line'>$
+</span><span class='line'>Hirb.enable$
+</span><span class='line'>$
+</span><span class='line'>old_print = Pry.config.print$
+</span><span class='line'>Pry.config.print = proc do |output, value|$
+</span><span class='line'>  Hirb::View.view_or_page_output(value) || old_print.call(output, value)$
+</span><span class='line'>end$
+</span><span class='line'>$
+</span><span class='line'>Pry.commands.alias_command 'c', 'continue'$
+</span><span class='line'>Pry.commands.alias_command 's', 'step'$
+</span><span class='line'>Pry.commands.alias_command 'n', 'next'$
+</span><span class='line'>Pry.commands.alias_command 'f', 'finish'$</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考：<br/>
+<a href="https://github.com/nixme/pry-debugger">https://github.com/nixme/pry-debugger</a></p>
+
+<hr />
+
+<h4>rspec導入／テスト雛形作成</h4>
+
+<p>・railsへのrspecのインストールと雛形を作成。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rails generate rspec:install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>・既に作成済みのコントローラのテストの雛形を作成（アクションは複数追加可）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rails generate rspec:controller &lt;コントローラ名&gt; &lt;アクション名&gt; &lt;アクション名&gt; ......</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>gitリポジトリ作成</h4>
+
+<p>以下はプロジェクトディレクトリに移動して行うこと。</p>
+
+<p>・レポジトリ初期化</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git init</span></code></pre></td></tr></table></div></figure>
+
+
+<p>・ファイルを全て追加</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git add .</span></code></pre></td></tr></table></div></figure>
+
+
+<p>・変更ファイルを確認</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git status</span></code></pre></td></tr></table></div></figure>
+
+
+<p>・コミット</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git commit -m 'first commit'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>・履歴を確認</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git log</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>rakeファイル</h4>
+
+<h5>rakeタスクでActiveRecordを使うには、「task :taskname => :environment」が必要</h5>
+
+<p>rakeファイル中で以下のように記述する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>namespace :hoge do
+</span><span class='line'>  task :setup =&gt; :environment do
+</span><span class='line'>    p User.count
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>その他</h4>
+
+<h5>状態表示</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake stats</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>ルート表示</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake routes</span></code></pre></td></tr></table></div></figure>
+
+
+<p>コントローラで絞り込む場合</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake routes CONTROLLER=&lt;コントローラ名&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake routes CONTROLLER=users</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>session情報をDBで管理する方法</h4>
+
+<p>まずRDBに対してマイグレーションを行う</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake db:sessions:create
+</span><span class='line'>$ rake db:migrate</span></code></pre></td></tr></table></div></figure>
+
+
+<p>次に config/initializers/session_store.rb 3行目をコメントに変更する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#&lt;プロジェクト名&gt;::Application.config.session_store :cookie_store, :key =&gt; '_market_session' </span></code></pre></td></tr></table></div></figure>
+
+
+<p>さらに8行目のコメントを外す</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;プロジェクト名&gt;::Application.config.session_store :active_record_store</span></code></pre></td></tr></table></div></figure>
+
+
+<p>また以下を行うことでRDB上のセッション情報を全削除できる</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake db:sessions:clear</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>Rakeタスクでプリコンパイル済みのアセットを作成する</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake assets:precompile RAILS_ENV=production</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Philippos</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-02T07:19:00+09:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/introduction/'>introduction</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://philippos2.github.io/blog/2013/07/02/rails3-introduction/" data-via="" data-counturl="http://philippos2.github.io/blog/2013/07/02/rails3-introduction/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/07/01/about-vim-settings/" title="Previous Post: about-vim-settings">&laquo; about-vim-settings</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/07/02/about-slim/" title="Next Post: about-slim">about-slim &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/13/scalatra-introduction/">scalatra introduction</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo/">vagrant + chef-solo (knife-solo)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/15/scala-play2-introduction/">scala play2 introduction</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/07/bookmarks-2013-12/">bookmarks 2013/12</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/11/rails-optimization-points/">rails optimization points</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/act-as-paranoid' style='font-size: 103.52941176470588%'>act-as-paranoid(1)</a> <a href='/blog/categories/authentication' style='font-size: 110.58823529411765%'>authentication(3)</a> <a href='/blog/categories/bookmarks' style='font-size: 103.52941176470588%'>bookmarks(1)</a> <a href='/blog/categories/byebug' style='font-size: 103.52941176470588%'>byebug(1)</a> <a href='/blog/categories/cancan' style='font-size: 103.52941176470588%'>cancan(1)</a> <a href='/blog/categories/centos' style='font-size: 103.52941176470588%'>centos(1)</a> <a href='/blog/categories/chef-solo' style='font-size: 103.52941176470588%'>chef-solo(1)</a> <a href='/blog/categories/debian' style='font-size: 103.52941176470588%'>debian(1)</a> <a href='/blog/categories/devise' style='font-size: 103.52941176470588%'>devise(1)</a> <a href='/blog/categories/git' style='font-size: 110.58823529411765%'>git(3)</a> <a href='/blog/categories/heroku' style='font-size: 103.52941176470588%'>heroku(1)</a> <a href='/blog/categories/introduction' style='font-size: 145.88235294117646%'>introduction(13)</a> <a href='/blog/categories/knife-solo' style='font-size: 103.52941176470588%'>knife-solo(1)</a> <a href='/blog/categories/logrotate' style='font-size: 103.52941176470588%'>logrotate(1)</a> <a href='/blog/categories/memcached' style='font-size: 103.52941176470588%'>memcached(1)</a> <a href='/blog/categories/mysql' style='font-size: 103.52941176470588%'>mysql(1)</a> <a href='/blog/categories/nginx' style='font-size: 107.05882352941177%'>nginx(2)</a> <a href='/blog/categories/octopress' style='font-size: 103.52941176470588%'>octopress(1)</a> <a href='/blog/categories/play2' style='font-size: 103.52941176470588%'>play2(1)</a> <a href='/blog/categories/plugins' style='font-size: 131.76470588235293%'>plugins(9)</a> <a href='/blog/categories/postgresql' style='font-size: 107.05882352941177%'>postgresql(2)</a> <a href='/blog/categories/pry' style='font-size: 110.58823529411765%'>pry(3)</a> <a href='/blog/categories/rails' style='font-size: 160.0%'>rails(17)</a> <a href='/blog/categories/rspec' style='font-size: 103.52941176470588%'>rspec(1)</a> <a href='/blog/categories/ruby' style='font-size: 142.35294117647058%'>ruby(12)</a> <a href='/blog/categories/scala' style='font-size: 107.05882352941177%'>scala(2)</a> <a href='/blog/categories/scalatra' style='font-size: 103.52941176470588%'>scalatra(1)</a> <a href='/blog/categories/slim' style='font-size: 103.52941176470588%'>slim(1)</a> <a href='/blog/categories/sorcery' style='font-size: 103.52941176470588%'>sorcery(1)</a> <a href='/blog/categories/tmux' style='font-size: 103.52941176470588%'>tmux(1)</a> <a href='/blog/categories/tools' style='font-size: 103.52941176470588%'>tools(1)</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap(2)</a> <a href='/blog/categories/unicorn' style='font-size: 107.05882352941177%'>unicorn(2)</a> <a href='/blog/categories/vagrant' style='font-size: 103.52941176470588%'>vagrant(1)</a> <a href='/blog/categories/vim' style='font-size: 107.05882352941177%'>vim(2)</a> <a href='/blog/categories/virtualbox' style='font-size: 107.05882352941177%'>virtualbox(2)</a> <a href='/blog/categories/z-shell' style='font-size: 103.52941176470588%'>z-shell(1)</a> </span>
+</section>
+
+
+
+
+
+
+<p/>
+
+<div align="center">
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4844330845/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4844330845&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4844330845&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4844330845" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798125415/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798125415&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798125415&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798125415" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4873115655/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4873115655&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873115655&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4873115655" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4873113946/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4873113946&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873113946&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4873113946" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4048687158/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4048687158&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4048687158&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4048687158" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4274068668/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4274068668&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4274068668&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4274068668" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798121932/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798121932&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798121932&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798121932" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798115169/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798115169&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798115169&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798115169" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798124702/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798124702&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798124702&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798124702" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4774143073/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4774143073&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4774143073&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4774143073" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+</div>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Philippos -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

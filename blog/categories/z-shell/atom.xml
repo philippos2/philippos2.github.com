@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: z-shell | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/z-shell/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[z-shell-introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/08/03/z-shell-introduction/"/>
+    <updated>2013-08-03T18:26:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/08/03/z-shell-introduction</id>
+    <content type="html"><![CDATA[<h3>z-shell 導入</h3>
+
+<p>tmux 上の作業用 shell を bash から bash と比較して多機能かつ高速であるとされる z-shell へ移行した。</p>
+
+<p><a href="http://www.zsh.org/">http://www.zsh.org/</a></p>
+
+<h4>■z-shell のインストール</h4>
+
+<p><code>
+$ sudo aptitude install zsh
+</code></p>
+
+<p>tmuxの設定ファイル（.tmux.conf）に、下記の設定を追記する。</p>
+
+<p><code>
+set-option -g default-shell /bin/zsh
+</code></p>
+
+<p>上記設定を追加後、tmux を再起動する。
+tmux を再起動してから使用されている shell の種類を確認すること。</p>
+
+<p><code>
+$ echo $SHELL
+</code></p>
+
+<h5>その他</h5>
+
+<p>zsh によるグロッピングが原因で octopress 用のコマンドがエラーとなってしまうため、.zshrc にグロッピング禁止の設定を追加する。 <br/>
+~/.zshrc に以下を追記すること。</p>
+
+<p><code>
+setopt nonomatch # for octopress
+</code></p>
+
+<h4>■oh-my-zsh のインストール</h4>
+
+<p>設定ファイル集 oh-my-zsh を利用する。</p>
+
+<p><code>
+git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+</code></p>
+
+<p>以下のサイトのプレビューからテーマを選択する。</p>
+
+<p><a href="http://zshthem.es/all/">http://zshthem.es/all/</a></p>
+
+<p>これらのテーマの中には、ローカルの git リポジトリ状態（対象ブランチ、編集中か否か、等）を shell prompt に表示するものもあるので利用したい。 <br/>
+今回はテーマとして、'pmcgee' を採用した。
+.zshrc 中の以下の変数を編集する。</p>
+
+<p><code>
+ZSH_THEME="pmcgee"
+</code></p>
+
+<p>tmux を再起動してテーマが正しく設定されているか確認すること。</p>
+
+<hr />
+
+<p>参考サイト： <br/>
+<a href="http://news.mynavi.jp/column/zsh/022/index.html">http://news.mynavi.jp/column/zsh/022/index.html</a> <br/>
+<a href="http://shanon-tech.blogspot.jp/2012/10/zsh.html">http://shanon-tech.blogspot.jp/2012/10/zsh.html</a> <br/>
+<a href="http://d.hatena.ne.jp/eitya/20110707/1310023383">http://d.hatena.ne.jp/eitya/20110707/1310023383</a> <br/>
+<a href="http://zshthem.es/all/">http://zshthem.es/all/</a></p>
+]]></content>
+  </entry>
+  
+</feed>

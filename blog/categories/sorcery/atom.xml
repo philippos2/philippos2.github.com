@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: sorcery | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/sorcery/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[about-sorcery]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/04/about-sorcery/"/>
+    <updated>2013-07-04T07:23:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/04/about-sorcery</id>
+    <content type="html"><![CDATA[<h3>認証用GEM Saorcery 導入手順 （2012/04/20～）</h3>
+
+<p>内容については割愛</p>
+
+<p>参考サイト：<br/>
+<a href="http://selfkleptomaniac.org/archives/2068">http://selfkleptomaniac.org/archives/2068</a> <br/>
+<a href="http://blog.twiwt.org/e/63070f">http://blog.twiwt.org/e/63070f</a> <br/>
+<a href="http://railscasts.com/episodes/283-authentication-with-sorcery">http://railscasts.com/episodes/283-authentication-with-sorcery</a> <br/>
+<a href="http://railscasts.com/episodes/283-authentication-with-sorcery?language=ja&amp;view=asciicast">http://railscasts.com/episodes/283-authentication-with-sorcery?language=ja&amp;view=asciicast</a></p>
+]]></content>
+  </entry>
+  
+</feed>

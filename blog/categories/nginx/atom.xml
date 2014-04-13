@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: nginx | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/nginx/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[logging settings by logrotate]]></title>
+    <link href="http://philippos2.github.io/blog/2013/08/10/logging-settings-by-logrotate/"/>
+    <updated>2013-08-10T14:12:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/08/10/logging-settings-by-logrotate</id>
+    <content type="html"><![CDATA[<h3>■ nginx の logrotate 設定</h3>
+
+<p>今回 squeeze 上に導入した nginx/1.4.1 では特に設定の必要なし。
+以下は既定の設定である。</p>
+
+<p>```
+/var/log/nginx/*.log {</p>
+
+<pre><code>    daily
+    missingok
+    rotate 52
+    compress
+    delaycompress
+    notifempty
+    create 640 nginx adm
+    sharedscripts
+    postrotate
+            [ -f /var/run/nginx.pid ] &amp;&amp; kill -USR1 `cat /var/run/nginx.pid`
+    endscript
+</code></pre>
+
+<p>}
+```</p>
+
+<p>対象となるログは以下である。 <br/>
+/var/log/nginx/access.log <br/>
+/var/log/nginx/error.log</p>
+
+<p>参考サイト： <br/>
+<a href="http://www.mk-mode.com/octopress/2013/02/17/nginx-logrotation/">http://www.mk-mode.com/octopress/2013/02/17/nginx-logrotation/</a></p>
+
+<hr />
+
+<h3>■ unicorn の logrotate 設定</h3>
+
+<p>rails アプリの logrotate 用設定ファイルを /etc/logrotate.d/[rails_app] に設定する。</p>
+
+<p>```
+/home/philippos/[rails_app]/log/unicorn.*.log {
+  daily
+  missingok
+  rotate 60
+  dateext</p>
+
+<p>  # 圧縮設定 (次回のログ循環まで保留)
+  compress
+  delaycompress</p>
+
+<p>  # unicorn master プロセスへ USR1 シグナル送信
+  lastaction</p>
+
+<pre><code>pid=/home/philippos/[rails_app]/tmp/pids/unicorn.pid
+test -s $pid &amp;&amp; kill -USR1 "$(cat $pid)"
+</code></pre>
+
+<p>  endscript
+}
+```</p>
+
+<p>上記設定の場合、日次でログ循環し、過去のログファイルは60世代まで確保される。
+日付が付けられた過去のログファイルは圧縮される。</p>
+
+<h4>○補追</h4>
+
+<h5>daily</h5>
+
+<p>日次でログ循環する。週次の場合は <code>weekly</code>、月次の場合は <code>monthly</code> を設定する。</p>
+
+<h5>missingok</h5>
+
+<p>ログファイルが存在しない場合でもエラーとしない。</p>
+
+<h5>rotate n</h5>
+
+<p>n 世代までログファイルを保持する。</p>
+
+<h5>dateext</h5>
+
+<p>過去のログファイルに日付（YYYYMMDD）を付加する。</p>
+
+<h4>○logrotate のオプションについて</h4>
+
+<p>logrotate 設定テスト</p>
+
+<p><code>
+$ /usr/sbin/logrotate -d /etc/logrotate.d/[rails_app]
+</code></p>
+
+<p>cron に依らず手動で logrotate してみたい場合</p>
+
+<p><code>
+$ /usr/sbin/logrotate -f /etc/logrotate.d/[rails_app]
+</code></p>
+
+<p>参考サイト： <br/>
+<a href="https://github.com/phusion/unicorn/blob/master/examples/logrotate.conf">https://github.com/phusion/unicorn/blob/master/examples/logrotate.conf</a> <br/>
+<a href="http://linux.kororo.jp/cont/server/logrotate.php">http://linux.kororo.jp/cont/server/logrotate.php</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[nginx+unicorn-introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/07/nginx-plus-unicorn-introduction/"/>
+    <updated>2013-07-07T11:27:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/07/nginx-plus-unicorn-introduction</id>
+    <content type="html"><![CDATA[<h3>【nginx+unicorn導入メモ】2013/06/02～</h3>
+
+<p>Railsアプリにおいて静的資源をnginxに、rackサーバ上で動作する動的資源についてはunicornに担当させる構成について
+とりあえず導入まで。最適化に関しては別稿に譲る</p>
+
+<hr />
+
+<h4>■nginx導入</h4>
+
+<h5>○nginx導入前準備</h5>
+
+<p>2013/06/02時点において、aptitudeでのnginxパッケージの既定バージョンは0.7.67と古いため、nginx公式サイトをリポジトリに登録し、aptitudeでstable最新版をインストールできるようにする</p>
+
+<h4>1. まずパッケージの公開鍵をダウンロードしてapt-keyで追加する</h4>
+
+<p><code>
+$ wget "http://nginx.org/keys/nginx_signing.key"
+$ sudo apt-key add nginx_signing.key
+</code></p>
+
+<h4>2. 次にnginx公式サイトをリポジトリに追加する</h4>
+
+<p>次のファイルに追加する
+<code>
+$ sudo vim /etc/apt/sources.list
+</code></p>
+
+<p><code>
+deb http://nginx.org/packages/debian/ squeeze nginx
+deb-src http://nginx.org/packages/debian/ squeeze nginx
+</code></p>
+
+<h4>3. リポジトリの追加を反映する</h4>
+
+<p><code>
+$ sudo aptitude update
+</code></p>
+
+<p>インストール可能なバージョンが更新されているか確認する
+<code>
+$ aptitude show nginx
+</code></p>
+
+<p>2013/06/02時点でイントール可能なバージョンは、「1.4.1-1~squeeze」である</p>
+
+<h5>○nginx導入</h5>
+
+<p>aptitudeコマンドにてnginxをインストールする
+<code>
+$ sudo aptitude install nginx
+</code></p>
+
+<p>以下のコマンドで正常にインストールできたか確認する
+<code>
+$ aptitude show nginx
+</code></p>
+
+<p><code>
+パッケージ: nginx
+状態: インストール済み
+自動的にインストールされた: no
+バージョン: 1.4.1-1~squeeze
+優先度: 任意
+セクション: httpd
+メンテナ: Sergey Budnevitch &lt;sb@nginx.com&gt;
+展開サイズ: 1,102 k
+依存: libc6 (&gt;= 2.10), libpcre3 (&gt;= 7.7), libssl0.9.8 (&gt;= 0.9.8m-1), zlib1g (&gt;= 1:1.1.4), lsb-base, adduser
+提供: httpd
+説明: HTTP and reverse proxy server, as well as a mail proxy server
+ written by Igor Sysoev
+ホームページ: http://nginx.org
+</code></p>
+
+<p>バージョン確認
+```
+$ /usr/sbin/nginx -v</p>
+
+<p>nginx version: nginx/1.4.1
+```</p>
+
+<hr />
+
+<h4>■nginx起動／停止</h4>
+
+<h5>○起動</h5>
+
+<p><code>
+$ sudo /etc/init.d/nginx start
+</code></p>
+
+<p><a href="http://192.168.56.1/">http://192.168.56.1/</a> 等、起動したサーバへアクセスし、「Welcome to nginx!」と表示されるか確認する</p>
+
+<h5>○停止</h5>
+
+<p><code>
+$ sudo /etc/init.d/nginx stop
+</code></p>
+
+<p>※
+以下のエラーが出る場合には、何らかのプログラムが80番ポートを塞いでいる可能性があるので、そのプログラムを停止しておく
+<code>
+nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+</code></p>
+
+<p>例）
+80番ポートを塞いでいるプログラムを探し、停止する
+```
+$ sudo lsof -i:80</p>
+
+<p>COMMAND  PID     USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+apache2 1768     root    5u  IPv6   4665      0t0  TCP *:www (LISTEN)</p>
+
+<p>$ sudo /etc/init.d/apache2 stop
+```</p>
+
+<hr />
+
+<h4>■nginx設定</h4>
+
+<p><code>
+/etc/nginx/conf.d/default.conf
+</code></p>
+
+<p>default.confを元に編集した
+元となったdefault.confは、default.conf.backupとして保存した</p>
+
+<h5>○設定のポイント</h5>
+
+<ol>
+<li>ソケットファイルのパスをunicornで設定するそれ（後述）と一致させること</li>
+<li>ポート番号に留意すること</li>
+<li>プロキシパスを設定すること</li>
+</ol>
+
+
+<p>注）コメントアウトされている箇所については割愛した
+```
+upstream unicorn.railsapp {</p>
+
+<pre><code>server unix:/home/philippos/coxcomb/tmp/sockets/unicorn.sock;
+</code></pre>
+
+<p>}</p>
+
+<p>server {</p>
+
+<pre><code>listen       80;
+server_name  localhost;
+
+location / {
+    root   /home/philippos/coxcomb/public;
+    index  index.html index.htm;
+
+    proxy_pass http://unicorn.railsapp;
+}
+
+# redirect server error pages to the static page /50x.html
+#
+error_page   500 502 503 504  /50x.html;
+location = /50x.html {
+    root   /usr/share/nginx/html;
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<hr />
+
+<h4>■unicorn導入</h4>
+
+<ul>
+<li>Railsアプリディレクトリ以下のGemfileにunicornを追加する</li>
+<li>bundle install した後、configフォルダに設定ファイルとして、unicorn_config.rbを作成する</li>
+<li>内容は後述</li>
+</ul>
+
+
+<h5>○起動確認</h5>
+
+<ul>
+<li>-Dオプションを追加することでデーモンとして起動する</li>
+<li>デーモンを停止させるにはpsコマンドで該当プロセルを探し、kill -9 コマンドでpidを指定して停止させる</li>
+</ul>
+
+
+<h5>■起動</h5>
+
+<p><code>
+$ unicorn_rails -c config/unicorn_config.rb -E production -D
+</code></p>
+
+<h5>■停止</h5>
+
+<p>起動中のプロセスを検索し、unicornのマスタープロセスのみ停止させる。</p>
+
+<p>```
+$ ps aux | grep unicorn</p>
+
+<p>133:1000      9174  0.1 16.9 736356 64496 ?        Sl   06:52   0:01 unicorn_rails master -c config/unicorn_config.rb -E production -D                                                                                                                  <br/>
+134:1000      9180  0.0 18.3 746884 69880 ?        Sl   06:52   0:00 unicorn_rails worker[0] -c config/unicorn_config.rb -E production -D                                                                                                               <br/>
+135:1000      9183  0.0 18.5 747356 70280 ?        Sl   06:52   0:00 unicorn_rails worker[1] -c config/unicorn_config.rb -E production -D                                                                                                               <br/>
+136:1000      9186  0.0 16.4 738984 62556 ?        Sl   06:52   0:00 unicorn_rails worker[2] -c config/unicorn_config.rb -E production -D                                                                                                               <br/>
+137:1000      9189  0.0 18.0 745620 68404 ?        Sl   06:52   0:00 unicorn_rails worker[3] -c config/unicorn_config.rb -E production -D                                                                                                               <br/>
+141:1000      9428  0.1  1.1  36220  4204 pts/1    S+   07:01   0:00 vim source/_posts/2013-07-07-nginx-plus-unicorn-introduction.markdown
+143:1000      9452  0.0  0.2  11328   936 pts/0    S+   07:04   0:00 grep -n unicorn</p>
+
+<p>$ kill -9 9174
+```</p>
+
+<hr />
+
+<h4>■unicorn設定</h4>
+
+<ul>
+<li>Railsアプリディレクトリ以下connfig/unicorn_config.rb</li>
+<li>ソケットファイルのパス、ポート番号、ログ出力先等に留意する</li>
+<li>それらをnginxの設定と同一にする必要がある</li>
+</ul>
+
+
+<p>例）
+```</p>
+
+<h1>coding:utf-8</h1>
+
+<h1>unicron.rb</h1>
+
+<p>worker_processes  4
+working_directory &lsquo;/home/philippos/coxcomb&rsquo;</p>
+
+<p>listen &lsquo;/home/philippos/coxcomb/tmp/pids/unicorn.sock&rsquo;, :backlog => 1
+listen 4422, :tcp_nopush => true</p>
+
+<p>pid &lsquo;/home/philippos/coxcomb/tmp/sockets/unicorn.pid&rsquo;</p>
+
+<p>timeout 10</p>
+
+<p>stdout_path &lsquo;/home/philippos/coxcomb/log/unicorn.stdout.log&rsquo;
+stderr_path &lsquo;/home/philippos/coxcomb/log/unicorn.stderr.log&rsquo;</p>
+
+<p>preload_app true
+GC.respond_to?(:copy_on_write_friendly=) and GC.copy_on_write_friendly = true</p>
+
+<p>before_fork do |server, worker|
+defined?(ActiveRecord::Base) and ActiveRecord::Base.connection.disconnect!</p>
+
+<p>old_pid = &ldquo;#{server.config[:pid]}.oldbin&rdquo;</p>
+
+<p>if old_pid != server.pid
+  begin</p>
+
+<pre><code>sig = (worker.nr + 1) &gt;= server.worker_processes ? :QUIT : :TTOU
+Process.kill(sig, File.read(old_pid).to_i)
+</code></pre>
+
+<p>  rescue Errno::ENOENT, Errno::ESRCH
+  end
+end</p>
+
+<p>sleep 1
+end</p>
+
+<p>after_fork do |server, worker|
+  defined?(ActiveRecord::Base) and ActiveRecord::Base.establish_connection
+end
+```</p>
+
+<hr />
+
+<h4>■その他</h4>
+
+<p>abコマンド：サイトが1秒間に何アクセス捌けるか確認するコマンド
+<code>
+$ ab -c 10 -n 100 http://example.com/
+</code></p>
+
+<p>○thinサーバの場合……
+<code>
+Requests per second:    11.22 [#/sec] (mean)
+</code></p>
+
+<p>○nginx + unicornの場合……
+<code>
+Requests per second:    105.77 [#/sec] (mean)
+</code></p>
+
+<h5>■rails設定</h5>
+
+<p>config/environments/production.rb内の設定は、以下のようにすること。</p>
+
+<ul>
+<li>静的ファイルの扱いを rails 本体ではなく、nginx に移譲する。</li>
+</ul>
+
+
+<p><code>config.serve_static_assets = false</code></p>
+
+<ul>
+<li>アセットパイプラインのライブコンパイルを有効にする。</li>
+</ul>
+
+
+<p><code>config.assets.compile = true</code></p>
+
+<p>以上</p>
+]]></content>
+  </entry>
+  
+</feed>

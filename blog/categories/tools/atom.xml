@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: tools | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/tools/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[about-sar-command]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/08/about-sar-command/"/>
+    <updated>2013-07-08T21:20:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/08/about-sar-command</id>
+    <content type="html"><![CDATA[<h3>【その他周辺ツール類】</h3>
+
+<h4>■sarコマンド導入</h4>
+
+<p>```
+$ sudo aptitude install sysstat</p>
+
+<p>sudo dpkg-reconfigure sysstat
+sysstatのcron jobを有効にしますか？→はい
+```</p>
+
+<p>以上</p>
+
+<h4>■sarコマンド使用方法</h4>
+
+<p>○sarコマンドの主要オプション（パラメータ）</p>
+
+<ul>
+<li>-A<br/>
+全情報表示</li>
+<li>-n DEV<br/>
+送信／受信パケットに関する情報</li>
+<li>-n EDEV<br/>
+エラーパケットに関する情報</li>
+<li>-u<br/>
+CPUの利用状況</li>
+<li>-b<br/>
+ディスクI/Oの使用状況</li>
+<li>-r<br/>
+メモリとスワップの使用状況</li>
+<li>-W<br/>
+秒当たりのスワップ情報</li>
+</ul>
+
+
+<p>参考サイト:<br/>
+<a href="http://d.hatena.ne.jp/nabnab/20101028/1288259546">http://d.hatena.ne.jp/nabnab/20101028/1288259546</a> <br/>
+<a href="http://www.syboos.jp/linux/doc/sar-command.html">http://www.syboos.jp/linux/doc/sar-command.html</a></p>
+]]></content>
+  </entry>
+  
+</feed>

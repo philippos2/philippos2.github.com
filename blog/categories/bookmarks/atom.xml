@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: bookmarks | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/bookmarks/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[bookmarks 2013/12]]></title>
+    <link href="http://philippos2.github.io/blog/2013/12/07/bookmarks-2013-12/"/>
+    <updated>2013-12-07T18:41:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/12/07/bookmarks-2013-12</id>
+    <content type="html"><![CDATA[<h3>ここ二ヶ月程でタメになったブログ記事一覧</h3>
+
+<ul>
+<li><h4>肥大化したActiveRecordモデルをリファクタリングする7つの方法(翻訳)</h4>
+
+<p><a href="http://techracho.bpsinc.jp/hachi8833/2013_11_19/14738">http://techracho.bpsinc.jp/hachi8833/2013_11_19/14738</a></p></li>
+<li><h4>Relish Project: RSpec Rails 3.0</h4>
+
+<p><a href="https://relishapp.com/rspec/rspec-rails/docs">https://relishapp.com/rspec/rspec-rails/docs</a></p></li>
+<li><h4>Better Specs { rspec guidelines with ruby }</h4>
+
+<p><a href="http://betterspecs.org/jp/">http://betterspecs.org/jp/</a></p></li>
+<li><h4>メタプログラミングRuby イディオム・黒魔術一覧</h4>
+
+<p><a href="http://d.hatena.ne.jp/tbpg/20130613/1371143345">http://d.hatena.ne.jp/tbpg/20130613/1371143345</a></p></li>
+<li><h4>メタプログラミングRubyのイディオム</h4>
+
+<p><a href="http://maeshima.hateblo.jp/entry/20110519/1305808363">http://maeshima.hateblo.jp/entry/20110519/1305808363</a></p></li>
+<li><h4>「関数型Ruby」という病</h4>
+
+<p><a href="http://yuroyoro.hatenablog.com/entry/2012/08/08/201720">http://yuroyoro.hatenablog.com/entry/2012/08/08/201720</a></p></li>
+<li><h4>Pryが真の力を発揮してくれる19個のコマンドとコマンドの自作方法[Rails]</h4>
+
+<p><a href="http://morizyun.github.io/blog/pry-command-rails-ruby/">http://morizyun.github.io/blog/pry-command-rails-ruby/</a></p></li>
+<li><h4>Ruby on Rails 4.0.1リリース！大量のバグ修正、3系からの移行も少し簡単になりました</h4>
+
+<p><a href="http://techracho.bpsinc.jp/baba/2013_11_02/14645">http://techracho.bpsinc.jp/baba/2013_11_02/14645</a></p></li>
+<li><h4>知って得する！５５のRubyのトリビアな記法</h4>
+
+<p><a href="http://melborne.github.io/2013/03/04/ruby-trivias-you-should-know-4/">http://melborne.github.io/2013/03/04/ruby-trivias-you-should-know-4/</a>
+（←Rubyのcurry化って、こんなふうに使うのか……。）</p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

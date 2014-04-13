@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: octopress | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[octopress-on-github]]></title>
+    <link href="http://philippos2.github.io/blog/2013/06/29/octopress-on-github/"/>
+    <updated>2013-06-29T20:14:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/06/29/octopress-on-github</id>
+    <content type="html"><![CDATA[<p>[octopress on github 導入手順と使用方法] 2013/06/22～</p>
+
+<ul>
+<li><h4>導入</h4></li>
+</ul>
+
+
+<p><code>
+$ git clone git://github.com/imathis/octopress.git octopress
+$ cd octopress
+$ bundle install
+$ rake install
+</code></p>
+
+<ul>
+<li><h4>テーマの変更</h4></li>
+</ul>
+
+
+<p><code>
+$ git clone https://github.com/wallace/justin-kelly-theme.git .themes/justin-kelly
+$ rake install['justin-kelly']
+</code></p>
+
+<ul>
+<li><h4>初期設定</h4></li>
+</ul>
+
+
+<p><code>
+$ rake setup_github_pages
+</code></p>
+
+<p>Enter the read/write url for your repository:
+[リポジトリURI]</p>
+
+<ul>
+<li><h4>記事の投稿</h4></li>
+</ul>
+
+
+<p>以下でファイル(source/_posts/YYYY-mm-DD-test-post.markdown)を作成し、それを編集する。</p>
+
+<p>```
+$ rake new_post[&lsquo;new issue&rsquo;]</p>
+
+<p>```</p>
+
+<ul>
+<li><h4>ページの新設</h4></li>
+</ul>
+
+
+<p><code>
+$ rake new_page['new-page']
+</code></p>
+
+<ul>
+<li><h4>記事の生成</h4></li>
+</ul>
+
+
+<p><code>
+$ rake generate
+</code></p>
+
+<ul>
+<li><h4>ローカルでのプレビュー</h4></li>
+</ul>
+
+
+<p><code>
+$ rake preview
+</code></p>
+
+<p>以下へアクセス
+<a href="http://localhost:4000/">http://localhost:4000/</a></p>
+
+<ul>
+<li><h4>デプロイ</h4></li>
+</ul>
+
+
+<p><code>
+$ rake generate
+$ rake deploy
+</code></p>
+
+<p>もしくは</p>
+
+<p><code>
+$ rake gen_deploy
+</code></p>
+
+<ul>
+<li><h4>その他</h4></li>
+</ul>
+
+
+<p>たまにキャッシュを削除すること</p>
+
+<p><code>
+$ rake clean
+</code></p>
+
+<p>上記は以下と等価</p>
+
+<p><code>
+$ rm -rf .pygments-cache/** .gist-cache/** .sass-cache/** source/stylesheets/screen.css
+</code></p>
+
+<p>git も以下で最適化</p>
+
+<p><code>
+$ git gc
+</code></p>
+
+<p>以上</p>
+]]></content>
+  </entry>
+  
+</feed>

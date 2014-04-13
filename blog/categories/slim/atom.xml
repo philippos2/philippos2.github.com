@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: slim | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/slim/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[about-slim]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/02/about-slim/"/>
+    <updated>2013-07-02T23:10:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/02/about-slim</id>
+    <content type="html"><![CDATA[<h3>HTMLテンプレートエンジン slim</h3>
+
+<p>Gemfileに以下を追加しbundle installする</p>
+
+<p><code>
+gem 'slim-rails'
+</code></p>
+
+<p>文法については haml とほぼ同様</p>
+
+<p>参考サイト：<br/>
+<a href="http://slim-lang.com/">http://slim-lang.com/</a> <br/>
+<a href="http://route477.net/d/?date=20101201">http://route477.net/d/?date=20101201</a></p>
+]]></content>
+  </entry>
+  
+</feed>

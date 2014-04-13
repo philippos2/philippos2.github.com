@@ -1,0 +1,666 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>vagrant + chef-solo (knife-solo) - Philippos Blue Book</title>
+  <meta name="author" content="Philippos">
+
+  
+  <meta name="description" content="【vagrant + chef-solo および knife-solo による開発環境構築】(2014/03/15 &ndash; ) ■概要 ○目的 同一構成の複数の仮想マシンを開発環境として構築することで、開発環境構築の効率化と各開発者間の開発環境の統一を図る。 ○構成 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://philippos2.github.io/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Philippos Blue Book" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41954744-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:philippos2.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/">
+        <span class="blue_light">
+            Philippos Blue Book
+        </span>
+       
+           <span class="blue_dark">
+             rails introduction note
+           </span>
+       
+    </a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <!--li><a href="/about">About me</a></li-->
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Vagrant + Chef-solo (Knife-solo)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-17T01:13:00+09:00" pubdate data-updated="true">Mar 17<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>【vagrant + chef-solo および knife-solo による開発環境構築】(2014/03/15 &ndash; )</p>
+
+<p>■概要</p>
+
+<p>○目的</p>
+
+<p>同一構成の複数の仮想マシンを開発環境として構築することで、開発環境構築の効率化と各開発者間の開発環境の統一を図る。</p>
+
+<p>○構成</p>
+
+<p>各ソフトウェアのバージョンは現時点(2014/03/15)での版である。</p>
+
+<ul>
+<li>ホストOS：              Windows7</li>
+<li>ゲストOS：              CentOS 6.5 64bit</li>
+<li>仮想マシン：            VitualBox ver4.3.8</li>
+<li>仮想マシン管理：        Vagrant ver1.5.1</li>
+<li>自動システム管理：      chef-solo および Knife-solo</li>
+<li>その他：                rsync ver3.1.0</li>
+</ul>
+
+
+<p>その他：  <br/>
+・chef-solo を動作させるため、windows上にver1.9以降のrubyが必要である。1.8系以前のバージョンは非推奨。  <br/>
+・knife-solo は、chef-solo を補助するためのツールである。</p>
+
+<p>○大まかな手順</p>
+
+<p>&mdash; 準備 &mdash;</p>
+
+<ol>
+<li>Vagrant上の仮想マシンテンプレートに対し、chef-solo および knife-solo を利用し開発環境構築を行う。</li>
+<li>上記開発環境のBoxファイルを作成し、Vagrantfile、レシピと共に各開発者に公開する。</li>
+</ol>
+
+
+<p>&mdash; 必要に応じて各開発者が行う &mdash;</p>
+
+<ol>
+<li>各開発者はvirtualboxとVagrantを自分のローカル環境にインストールする。</li>
+<li>各開発者は上記1.で作成したBoxファイルをVagrantコマンドによりダウンロードし、共有されたVagrantfileを利用して仮想マシンを起動する。</li>
+</ol>
+
+
+<hr />
+
+<p>以下より構築手順詳細
+以下はホストOSであるWindows上で行うこと</p>
+
+<p>■Vagrantの準備</p>
+
+<p>○VirtualBox導入</p>
+
+<p>VirtualBoxはVagrant上のBOXを稼働させるために利用する。
+公式サイトからVirtualBoxをダウンロードしインストールする。</p>
+
+<p><a href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a></p>
+
+<p>○ホストOS（Windows）へVagrant導入</p>
+
+<p>・準備</p>
+
+<p>公式サイトからVagrantをダウンロードしインストールする。</p>
+
+<p><a href="http://www.vagrantup.com/">http://www.vagrantup.com/</a></p>
+
+<p>インストール後PCを再帰動し、vagrantが正しくインストールされたか確認するため、DOS窓を開いて以下のようにvagrantのバージョンを表示させる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant -v
+</span><span class='line'>
+</span><span class='line'>Vagrant 1.5.1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>・Vagrant上に仮想マシンを追加する</p>
+
+<p>任意のディレクトリへ移動し、下記サイトの「CentOS 6.5 x86_64」の仮想マシンテンプレートを指定してVagrant上に仮想マシンを追加する。
+所要時間は10分から15分程度。</p>
+
+<p><a href="http://www.vagrantbox.es/">http://www.vagrantbox.es/</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant box add centos6 https://github.com/2creatives/vagrant-centos/releases/download/v6.5.1/centos65-x86_64-20131205.box</span></code></pre></td></tr></table></div></figure>
+
+
+<p>なお下記のVagrant環境のための一連の準備により、ユーザホームディレクトリおよび作業用ディレクトリには以下のファイルが作成される。</p>
+
+<ul>
+<li><p>Vagrantインストール時にWindowsのユーザホームディレクトリ（C:\Users&lt;ユーザ名>）に作成されるファイル<br/>
+.vagrant.d</p></li>
+<li><p>vagrant環境初期化（vagrant init）時に作業用ディレクトリに作成されるファイル<br/>
+Vagrantfile</p></li>
+<li><p>vagrant初回起動時（vagrant up）時に作業用ディレクトリに作成されるファイル<br/>
+.vagrant</p></li>
+</ul>
+
+
+<p>下記の一連の準備を終えたあと上記ファイルが作成されているか確認すること。</p>
+
+<p>・仮想マシン追加完了後、Vagrant環境の初期化を行う</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant init</span></code></pre></td></tr></table></div></figure>
+
+
+<p>・仮想マシンの起動を行う</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant up</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上記コマンドを実行し以下の様なエラーが出る場合、これはbox名の解決に失敗しているということなので、Vagrantfileファイルの一部を編集して再度仮想マシンの起動を行うこと。</p>
+
+<p>Bringing machine &lsquo;default&rsquo; up with &lsquo;virtualbox&rsquo; provider&hellip;
+==> default: Box &lsquo;base&rsquo; could not be found. Attempting to find and install&hellip;</p>
+
+<p>Vagrantfileファイル13行目</p>
+
+<p>config.vm.box = &ldquo;base&rdquo;</p>
+
+<p>上記の箇所を以下のように編集</p>
+
+<p>config.vm.box = &ldquo;centos65&rdquo;</p>
+
+<p>参考サイト：<a href="http://www.trapon.jp/log/201307/mac_vagrant_centos.html">http://www.trapon.jp/log/201307/mac_vagrant_centos.html</a></p>
+
+<p>仮想マシン起動後、PuTTYやTeraTermなどのSSHクライアントで仮想マシンへアクセス可能である。</p>
+
+<p>Host:   127.0.0.1
+Port:   2222
+ID:     vagrant
+PW:     vagrant</p>
+
+<p>・その他のVagrantコマンド</p>
+
+<p>Vagrantの状況確認を行う</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant status</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Vagrant Boxの一覧を表示する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant box list</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Vagrant Boxを削除する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant box remove &lt;Box名&gt; virtualbox</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Vagrantを終了させる</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant halt          ……サスペド    
+</span><span class='line'>$ vagrant destroy       ……ターミネー    </span></code></pre></td></tr></table></div></figure>
+
+
+<p>Vagrantの準備は以上。</p>
+
+<hr />
+
+<p>■chef solo の準備</p>
+
+<p>○前提
+ゲストOS側にはknife-soloは導入の必要無し</p>
+
+<p>ホストOS：Windows7
+  chef-solo
+  knife-solo</p>
+
+<p>ゲストOS：CentOS 6.5 64bit
+  chef-solo</p>
+
+<p>また、chef-soloのレシピ群は以下の階層構造で管理される</p>
+
+<p>　レポジトリ（キッチン）＞クックブック＞レシピ</p>
+
+<p>○ホストOS（Windows）へruby2.0導入</p>
+
+<p>ruby公式サイトより Ruby 2.0.0-p451 (x64) をダウンロードしインストールする。</p>
+
+<p><a href="http://rubyinstaller.org/downloads/">http://rubyinstaller.org/downloads/</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby -v</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ruby 2.0.0p451 (2014-02-24) [x64-mingw32]</p>
+
+<p>○ホストOS（Windows）へDevelopment Kit導入</p>
+
+<p>同様にruby公式サイトより DevKit-mingw64-64-4.7.2-20130224-1432-sfx.exe (For use with Ruby 2.0 (x64 64bits only))をダウンロードしインストールする。
+次にインストール先ディレクトリにて以下のコマンドを実行すること。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby dk.rb init
+</span><span class='line'>
+</span><span class='line'>[INFO] found RubyInstaller v2.0.0 at C:/Ruby200-x64
+</span><span class='line'>
+</span><span class='line'>Initialization complete! Please review and modify the auto-generated
+</span><span class='line'>'config.yml' file to ensure it contains the root directories to all
+</span><span class='line'>of the installed Rubies you want enhanced by the DevKit.
+</span><span class='line'>
+</span><span class='line'>$ ruby dk.rb install
+</span><span class='line'>
+</span><span class='line'>[INFO] Updating convenience notice gem override for 'C:/Ruby200-x64'
+</span><span class='line'>[INFO] Installing 'C:/Ruby200-x64/lib/ruby/site_ruby/devkit.rb'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○ホストOS（Windows）へknife-solo導入</p>
+
+<p>以下のgemをインストールすることで、chef-soloも同時にインストールできる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem install knife-solo</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Windows版には以下のgemも必要となる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem install win32-process    
+</span><span class='line'>$ gem install windows-pr    </span></code></pre></td></tr></table></div></figure>
+
+
+<p>knife-soloのバージョンを表示して正常にインストールできたか確認する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ knife -v
+</span><span class='line'>
+</span><span class='line'>Chef: 11.10.4</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○リソース同期ツールrsync導入</p>
+
+<p>下記サイトよりrsyncの無料版をダウンロードし、インストールする。</p>
+
+<p><a href="https://www.itefix.no/i2/cwrsync">https://www.itefix.no/i2/cwrsync</a></p>
+
+<p>任意のパスに配置しパスを通しておくこと</p>
+
+<p>○リポジトリ（キッチン）の作成</p>
+
+<p>以下のようにして chef-solo 基本ディレクトリを作成する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ knife solo init &lt;リポジトリ名&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>仮にリポジトリ名をchef-repoとすると、下記コマンドにてディレクトリ chef-repo 以下にレシピテンプレートが作成される。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ knife solo init chef-repo</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○ゲストOS（Vagrant上のBOXとして起動しているCentOS6.5）へchef-solo導入</p>
+
+<p>次にゲストOSへ chef-solo を導入するため作成したディレクトリ chef-repo に移動し、下記コマンドを実行する。
+「2222」はゲストOSが稼働しているBoxのポート番号である。所要時間は30分程度。
+この際、.chef/knife.rb が設定ファイルとして出力される</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd chef-repo
+</span><span class='line'>$ knife solo prepare -i "C:\Users\&lt;ユーザー名&gt;\.vagrant.d\insecure_private_key" -p 2222 vagrant@127.0.0.1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○クックブックの作成</p>
+
+<p>クックブック名を仮に mybook として下記コマンドを実行する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ knife cookbook create mybook -o site-cookbooks</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○レシピの作成</p>
+
+<p>レシピファイルを編集しApacheのインストールを行ってみる。
+レシピファイル（\chef-repo\site-cookbooks\mybook\recipes\default.rb）を以下のように編集</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>package "httpd" do
+</span><span class='line'>  action :install
+</span><span class='line'>end
+</span><span class='line'> 
+</span><span class='line'>service "httpd" do
+</span><span class='line'>  action :start
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○実行レシピの指定</p>
+
+<p>JSONファイル \chef-repo\nodes\127.0.0.1.json を編集し、実行レシピを追加する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{"run_list":["mybook"]}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○レシピ実行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ knife solo cook -i "C:\Users\&lt;ユーザー名&gt;\.vagrant.d\insecure_private_key" -p 2222 vagrant@127.0.0.1</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p>chef-solo/knife-soloによるレシピ実行まで、以上</p>
+
+<hr />
+
+<p>■追補</p>
+
+<p>○仮想マシンのメモリ設定（VirtualBoxの場合）</p>
+
+<p>仮想マシン上に例えば2MByteのメモリ領域を設定する場合、Vagrantfileファイルを編集し、以下を追加すること。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  # allocate the memory for the buffer pool
+</span><span class='line'>  config.vm.provider "virtualbox" do |v|
+</span><span class='line'>    v.memory = 2048
+</span><span class='line'>  end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○cookしようとしたときなどに以下のワーニングが出力される場合</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+</span><span class='line'>@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+</span><span class='line'>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下のファイルを削除する</p>
+
+<p>&lt;ユーザホームディレクトリ>.ssh\known_hosts</p>
+
+<p>○boxへのメモリの追加</p>
+
+<p>規定値ではメモリが足りたいため、vagrant box（virtulabox 上の仮想マシン）のメモリを追加すること。
+以下Vagrantfileへ記述を追加する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  # allocate the memory for the buffer pool
+</span><span class='line'>  config.vm.provider "virtualbox" do |v|
+</span><span class='line'>    v.memory = 2048
+</span><span class='line'>  end</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Philippos</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-17T01:13:00+09:00" pubdate data-updated="true">Mar 17<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/chef-solo/'>chef-solo</a>, <a class='category' href='/blog/categories/knife-solo/'>knife-solo</a>, <a class='category' href='/blog/categories/vagrant/'>vagrant</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://philippos2.github.io/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo/" data-via="" data-counturl="http://philippos2.github.io/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/15/scala-play2-introduction/" title="Previous Post: scala play2 introduction">&laquo; scala play2 introduction</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/04/13/scalatra-introduction/" title="Next Post: scalatra introduction">scalatra introduction &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/13/scalatra-introduction/">scalatra introduction</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo/">vagrant + chef-solo (knife-solo)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/15/scala-play2-introduction/">scala play2 introduction</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/07/bookmarks-2013-12/">bookmarks 2013/12</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/11/rails-optimization-points/">rails optimization points</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/act-as-paranoid' style='font-size: 103.52941176470588%'>act-as-paranoid(1)</a> <a href='/blog/categories/authentication' style='font-size: 110.58823529411765%'>authentication(3)</a> <a href='/blog/categories/bookmarks' style='font-size: 103.52941176470588%'>bookmarks(1)</a> <a href='/blog/categories/byebug' style='font-size: 103.52941176470588%'>byebug(1)</a> <a href='/blog/categories/cancan' style='font-size: 103.52941176470588%'>cancan(1)</a> <a href='/blog/categories/centos' style='font-size: 103.52941176470588%'>centos(1)</a> <a href='/blog/categories/chef-solo' style='font-size: 103.52941176470588%'>chef-solo(1)</a> <a href='/blog/categories/debian' style='font-size: 103.52941176470588%'>debian(1)</a> <a href='/blog/categories/devise' style='font-size: 103.52941176470588%'>devise(1)</a> <a href='/blog/categories/git' style='font-size: 110.58823529411765%'>git(3)</a> <a href='/blog/categories/heroku' style='font-size: 103.52941176470588%'>heroku(1)</a> <a href='/blog/categories/introduction' style='font-size: 145.88235294117646%'>introduction(13)</a> <a href='/blog/categories/knife-solo' style='font-size: 103.52941176470588%'>knife-solo(1)</a> <a href='/blog/categories/logrotate' style='font-size: 103.52941176470588%'>logrotate(1)</a> <a href='/blog/categories/memcached' style='font-size: 103.52941176470588%'>memcached(1)</a> <a href='/blog/categories/mysql' style='font-size: 103.52941176470588%'>mysql(1)</a> <a href='/blog/categories/nginx' style='font-size: 107.05882352941177%'>nginx(2)</a> <a href='/blog/categories/octopress' style='font-size: 103.52941176470588%'>octopress(1)</a> <a href='/blog/categories/play2' style='font-size: 103.52941176470588%'>play2(1)</a> <a href='/blog/categories/plugins' style='font-size: 131.76470588235293%'>plugins(9)</a> <a href='/blog/categories/postgresql' style='font-size: 107.05882352941177%'>postgresql(2)</a> <a href='/blog/categories/pry' style='font-size: 110.58823529411765%'>pry(3)</a> <a href='/blog/categories/rails' style='font-size: 160.0%'>rails(17)</a> <a href='/blog/categories/rspec' style='font-size: 103.52941176470588%'>rspec(1)</a> <a href='/blog/categories/ruby' style='font-size: 142.35294117647058%'>ruby(12)</a> <a href='/blog/categories/scala' style='font-size: 107.05882352941177%'>scala(2)</a> <a href='/blog/categories/scalatra' style='font-size: 103.52941176470588%'>scalatra(1)</a> <a href='/blog/categories/slim' style='font-size: 103.52941176470588%'>slim(1)</a> <a href='/blog/categories/sorcery' style='font-size: 103.52941176470588%'>sorcery(1)</a> <a href='/blog/categories/tmux' style='font-size: 103.52941176470588%'>tmux(1)</a> <a href='/blog/categories/tools' style='font-size: 103.52941176470588%'>tools(1)</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap(2)</a> <a href='/blog/categories/unicorn' style='font-size: 107.05882352941177%'>unicorn(2)</a> <a href='/blog/categories/vagrant' style='font-size: 103.52941176470588%'>vagrant(1)</a> <a href='/blog/categories/vim' style='font-size: 107.05882352941177%'>vim(2)</a> <a href='/blog/categories/virtualbox' style='font-size: 107.05882352941177%'>virtualbox(2)</a> <a href='/blog/categories/z-shell' style='font-size: 103.52941176470588%'>z-shell(1)</a> </span>
+</section>
+
+
+
+
+
+
+<p/>
+
+<div align="center">
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4844330845/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4844330845&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4844330845&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4844330845" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798125415/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798125415&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798125415&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798125415" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4873115655/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4873115655&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873115655&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4873115655" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4873113946/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4873113946&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873113946&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4873113946" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4048687158/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4048687158&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4048687158&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4048687158" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4274068668/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4274068668&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4274068668&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4274068668" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798121932/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798121932&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798121932&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798121932" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798115169/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798115169&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798115169&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798115169" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798124702/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798124702&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798124702&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798124702" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4774143073/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4774143073&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4774143073&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4774143073" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+</div>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Philippos -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

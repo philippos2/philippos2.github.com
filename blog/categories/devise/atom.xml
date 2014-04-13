@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: devise | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/devise/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[about-device]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/03/about-devise/"/>
+    <updated>2013-07-03T00:34:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/03/about-devise</id>
+    <content type="html"><![CDATA[<h3>認証用GEM devise 導入手順 （2012/04/20～）</h3>
+
+<p>Gemfileに以下を追加しbundle installする</p>
+
+<p><code>
+gem 'devise'
+</code></p>
+
+<p>プロジェクトにdeviseをインストールする</p>
+
+<p><code>
+$ rails g devise:install            # Deviseをアプリに組み込み
+$ rails g controller welcome index  # トップページを作成
+$ rails g devise:views              # Viewを生成
+$ rails g devise user               # Userモデルを生成
+$ rake db:migrate                   # マイグレーションを実行
+</code></p>
+
+<h3>1. メールの設定</h3>
+
+<p>config/environments/development.rb</p>
+
+<p>例）
+```
+Hoge::Application.configure do
+  (省略)
+  config.action_mailer.default_url_options = { :host => &lsquo;localhost:3000&rsquo; }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {</p>
+
+<pre><code>address:              "smtp.gmail.com",
+port:                 587,
+domain:               "domain.of.sender.net"$
+authentication:       "plain",
+user_name:            "XXXXX@gmail.com",
+password:             "XXXXXXXX",
+enable_starttls_auto: true
+</code></pre>
+
+<p>  }
+end
+```</p>
+
+<h3>2. ルーティングの設定</h3>
+
+<p>config/routes.rbが以下のように設定されているか確認すること<br/>
+deviseは認証後、rootページへ自動的にリダイレクトする</p>
+
+<p>例）
+```
+Todo::Application.routes.draw do
+  (省略)
+  devise_for :users    # ユーザ登録／認証
+  get &ldquo;welcome/index&rdquo;  # トップページ</p>
+
+<p>  # You can have the root of your site routed with &ldquo;root&rdquo;
+  # just remember to delete public/index.html.
+  root :to => &ldquo;welcome#index&rdquo;  # root設定
+  (省略)
+end
+```</p>
+
+<h3>3. Viewの修正</h3>
+
+<p>app/views/layouts/application.html.erb</p>
+
+<p>```
+<body>
+  <!-- ここから2行追加 -->
+  <p class="notice">&lt;%= notice %></p>
+  <p class="alert">&lt;%= alert %></p>
+  &lt;%= yield %>
+</body>
+app/views/welcome/index.html.erb</p>
+
+<h1>Hogeへようこそ</h1>
+
+
+<p>&lt;% if current_user %>
+  <span>&lt;%= link_to &lsquo;ログアウト&rsquo;, destroy_user_session_path, :method=>&lsquo;delete&rsquo; %></span>
+&lt;% else %>
+  <span>&lt;%= link_to &lsquo;ログイン&rsquo;, new_user_session_path %></span>
+  <span>&lt;%= link_to &lsquo;ユーザー登録&rsquo;, new_user_registration_path %></span>
+  <span>&lt;%= link_to &lsquo;パスワード再発行&rsquo;, new_user_password_path %></span>
+&lt;% end %>
+```</p>
+
+<h3>4. Controllerの修正</h3>
+
+<p>※ 認証機能をコントローラに追加する場合は、以下のようにフィルタを設ける<br/>
+認証済みではない場合はログイン画面へリダイレクトされるようになる</p>
+
+<p>```
+class HogeController &lt; ApplicationController
+  before_filter :authenticate_user!
+  &hellip;</p>
+
+<p>end
+```</p>
+
+<p>※その他：<br/>
+ユーザ登録（sign up）を禁止するには、モデルUserのregistableをコメントアウトする</p>
+
+<p>```
+class User &lt; ActiveRecord::Base
+  （略）
+  devise :database_authenticatable, #:registerable,</p>
+
+<pre><code>:recoverable, :rememberable, :trackable, :validatable
+</code></pre>
+
+<p>  （略）
+end
+```</p>
+
+<p>参考：<br/>
+* Autheticatable : パスワードを暗号化したりログイン時にユーザーを認証したりする<br/>
+* Confirmable : アカウントをログインするかどうか確認したり、確認方法をメールで送ったりする<br/>
+* Recoverable : ユーザーのパスワードを初期化したり、初期化方法をメールで送ったりする<br/>
+* Remenberable : 保存したクッキーを使ってユーザー認証する際のトークンを生成したり削除したりする<br/>
+* Validatable : メールでvalidationの必要なこと全てやパスワードを生成し、また任意でvalidation方法を変更することができる</p>
+
+<p>またroot的管理者が別の管理者を追加する場合は、user_controller を作成し、個別に new, create, show などを記述する</p>
+
+<h5>※日本語化について→今後記述予定（2012/07/20）</h5>
+
+<p>参考サイト：<br/>
+<a href="http://kitbc.s41.xrea.com/main/?use_devise">http://kitbc.s41.xrea.com/main/?use_devise</a> <br/>
+<a href="http://myruby.seesaa.net/article/221534274.html">http://myruby.seesaa.net/article/221534274.html</a> <br/>
+<a href="http://t-taira.hatenablog.com/entry/20110101/1293843821">http://t-taira.hatenablog.com/entry/20110101/1293843821</a> <br/>
+<a href="http://d.hatena.ne.jp/dimros/20110326/1301145073">http://d.hatena.ne.jp/dimros/20110326/1301145073</a> <br/>
+<a href="http://d.hatena.ne.jp/babie/20100729/1280381392">http://d.hatena.ne.jp/babie/20100729/1280381392</a> <br/>
+<a href="http://d.hatena.ne.jp/hrendoh/20110906/1315282969">http://d.hatena.ne.jp/hrendoh/20110906/1315282969</a> <br/>
+<a href="http://d.hatena.ne.jp/akihito_s/20110708">http://d.hatena.ne.jp/akihito_s/20110708</a> <br/>
+<a href="http://d.hatena.ne.jp/watanabe162/20110729/1311928889">http://d.hatena.ne.jp/watanabe162/20110729/1311928889</a> <br/>
+<a href="http://d.hatena.ne.jp/watanabe162/20110731/1312112812">http://d.hatena.ne.jp/watanabe162/20110731/1312112812</a> <br/>
+<a href="http://d.hatena.ne.jp/watanabe162/20110731/1312119021">http://d.hatena.ne.jp/watanabe162/20110731/1312119021</a> <br/>
+<a href="http://eitoball.blogspot.jp/2009/11/devise-rails.html">http://eitoball.blogspot.jp/2009/11/devise-rails.html</a> <br/>
+<a href="http://blog.livedoor.jp/nizoraul/archives/3597234.html">http://blog.livedoor.jp/nizoraul/archives/3597234.html</a></p>
+]]></content>
+  </entry>
+  
+</feed>

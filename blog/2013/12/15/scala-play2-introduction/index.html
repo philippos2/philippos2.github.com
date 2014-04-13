@@ -1,0 +1,562 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>scala play2 introduction - Philippos Blue Book</title>
+  <meta name="author" content="Philippos">
+
+  
+  <meta name="description" content="【Scala / play2 導入メモ】2013/12/14～ Play2 version: 2.2.0
+Scala version: 2.10.2 (OpenJDK 64-Bit Server VM, Java 1.6.0_27). 以下、ホームディレクトリにて行う。 ■準備 事前に Java &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://philippos2.github.io/blog/2013/12/15/scala-play2-introduction/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Philippos Blue Book" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41954744-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:philippos2.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/">
+        <span class="blue_light">
+            Philippos Blue Book
+        </span>
+       
+           <span class="blue_dark">
+             rails introduction note
+           </span>
+       
+    </a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <!--li><a href="/about">About me</a></li-->
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Scala Play2 Introduction</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-15T21:40:00+09:00" pubdate data-updated="true">Dec 15<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>【Scala / play2 導入メモ】2013/12/14～</p>
+
+<p>Play2 version: 2.2.0
+Scala version: 2.10.2 (OpenJDK 64-Bit Server VM, Java 1.6.0_27).</p>
+
+<p>以下、ホームディレクトリにて行う。</p>
+
+<p>■準備</p>
+
+<p>事前に Java 開発環境のインストールをしておくこと。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install openjdk-6-jdk</span></code></pre></td></tr></table></div></figure>
+
+
+<p>■play2 フレームワークの取得と展開</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ wget http://downloads.typesafe.com/play/2.2.0/play-2.2.0.zip
+</span><span class='line'>
+</span><span class='line'>$ unzip play-2.2.0.zip
+</span><span class='line'>
+</span><span class='line'>$ sudo mv play-2.2.0 /usr/local
+</span><span class='line'>
+</span><span class='line'>$ cd /usr/bin
+</span><span class='line'>
+</span><span class='line'>$ sudo ln -s /usr/local/play-2.2.0/play play</span></code></pre></td></tr></table></div></figure>
+
+
+<p>■動作確認</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ play
+</span><span class='line'>
+</span><span class='line'>zsh: correct 'play' to 'aplay' [nyae]? n
+</span><span class='line'>Getting com.typesafe.play console_2.10 2.2.0 ...
+</span><span class='line'>:: retrieving :: org.scala-sbt#boot-app
+</span><span class='line'>confs: [default]
+</span><span class='line'>6 artifacts copied, 0 already retrieved (2012kB/93ms)
+</span><span class='line'>Getting Scala 2.10.2 (for console)...
+</span><span class='line'>:: retrieving :: org.scala-sbt#boot-scala
+</span><span class='line'>confs: [default]
+</span><span class='line'>5 artifacts copied, 0 already retrieved (24390kB/2078ms)
+</span><span class='line'>_
+</span><span class='line'> _ __ | | __ _ _  _
+</span><span class='line'> | '_ \| |/ _' | || |
+</span><span class='line'> |  __/|_|\____|\__ /
+</span><span class='line'> |_|            |__/
+</span><span class='line'>
+</span><span class='line'>play 2.2.0 built with Scala 2.10.2 (running Java 1.6.0_18), http://www.playframework.com
+</span><span class='line'>
+</span><span class='line'>This is not a play application!
+</span><span class='line'>
+</span><span class='line'>Use `play new` to create a new Play application in the current directory,
+</span><span class='line'>or go to an existing application and launch the development console using `play`.
+</span><span class='line'>
+</span><span class='line'>You can also browse the complete documentation at http://www.playframework.com.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>■Scalaプロジェクト作成</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ play new testPlay
+</span><span class='line'>
+</span><span class='line'>zsh: correct 'play' to 'aplay' [nyae]? n
+</span><span class='line'>_
+</span><span class='line'> _ __ | | __ _ _  _
+</span><span class='line'> | '_ \| |/ _' | || |
+</span><span class='line'> |  __/|_|\____|\__ /
+</span><span class='line'> |_|            |__/
+</span><span class='line'>
+</span><span class='line'>play 2.2.0 built with Scala 2.10.2 (running Java 1.6.0_18), http://www.playframework.com
+</span><span class='line'>
+</span><span class='line'>The new application will be created in /home/philippos/testPlay
+</span><span class='line'>
+</span><span class='line'>What is the application name? [testPlay]
+</span><span class='line'>&gt;
+</span><span class='line'>
+</span><span class='line'>Which template do you want to use for this new application?
+</span><span class='line'>
+</span><span class='line'>1             - Create a simple Scala application
+</span><span class='line'>2             - Create a simple Java application
+</span><span class='line'>
+</span><span class='line'>&gt; 1
+</span><span class='line'>OK, application testPlay is created.
+</span><span class='line'>
+</span><span class='line'>Have fun!
+</span><span class='line'>
+</span><span class='line'>$ tree testPlay
+</span><span class='line'>
+</span><span class='line'>testPlay
+</span><span class='line'>|-- README
+</span><span class='line'>|-- app
+</span><span class='line'>|   |-- controllers
+</span><span class='line'>|   |   `-- Application.scala
+</span><span class='line'>|   `-- views
+</span><span class='line'>|       |-- index.scala.html
+</span><span class='line'>|       `-- main.scala.html
+</span><span class='line'>|-- build.sbt
+</span><span class='line'>|-- conf
+</span><span class='line'>|   |-- application.conf
+</span><span class='line'>|   `-- routes
+</span><span class='line'>|-- project
+</span><span class='line'>|   |-- build.properties
+</span><span class='line'>|   `-- plugins.sbt
+</span><span class='line'>|-- public
+</span><span class='line'>|   |-- images
+</span><span class='line'>|   |   `-- favicon.png
+</span><span class='line'>|   |-- javascripts
+</span><span class='line'>|   |   `-- jquery-1.9.0.min.js
+</span><span class='line'>|   `-- stylesheets
+</span><span class='line'>|       `-- main.css
+</span><span class='line'>`-- test
+</span><span class='line'>    |-- ApplicationSpec.scala
+</span><span class='line'>    `-- IntegrationSpec.scala
+</span><span class='line'>
+</span><span class='line'>10 directories, 14 files</span></code></pre></td></tr></table></div></figure>
+
+
+<p>■playアプリケーションの実行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ play run
+</span><span class='line'>
+</span><span class='line'>[info] Loading project definition from /home/philippos/testPlay/project
+</span><span class='line'>[info] Set current project to testPlay (in build file:/home/philippos/testPlay/)
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Cannot load the JNotify native library (/home/philippos/testPlay/target/native_libraries/64bits/libjnotify.so: /lib/libc.so.6: version `GLIBC_2.12' not found (required by /home/philippos/testPlay/target/native_libraries/64bits/libjnotify.so))
+</span><span class='line'>Play will check file changes for each request, so expect degraded reloading performace.
+</span><span class='line'>
+</span><span class='line'>--- (Running the application from SBT, auto-reloading is enabled) ---
+</span><span class='line'>
+</span><span class='line'>[info] play - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+</span><span class='line'>
+</span><span class='line'>(Server started, use Ctrl+D to stop and go back to the console...)
+</span><span class='line'>
+</span><span class='line'>[info] Compiling 5 Scala sources and 1 Java source to /home/philippos/testPlay/target/scala-2.10/classes...
+</span><span class='line'>[info] play - Application started (Dev)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下記URLでアクセスし動作を確認する。</p>
+
+<p><a href="http://localhost:9000/">http://localhost:9000/</a></p>
+
+<p>■対話型実況環境（REPL）の起動</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ play console                                                                                                                                                                    [21:19:14]
+</span><span class='line'>[info] Loading project definition from /home/philippos/testPlay/project
+</span><span class='line'>[info] Set current project to testPlay (in build file:/home/philippos/testPlay/)
+</span><span class='line'>[info] Starting scala interpreter...
+</span><span class='line'>[info]
+</span><span class='line'>Welcome to Scala version 2.10.2 (OpenJDK 64-Bit Server VM, Java 1.6.0_27).
+</span><span class='line'>Type in expressions to have them evaluated.
+</span><span class='line'>Type :help for more information.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>終了するときは、:quit とする。</p>
+
+<hr />
+
+<p>■参考サイト：</p>
+
+<p><a href="http://www.playframework.com/download">http://www.playframework.com/download</a>  <br/>
+<a href="http://yksris.hatenablog.com/entry/2013/01/06/134353">http://yksris.hatenablog.com/entry/2013/01/06/134353</a>  <br/>
+<a href="http://tech-sketch.jp/2013/11/scala-play2-1.html">http://tech-sketch.jp/2013/11/scala-play2-1.html</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Philippos</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-15T21:40:00+09:00" pubdate data-updated="true">Dec 15<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/introduction/'>introduction</a>, <a class='category' href='/blog/categories/play2/'>play2</a>, <a class='category' href='/blog/categories/scala/'>scala</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://philippos2.github.io/blog/2013/12/15/scala-play2-introduction/" data-via="" data-counturl="http://philippos2.github.io/blog/2013/12/15/scala-play2-introduction/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/07/bookmarks-2013-12/" title="Previous Post: bookmarks 2013/12">&laquo; bookmarks 2013/12</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo/" title="Next Post: vagrant + chef-solo (knife-solo)">vagrant + chef-solo (knife-solo) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/13/scalatra-introduction/">scalatra introduction</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo/">vagrant + chef-solo (knife-solo)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/15/scala-play2-introduction/">scala play2 introduction</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/07/bookmarks-2013-12/">bookmarks 2013/12</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/11/rails-optimization-points/">rails optimization points</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/act-as-paranoid' style='font-size: 103.52941176470588%'>act-as-paranoid(1)</a> <a href='/blog/categories/authentication' style='font-size: 110.58823529411765%'>authentication(3)</a> <a href='/blog/categories/bookmarks' style='font-size: 103.52941176470588%'>bookmarks(1)</a> <a href='/blog/categories/byebug' style='font-size: 103.52941176470588%'>byebug(1)</a> <a href='/blog/categories/cancan' style='font-size: 103.52941176470588%'>cancan(1)</a> <a href='/blog/categories/centos' style='font-size: 103.52941176470588%'>centos(1)</a> <a href='/blog/categories/chef-solo' style='font-size: 103.52941176470588%'>chef-solo(1)</a> <a href='/blog/categories/debian' style='font-size: 103.52941176470588%'>debian(1)</a> <a href='/blog/categories/devise' style='font-size: 103.52941176470588%'>devise(1)</a> <a href='/blog/categories/git' style='font-size: 110.58823529411765%'>git(3)</a> <a href='/blog/categories/heroku' style='font-size: 103.52941176470588%'>heroku(1)</a> <a href='/blog/categories/introduction' style='font-size: 145.88235294117646%'>introduction(13)</a> <a href='/blog/categories/knife-solo' style='font-size: 103.52941176470588%'>knife-solo(1)</a> <a href='/blog/categories/logrotate' style='font-size: 103.52941176470588%'>logrotate(1)</a> <a href='/blog/categories/memcached' style='font-size: 103.52941176470588%'>memcached(1)</a> <a href='/blog/categories/mysql' style='font-size: 103.52941176470588%'>mysql(1)</a> <a href='/blog/categories/nginx' style='font-size: 107.05882352941177%'>nginx(2)</a> <a href='/blog/categories/octopress' style='font-size: 103.52941176470588%'>octopress(1)</a> <a href='/blog/categories/play2' style='font-size: 103.52941176470588%'>play2(1)</a> <a href='/blog/categories/plugins' style='font-size: 131.76470588235293%'>plugins(9)</a> <a href='/blog/categories/postgresql' style='font-size: 107.05882352941177%'>postgresql(2)</a> <a href='/blog/categories/pry' style='font-size: 110.58823529411765%'>pry(3)</a> <a href='/blog/categories/rails' style='font-size: 160.0%'>rails(17)</a> <a href='/blog/categories/rspec' style='font-size: 103.52941176470588%'>rspec(1)</a> <a href='/blog/categories/ruby' style='font-size: 142.35294117647058%'>ruby(12)</a> <a href='/blog/categories/scala' style='font-size: 107.05882352941177%'>scala(2)</a> <a href='/blog/categories/scalatra' style='font-size: 103.52941176470588%'>scalatra(1)</a> <a href='/blog/categories/slim' style='font-size: 103.52941176470588%'>slim(1)</a> <a href='/blog/categories/sorcery' style='font-size: 103.52941176470588%'>sorcery(1)</a> <a href='/blog/categories/tmux' style='font-size: 103.52941176470588%'>tmux(1)</a> <a href='/blog/categories/tools' style='font-size: 103.52941176470588%'>tools(1)</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap(2)</a> <a href='/blog/categories/unicorn' style='font-size: 107.05882352941177%'>unicorn(2)</a> <a href='/blog/categories/vagrant' style='font-size: 103.52941176470588%'>vagrant(1)</a> <a href='/blog/categories/vim' style='font-size: 107.05882352941177%'>vim(2)</a> <a href='/blog/categories/virtualbox' style='font-size: 107.05882352941177%'>virtualbox(2)</a> <a href='/blog/categories/z-shell' style='font-size: 103.52941176470588%'>z-shell(1)</a> </span>
+</section>
+
+
+
+
+
+
+<p/>
+
+<div align="center">
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4844330845/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4844330845&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4844330845&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4844330845" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798125415/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798125415&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798125415&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798125415" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4873115655/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4873115655&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873115655&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4873115655" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4873113946/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4873113946&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873113946&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4873113946" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4048687158/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4048687158&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4048687158&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4048687158" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4274068668/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4274068668&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4274068668&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4274068668" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798121932/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798121932&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798121932&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798121932" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798115169/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798115169&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798115169&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798115169" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798124702/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798124702&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798124702&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798124702" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4774143073/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4774143073&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4774143073&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4774143073" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+</div>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Philippos -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

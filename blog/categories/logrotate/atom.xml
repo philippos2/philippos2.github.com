@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: logrotate | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/logrotate/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[logging settings by logrotate]]></title>
+    <link href="http://philippos2.github.io/blog/2013/08/10/logging-settings-by-logrotate/"/>
+    <updated>2013-08-10T14:12:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/08/10/logging-settings-by-logrotate</id>
+    <content type="html"><![CDATA[<h3>■ nginx の logrotate 設定</h3>
+
+<p>今回 squeeze 上に導入した nginx/1.4.1 では特に設定の必要なし。
+以下は既定の設定である。</p>
+
+<p>```
+/var/log/nginx/*.log {</p>
+
+<pre><code>    daily
+    missingok
+    rotate 52
+    compress
+    delaycompress
+    notifempty
+    create 640 nginx adm
+    sharedscripts
+    postrotate
+            [ -f /var/run/nginx.pid ] &amp;&amp; kill -USR1 `cat /var/run/nginx.pid`
+    endscript
+</code></pre>
+
+<p>}
+```</p>
+
+<p>対象となるログは以下である。 <br/>
+/var/log/nginx/access.log <br/>
+/var/log/nginx/error.log</p>
+
+<p>参考サイト： <br/>
+<a href="http://www.mk-mode.com/octopress/2013/02/17/nginx-logrotation/">http://www.mk-mode.com/octopress/2013/02/17/nginx-logrotation/</a></p>
+
+<hr />
+
+<h3>■ unicorn の logrotate 設定</h3>
+
+<p>rails アプリの logrotate 用設定ファイルを /etc/logrotate.d/[rails_app] に設定する。</p>
+
+<p>```
+/home/philippos/[rails_app]/log/unicorn.*.log {
+  daily
+  missingok
+  rotate 60
+  dateext</p>
+
+<p>  # 圧縮設定 (次回のログ循環まで保留)
+  compress
+  delaycompress</p>
+
+<p>  # unicorn master プロセスへ USR1 シグナル送信
+  lastaction</p>
+
+<pre><code>pid=/home/philippos/[rails_app]/tmp/pids/unicorn.pid
+test -s $pid &amp;&amp; kill -USR1 "$(cat $pid)"
+</code></pre>
+
+<p>  endscript
+}
+```</p>
+
+<p>上記設定の場合、日次でログ循環し、過去のログファイルは60世代まで確保される。
+日付が付けられた過去のログファイルは圧縮される。</p>
+
+<h4>○補追</h4>
+
+<h5>daily</h5>
+
+<p>日次でログ循環する。週次の場合は <code>weekly</code>、月次の場合は <code>monthly</code> を設定する。</p>
+
+<h5>missingok</h5>
+
+<p>ログファイルが存在しない場合でもエラーとしない。</p>
+
+<h5>rotate n</h5>
+
+<p>n 世代までログファイルを保持する。</p>
+
+<h5>dateext</h5>
+
+<p>過去のログファイルに日付（YYYYMMDD）を付加する。</p>
+
+<h4>○logrotate のオプションについて</h4>
+
+<p>logrotate 設定テスト</p>
+
+<p><code>
+$ /usr/sbin/logrotate -d /etc/logrotate.d/[rails_app]
+</code></p>
+
+<p>cron に依らず手動で logrotate してみたい場合</p>
+
+<p><code>
+$ /usr/sbin/logrotate -f /etc/logrotate.d/[rails_app]
+</code></p>
+
+<p>参考サイト： <br/>
+<a href="https://github.com/phusion/unicorn/blob/master/examples/logrotate.conf">https://github.com/phusion/unicorn/blob/master/examples/logrotate.conf</a> <br/>
+<a href="http://linux.kororo.jp/cont/server/logrotate.php">http://linux.kororo.jp/cont/server/logrotate.php</a></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>scalatra introduction - Philippos Blue Book</title>
+  <meta name="author" content="Philippos">
+
+  
+  <meta name="description" content="【scalatra 環境構築メモ】 ■scalatra本体、関連ツール導入 Scala本体 Scala公式サイト（http://www.scala-lang.org/download/%EF%BC%89%E3%82%88%E3%82%8A%E3%83%90%E3%82%A4%E3%83%8A%E3 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://philippos2.github.io/blog/2014/04/13/scalatra-introduction/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Philippos Blue Book" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41954744-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:philippos2.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/">
+        <span class="blue_light">
+            Philippos Blue Book
+        </span>
+       
+           <span class="blue_dark">
+             rails introduction note
+           </span>
+       
+    </a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <!--li><a href="/about">About me</a></li-->
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Scalatra Introduction</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-13T11:16:00+09:00" pubdate data-updated="true">Apr 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>【scalatra 環境構築メモ】</p>
+
+<p>■scalatra本体、関連ツール導入</p>
+
+<ol>
+<li>Scala本体</li>
+</ol>
+
+
+<p>Scala公式サイト（<a href="http://www.scala-lang.org/download/%EF%BC%89%E3%82%88%E3%82%8A%E3%83%90%E3%82%A4%E3%83%8A%E3%83%AA%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%88tgz%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%89%E3%82%92%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%81%97%E3%80%81/usr/bin%E4%BB%A5%E4%B8%8B%E3%81%AB%E5%B1%95%E9%96%8B%E3%80%82">http://www.scala-lang.org/download/%EF%BC%89%E3%82%88%E3%82%8A%E3%83%90%E3%82%A4%E3%83%8A%E3%83%AA%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%88tgz%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%89%E3%82%92%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%81%97%E3%80%81/usr/bin%E4%BB%A5%E4%B8%8B%E3%81%AB%E5%B1%95%E9%96%8B%E3%80%82</a></p>
+
+<ol>
+<li>SBT</li>
+</ol>
+
+
+<p>SBT公式サイト（<a href="http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html#unix%EF%BC%89%E3%81%8B%E3%82%89sbt-launch.jar%E3%82%92%E5%8F%96%E5%BE%97%E3%81%97%E3%80%81~/bin%E3%81%AB%E9%85%8D%E7%BD%AE%E3%80%82">http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html#unix%EF%BC%89%E3%81%8B%E3%82%89sbt-launch.jar%E3%82%92%E5%8F%96%E5%BE%97%E3%81%97%E3%80%81~/bin%E3%81%AB%E9%85%8D%E7%BD%AE%E3%80%82</a>
+SBT公式サイトの勧めに従い、起動用スクリプトを作成する。単に以下をコピペし、~/bin/sbtとして保存。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
+</span><span class='line'>java $SBT_OPTS -jar `dirname $0`/sbt-launch.jar "$@"</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Conscript</li>
+</ol>
+
+
+<p>以下を実行する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl https://raw.github.com/n8han/conscript/master/setup.sh | sh</span></code></pre></td></tr></table></div></figure>
+
+
+<p>結果、スクリプト ~/bin/cs が作成されたことを確認すること。</p>
+
+<ol>
+<li>giter8</li>
+</ol>
+
+
+<p>以下を実行する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cs n8han/giter8</span></code></pre></td></tr></table></div></figure>
+
+
+<p>結果、スクリプト ~/bin/g8 が作成されたことを確認すること。</p>
+
+<p>■scalatraプロジェクトの作成</p>
+
+<p>任意のパスで以下を実行し、ドメイン設定、パッケージ名、プロジェクト名等を設定しscalatraプロジェクトを作成する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ g8 scalatra/scalatra-sbt</span></code></pre></td></tr></table></div></figure>
+
+
+<p>■scalatraサーバの起動</p>
+
+<p>プロジェクトディレクトリ以下に移動し、sbtを起動し、コマンド <code>container:start</code> としてscalatraサーバを起ち上げる。</p>
+
+<hr />
+
+<p>参考サイト：
+<a href="https://gist.github.com/kmizu/1876800">https://gist.github.com/kmizu/1876800</a>
+<a href="http://scalajp.github.io/sbt-getting-started-guide-ja/">http://scalajp.github.io/sbt-getting-started-guide-ja/</a>
+<a href="http://qiita.com/k_ui/items/65def414bd7ec54aedeb">http://qiita.com/k_ui/items/65def414bd7ec54aedeb</a>
+<a href="http://diario.hatenablog.com/entry/2013/08/25/041417">http://diario.hatenablog.com/entry/2013/08/25/041417</a>
+<a href="http://sgykfjsm.github.io/blog/2013/02/22/scalatra-tutorial-001/">http://sgykfjsm.github.io/blog/2013/02/22/scalatra-tutorial-001/</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Philippos</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-13T11:16:00+09:00" pubdate data-updated="true">Apr 13<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/introduction/'>introduction</a>, <a class='category' href='/blog/categories/scala/'>scala</a>, <a class='category' href='/blog/categories/scalatra/'>scalatra</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://philippos2.github.io/blog/2014/04/13/scalatra-introduction/" data-via="" data-counturl="http://philippos2.github.io/blog/2014/04/13/scalatra-introduction/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo/" title="Previous Post: vagrant + chef-solo (knife-solo)">&laquo; vagrant + chef-solo (knife-solo)</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/13/scalatra-introduction/">scalatra introduction</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo/">vagrant + chef-solo (knife-solo)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/15/scala-play2-introduction/">scala play2 introduction</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/07/bookmarks-2013-12/">bookmarks 2013/12</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/11/rails-optimization-points/">rails optimization points</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/act-as-paranoid' style='font-size: 103.52941176470588%'>act-as-paranoid(1)</a> <a href='/blog/categories/authentication' style='font-size: 110.58823529411765%'>authentication(3)</a> <a href='/blog/categories/bookmarks' style='font-size: 103.52941176470588%'>bookmarks(1)</a> <a href='/blog/categories/byebug' style='font-size: 103.52941176470588%'>byebug(1)</a> <a href='/blog/categories/cancan' style='font-size: 103.52941176470588%'>cancan(1)</a> <a href='/blog/categories/centos' style='font-size: 103.52941176470588%'>centos(1)</a> <a href='/blog/categories/chef-solo' style='font-size: 103.52941176470588%'>chef-solo(1)</a> <a href='/blog/categories/debian' style='font-size: 103.52941176470588%'>debian(1)</a> <a href='/blog/categories/devise' style='font-size: 103.52941176470588%'>devise(1)</a> <a href='/blog/categories/git' style='font-size: 110.58823529411765%'>git(3)</a> <a href='/blog/categories/heroku' style='font-size: 103.52941176470588%'>heroku(1)</a> <a href='/blog/categories/introduction' style='font-size: 145.88235294117646%'>introduction(13)</a> <a href='/blog/categories/knife-solo' style='font-size: 103.52941176470588%'>knife-solo(1)</a> <a href='/blog/categories/logrotate' style='font-size: 103.52941176470588%'>logrotate(1)</a> <a href='/blog/categories/memcached' style='font-size: 103.52941176470588%'>memcached(1)</a> <a href='/blog/categories/mysql' style='font-size: 103.52941176470588%'>mysql(1)</a> <a href='/blog/categories/nginx' style='font-size: 107.05882352941177%'>nginx(2)</a> <a href='/blog/categories/octopress' style='font-size: 103.52941176470588%'>octopress(1)</a> <a href='/blog/categories/play2' style='font-size: 103.52941176470588%'>play2(1)</a> <a href='/blog/categories/plugins' style='font-size: 131.76470588235293%'>plugins(9)</a> <a href='/blog/categories/postgresql' style='font-size: 107.05882352941177%'>postgresql(2)</a> <a href='/blog/categories/pry' style='font-size: 110.58823529411765%'>pry(3)</a> <a href='/blog/categories/rails' style='font-size: 160.0%'>rails(17)</a> <a href='/blog/categories/rspec' style='font-size: 103.52941176470588%'>rspec(1)</a> <a href='/blog/categories/ruby' style='font-size: 142.35294117647058%'>ruby(12)</a> <a href='/blog/categories/scala' style='font-size: 107.05882352941177%'>scala(2)</a> <a href='/blog/categories/scalatra' style='font-size: 103.52941176470588%'>scalatra(1)</a> <a href='/blog/categories/slim' style='font-size: 103.52941176470588%'>slim(1)</a> <a href='/blog/categories/sorcery' style='font-size: 103.52941176470588%'>sorcery(1)</a> <a href='/blog/categories/tmux' style='font-size: 103.52941176470588%'>tmux(1)</a> <a href='/blog/categories/tools' style='font-size: 103.52941176470588%'>tools(1)</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap(2)</a> <a href='/blog/categories/unicorn' style='font-size: 107.05882352941177%'>unicorn(2)</a> <a href='/blog/categories/vagrant' style='font-size: 103.52941176470588%'>vagrant(1)</a> <a href='/blog/categories/vim' style='font-size: 107.05882352941177%'>vim(2)</a> <a href='/blog/categories/virtualbox' style='font-size: 107.05882352941177%'>virtualbox(2)</a> <a href='/blog/categories/z-shell' style='font-size: 103.52941176470588%'>z-shell(1)</a> </span>
+</section>
+
+
+
+
+
+
+<p/>
+
+<div align="center">
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4844330845/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4844330845&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4844330845&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4844330845" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798125415/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798125415&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798125415&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798125415" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4873115655/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4873115655&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873115655&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4873115655" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4873113946/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4873113946&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4873113946&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4873113946" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4048687158/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4048687158&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4048687158&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4048687158" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4274068668/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4274068668&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4274068668&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4274068668" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798121932/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798121932&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798121932&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798121932" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798115169/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798115169&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798115169&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798115169" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4798124702/ref=as_li_qf_sp_asin_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4798124702&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4798124702&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4798124702" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+  <p/>
+
+  <a href="http://www.amazon.co.jp/gp/product/4774143073/ref=as_li_tf_il?ie=UTF8&camp=247&creative=1211&creativeASIN=4774143073&linkCode=as2&tag=froggerblog-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=4774143073&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=froggerblog-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=froggerblog-22&l=as2&o=9&a=4774143073" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+</div>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Philippos -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

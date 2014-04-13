@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: memcached | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/memcached/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[memcached-introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/06/memcached-introduction/"/>
+    <updated>2013-07-06T14:05:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/06/memcached-introduction</id>
+    <content type="html"><![CDATA[<h3>【Memcached導入に関するメモ】2012/07/11（水）～</h3>
+
+<hr />
+
+<h4>■memcached導入</h4>
+
+<h5>memcached導入方法</h5>
+
+<p><code>
+$ sudo aptitude install memcached
+</code></p>
+
+<p>memcachedインストール時にlibevent-1.4-2（非同期イベント通知ライブラリ）もインストールされる模様</p>
+
+<h5>memcached起動方法</h5>
+
+<p><code>
+$ memcached -u memcached -d
+</code></p>
+
+<h5>memcachedの主なオプション</h5>
+
+<p>・-m &lt;キャッシュメモリ容量>
+デフォルトは64(単位はMB)</p>
+
+<p>・-l &lt;待ち受けネットワークインタフェース>
+デフォルトはINDRR_ANY</p>
+
+<p>・-p ポート番号、規定値は11211</p>
+
+<p>・-u &lt;デーモン実行ユーザ>
+rootでデーモンを起動する際にデーモン実行ユーザを指定する</p>
+
+<p>例) キャッシュ = 1GB、接続許可ホスト = ローカルホスト</p>
+
+<p><code>
+$ memcached -u memcached -d -m 1024 -l 127.0.0.1
+</code></p>
+
+<p>memcachedデーモンの起動を確認
+$ ps aux | grep &ldquo;memcached&rdquo;</p>
+
+<p><code>
+nobody 14955  0.0  0.3  62700  1224 ?     Sl 10:28 0:00 /usr/bin/memcached -m 64 -p 11211 -u nobody -l 127.0.0.1
+1000   15156  0.0  0.2   7112   836 pts/0 D+ 10:50 0:00 grep memcached
+</code></p>
+
+<h5>memcached動作確認</h5>
+
+<p>まずtelnetにてmemcachedへ接続</p>
+
+<p><code>
+$ telnet localhost 11211
+</code></p>
+
+<p>memcachedへ接続後、statsコマンド他で動作確認を行う
+動作確認後、quitコマンドで接続を切断する</p>
+
+<p>その他：memcachedのバージョンとヘルプを表示</p>
+
+<p><code>
+$ memcached -h
+</code></p>
+
+<h5>値の格納と取得</h5>
+
+<p>setコマンドとgetコマンドにて値の格納と取得を行う
+まずsetコマンドは以下のフォーマットで指定する</p>
+
+<p>&lt;コマンド> &lt;キー> &lt;圧縮フラグ(1 or 0)> &lt;有効期間(単位:秒)> &lt;サイズ(単位:Bytes)></p>
+
+<p>例) 「foo」というキーに「123」という3バイトのデータを非圧縮(0)/無期限(0)で格納する。またそれを取り出す。
+```
+set foo 0 0 3
+123</p>
+
+<p>=> STORED</p>
+
+<p>get foo</p>
+
+<p>=> VALUE foo 0 3
+=> 123
+=> END</p>
+
+<p>quit
+```</p>
+
+<h5>その他の操作</h5>
+
+<blockquote><p>stats items ：キャシュされているレコード情報を取得<br/>
+stats cachedump ：キャッシュ内容ダンプ</p></blockquote>
+
+<p>例）
+```
+$ telnet localhost 11211
+stats items
+STAT items:1:number 6
+STAT items:1:age 20505
+STAT items:1:evicted 0
+STAT items:1:evicted_time 0
+STAT items:1:outofmemory 0
+STAT items:1:tailrepairs 0</p>
+
+<p> stats cachedump 1 100
+ITEM foo [9 b; 1264464651 s]
+ITEM bar [9 b; 1264464649 s]
+```</p>
+
+<h5>memcached終了方法</h5>
+
+<p><code>
+$ sudo killall memcached
+</code></p>
+
+<h4>■dalli（memcachedクライアント）導入</h4>
+
+<h5>dalli導入方法</h5>
+
+<p>Gemfileに「gem &lsquo;dalli'」と一行追加し、bundle installを行う</p>
+
+<h4>■キャッシュストアに設定する方法</h4>
+
+<p>例としてproduction環境で使用する場合は、config/environments/production.rb に次の行を追加する
+<code>
+config.cache_store = :dalli_store
+</code></p>
+
+<h4>■セッションストアに設定する方法</h4>
+
+<p>config/initializers/session_store.rb に以下の行を追加</p>
+
+<p>例）以下はセッション情報を二週間保持する例<br/>
+注）Rails3のデフォルト設定では、ブラウザからのアクセスが切断された時点でセッションも破棄される
+<code>
+require 'action_dispatch/middleware/session/dalli_store'
+Railsアプリ名::Application.config.session_store :dalli_store
+Railsアプリ名::Application.config.session_options = {:cookie_only =&gt; false, :expire_after =&gt; 2.weeks}
+</code></p>
+
+<h4>■Railsコンソール上でのキャッシュ内容確認</h4>
+
+<h5>キャッシュ設定内容確認</h5>
+
+<p>例）
+```</p>
+
+<blockquote><p>Rails.cache
+ => #&lt;ActiveSupport::Cache::DalliStore:0x00000001e4cf68 @options={:compress=>nil}, @raise_errors=false, @data=#&lt;Dalli::Client:0x00000001e4ce28 @servers=[&ldquo;localhost:11211&rdquo;], @options={:compress=>nil}, @ring=nil>>
+```</p></blockquote>
+
+<h5>Railsコンソール上でのsession_optionsの確認</h5>
+
+<p>例）
+```</p>
+
+<blockquote><p>Railsアプリ名::Application.config.session_options
+ => { :cookie_only=>false , :memcache_server => [ &lsquo;localhost:11211&rsquo;]}
+```</p></blockquote>
+
+<h5>値の格納と取得</h5>
+
+<p>例）
+```</p>
+
+<blockquote><p>Rails.cache.write(&ldquo;test&rdquo;, {:message => &lsquo;Hello&rsquo;, :time => Time.now})
+ => true
+Rails.cache.read(&ldquo;test&rdquo;)
+ => {:message=>&ldquo;Hello&rdquo;, :time=>2010-09-15 13:26:09 +0900}
+Rails.cache.clear
+ => [true]
+```</p></blockquote>
+
+<p>以上</p>
+
+<hr />
+
+<p>参考サイト:<br/>
+<a href="http://l-w-i.net/t/memcached/0install_001.txt">memcached導入手順</a><br/>
+<a href="http://l-w-i.net/t/memcached/command_001.txt">memcachedコマンド一覧</a><br/>
+<a href="http://d.hatena.ne.jp/wadap/20100125/1264435692">memcachedでキー一覧を取得したい時に</a><br/>
+<a href="http://www.trajectory.jp/tech/server/memcached.php">memcachedでパフォーマンス向上</a><br/>
+<a href="http://www.banana-systems.com/2010/09/rails3_memcached/">Rails3からmemcachedを利用する</a><br/>
+<a href="http://research.sakura.ad.jp/2010/05/18/kvs-memcached-cas/">memcachedプロトコルCAS操作について</a><br/>
+<a href="http://d.hatena.ne.jp/nobyu/20111225/1324805638">HerokuでMemcacheを使うには</a></p>
+
+<p><a href="http://d.hatena.ne.jp/ux00ff/20111128/1322495435">Ruby on Rails 3.1 でセッションを memcached に保存する</a><br/>
+<a href="http://d.hatena.ne.jp/ux00ff/20120417/1334643127">Rails 3.2 で Dalli を Session Store として利用する際の session_options の罠</a><br/>
+<a href="http://bucato.jp/2012/06/rails3-x%E7%B3%BB%E3%81%A7%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E7%8A%B6%E6%85%8B%E3%82%92%E4%BF%9D%E6%8C%81%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/">Rails3.x系でログイン状態を保持する方法</a><br/>
+<a href="http://d.hatena.ne.jp/shiba_yu36/20100907/1283820213">rails 3でmemcachedを利用する</a><br/>
+<a href="http://d.hatena.ne.jp/yune_kotomi/20101124/1290601189">Rails3系でセッション有効期限の設定</a><br/>
+<a href="http://d.hatena.ne.jp/willnet/20080531/1212239850">railsのクッキーとセッションについてまとめ</a></p>
+
+<p>その他:<br/>
+<a href="http://memo.yomukaku.net/entries/333">各種サーバ構成の速度ベンチマーク</a></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,2557 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[scalatra introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2014/04/13/scalatra-introduction/"/>
+    <updated>2014-04-13T11:16:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2014/04/13/scalatra-introduction</id>
+    <content type="html"><![CDATA[<p>【scalatra 環境構築メモ】</p>
+
+<p>■scalatra本体、関連ツール導入</p>
+
+<ol>
+<li>Scala本体</li>
+</ol>
+
+
+<p>Scala公式サイト（<a href="http://www.scala-lang.org/download/%EF%BC%89%E3%82%88%E3%82%8A%E3%83%90%E3%82%A4%E3%83%8A%E3%83%AA%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%88tgz%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%89%E3%82%92%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%81%97%E3%80%81/usr/bin%E4%BB%A5%E4%B8%8B%E3%81%AB%E5%B1%95%E9%96%8B%E3%80%82">http://www.scala-lang.org/download/%EF%BC%89%E3%82%88%E3%82%8A%E3%83%90%E3%82%A4%E3%83%8A%E3%83%AA%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%88tgz%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%89%E3%82%92%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%81%97%E3%80%81/usr/bin%E4%BB%A5%E4%B8%8B%E3%81%AB%E5%B1%95%E9%96%8B%E3%80%82</a></p>
+
+<ol>
+<li>SBT</li>
+</ol>
+
+
+<p>SBT公式サイト（<a href="http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html#unix%EF%BC%89%E3%81%8B%E3%82%89sbt-launch.jar%E3%82%92%E5%8F%96%E5%BE%97%E3%81%97%E3%80%81~/bin%E3%81%AB%E9%85%8D%E7%BD%AE%E3%80%82">http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html#unix%EF%BC%89%E3%81%8B%E3%82%89sbt-launch.jar%E3%82%92%E5%8F%96%E5%BE%97%E3%81%97%E3%80%81~/bin%E3%81%AB%E9%85%8D%E7%BD%AE%E3%80%82</a>
+SBT公式サイトの勧めに従い、起動用スクリプトを作成する。単に以下をコピペし、~/bin/sbtとして保存。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
+</span><span class='line'>java $SBT_OPTS -jar `dirname $0`/sbt-launch.jar "$@"</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Conscript</li>
+</ol>
+
+
+<p>以下を実行する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl https://raw.github.com/n8han/conscript/master/setup.sh | sh</span></code></pre></td></tr></table></div></figure>
+
+
+<p>結果、スクリプト ~/bin/cs が作成されたことを確認すること。</p>
+
+<ol>
+<li>giter8</li>
+</ol>
+
+
+<p>以下を実行する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cs n8han/giter8</span></code></pre></td></tr></table></div></figure>
+
+
+<p>結果、スクリプト ~/bin/g8 が作成されたことを確認すること。</p>
+
+<p>■scalatraプロジェクトの作成</p>
+
+<p>任意のパスで以下を実行し、ドメイン設定、パッケージ名、プロジェクト名等を設定しscalatraプロジェクトを作成する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ g8 scalatra/scalatra-sbt</span></code></pre></td></tr></table></div></figure>
+
+
+<p>■scalatraサーバの起動</p>
+
+<p>プロジェクトディレクトリ以下に移動し、sbtを起動し、コマンド <code>container:start</code> としてscalatraサーバを起ち上げる。</p>
+
+<hr />
+
+<p>参考サイト：
+<a href="https://gist.github.com/kmizu/1876800">https://gist.github.com/kmizu/1876800</a>
+<a href="http://scalajp.github.io/sbt-getting-started-guide-ja/">http://scalajp.github.io/sbt-getting-started-guide-ja/</a>
+<a href="http://qiita.com/k_ui/items/65def414bd7ec54aedeb">http://qiita.com/k_ui/items/65def414bd7ec54aedeb</a>
+<a href="http://diario.hatenablog.com/entry/2013/08/25/041417">http://diario.hatenablog.com/entry/2013/08/25/041417</a>
+<a href="http://sgykfjsm.github.io/blog/2013/02/22/scalatra-tutorial-001/">http://sgykfjsm.github.io/blog/2013/02/22/scalatra-tutorial-001/</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[vagrant + chef-solo (knife-solo)]]></title>
+    <link href="http://philippos2.github.io/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo/"/>
+    <updated>2014-03-17T01:13:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo</id>
+    <content type="html"><![CDATA[<p>【vagrant + chef-solo および knife-solo による開発環境構築】(2014/03/15 &ndash; )</p>
+
+<p>■概要</p>
+
+<p>○目的</p>
+
+<p>同一構成の複数の仮想マシンを開発環境として構築することで、開発環境構築の効率化と各開発者間の開発環境の統一を図る。</p>
+
+<p>○構成</p>
+
+<p>各ソフトウェアのバージョンは現時点(2014/03/15)での版である。</p>
+
+<ul>
+<li>ホストOS：              Windows7</li>
+<li>ゲストOS：              CentOS 6.5 64bit</li>
+<li>仮想マシン：            VitualBox ver4.3.8</li>
+<li>仮想マシン管理：        Vagrant ver1.5.1</li>
+<li>自動システム管理：      chef-solo および Knife-solo</li>
+<li>その他：                rsync ver3.1.0</li>
+</ul>
+
+
+<p>その他：  <br/>
+・chef-solo を動作させるため、windows上にver1.9以降のrubyが必要である。1.8系以前のバージョンは非推奨。  <br/>
+・knife-solo は、chef-solo を補助するためのツールである。</p>
+
+<p>○大まかな手順</p>
+
+<p>&mdash; 準備 &mdash;</p>
+
+<ol>
+<li>Vagrant上の仮想マシンテンプレートに対し、chef-solo および knife-solo を利用し開発環境構築を行う。</li>
+<li>上記開発環境のBoxファイルを作成し、Vagrantfile、レシピと共に各開発者に公開する。</li>
+</ol>
+
+
+<p>&mdash; 必要に応じて各開発者が行う &mdash;</p>
+
+<ol>
+<li>各開発者はvirtualboxとVagrantを自分のローカル環境にインストールする。</li>
+<li>各開発者は上記1.で作成したBoxファイルをVagrantコマンドによりダウンロードし、共有されたVagrantfileを利用して仮想マシンを起動する。</li>
+</ol>
+
+
+<hr />
+
+<p>以下より構築手順詳細
+以下はホストOSであるWindows上で行うこと</p>
+
+<p>■Vagrantの準備</p>
+
+<p>○VirtualBox導入</p>
+
+<p>VirtualBoxはVagrant上のBOXを稼働させるために利用する。
+公式サイトからVirtualBoxをダウンロードしインストールする。</p>
+
+<p><a href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a></p>
+
+<p>○ホストOS（Windows）へVagrant導入</p>
+
+<p>・準備</p>
+
+<p>公式サイトからVagrantをダウンロードしインストールする。</p>
+
+<p><a href="http://www.vagrantup.com/">http://www.vagrantup.com/</a></p>
+
+<p>インストール後PCを再帰動し、vagrantが正しくインストールされたか確認するため、DOS窓を開いて以下のようにvagrantのバージョンを表示させる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant -v
+</span><span class='line'>
+</span><span class='line'>Vagrant 1.5.1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>・Vagrant上に仮想マシンを追加する</p>
+
+<p>任意のディレクトリへ移動し、下記サイトの「CentOS 6.5 x86_64」の仮想マシンテンプレートを指定してVagrant上に仮想マシンを追加する。
+所要時間は10分から15分程度。</p>
+
+<p><a href="http://www.vagrantbox.es/">http://www.vagrantbox.es/</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant box add centos6 https://github.com/2creatives/vagrant-centos/releases/download/v6.5.1/centos65-x86_64-20131205.box</span></code></pre></td></tr></table></div></figure>
+
+
+<p>なお下記のVagrant環境のための一連の準備により、ユーザホームディレクトリおよび作業用ディレクトリには以下のファイルが作成される。</p>
+
+<ul>
+<li><p>Vagrantインストール時にWindowsのユーザホームディレクトリ（C:\Users&lt;ユーザ名>）に作成されるファイル<br/>
+.vagrant.d</p></li>
+<li><p>vagrant環境初期化（vagrant init）時に作業用ディレクトリに作成されるファイル<br/>
+Vagrantfile</p></li>
+<li><p>vagrant初回起動時（vagrant up）時に作業用ディレクトリに作成されるファイル<br/>
+.vagrant</p></li>
+</ul>
+
+
+<p>下記の一連の準備を終えたあと上記ファイルが作成されているか確認すること。</p>
+
+<p>・仮想マシン追加完了後、Vagrant環境の初期化を行う</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant init</span></code></pre></td></tr></table></div></figure>
+
+
+<p>・仮想マシンの起動を行う</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant up</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上記コマンドを実行し以下の様なエラーが出る場合、これはbox名の解決に失敗しているということなので、Vagrantfileファイルの一部を編集して再度仮想マシンの起動を行うこと。</p>
+
+<p>Bringing machine &lsquo;default&rsquo; up with &lsquo;virtualbox&rsquo; provider&hellip;
+==> default: Box &lsquo;base&rsquo; could not be found. Attempting to find and install&hellip;</p>
+
+<p>Vagrantfileファイル13行目</p>
+
+<p>config.vm.box = &ldquo;base&rdquo;</p>
+
+<p>上記の箇所を以下のように編集</p>
+
+<p>config.vm.box = &ldquo;centos65&rdquo;</p>
+
+<p>参考サイト：<a href="http://www.trapon.jp/log/201307/mac_vagrant_centos.html">http://www.trapon.jp/log/201307/mac_vagrant_centos.html</a></p>
+
+<p>仮想マシン起動後、PuTTYやTeraTermなどのSSHクライアントで仮想マシンへアクセス可能である。</p>
+
+<p>Host:   127.0.0.1
+Port:   2222
+ID:     vagrant
+PW:     vagrant</p>
+
+<p>・その他のVagrantコマンド</p>
+
+<p>Vagrantの状況確認を行う</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant status</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Vagrant Boxの一覧を表示する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant box list</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Vagrant Boxを削除する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant box remove &lt;Box名&gt; virtualbox</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Vagrantを終了させる</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant halt          ……サスペド    
+</span><span class='line'>$ vagrant destroy       ……ターミネー    </span></code></pre></td></tr></table></div></figure>
+
+
+<p>Vagrantの準備は以上。</p>
+
+<hr />
+
+<p>■chef solo の準備</p>
+
+<p>○前提
+ゲストOS側にはknife-soloは導入の必要無し</p>
+
+<p>ホストOS：Windows7
+  chef-solo
+  knife-solo</p>
+
+<p>ゲストOS：CentOS 6.5 64bit
+  chef-solo</p>
+
+<p>また、chef-soloのレシピ群は以下の階層構造で管理される</p>
+
+<p>　レポジトリ（キッチン）＞クックブック＞レシピ</p>
+
+<p>○ホストOS（Windows）へruby2.0導入</p>
+
+<p>ruby公式サイトより Ruby 2.0.0-p451 (x64) をダウンロードしインストールする。</p>
+
+<p><a href="http://rubyinstaller.org/downloads/">http://rubyinstaller.org/downloads/</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby -v</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ruby 2.0.0p451 (2014-02-24) [x64-mingw32]</p>
+
+<p>○ホストOS（Windows）へDevelopment Kit導入</p>
+
+<p>同様にruby公式サイトより DevKit-mingw64-64-4.7.2-20130224-1432-sfx.exe (For use with Ruby 2.0 (x64 64bits only))をダウンロードしインストールする。
+次にインストール先ディレクトリにて以下のコマンドを実行すること。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby dk.rb init
+</span><span class='line'>
+</span><span class='line'>[INFO] found RubyInstaller v2.0.0 at C:/Ruby200-x64
+</span><span class='line'>
+</span><span class='line'>Initialization complete! Please review and modify the auto-generated
+</span><span class='line'>'config.yml' file to ensure it contains the root directories to all
+</span><span class='line'>of the installed Rubies you want enhanced by the DevKit.
+</span><span class='line'>
+</span><span class='line'>$ ruby dk.rb install
+</span><span class='line'>
+</span><span class='line'>[INFO] Updating convenience notice gem override for 'C:/Ruby200-x64'
+</span><span class='line'>[INFO] Installing 'C:/Ruby200-x64/lib/ruby/site_ruby/devkit.rb'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○ホストOS（Windows）へknife-solo導入</p>
+
+<p>以下のgemをインストールすることで、chef-soloも同時にインストールできる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem install knife-solo</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Windows版には以下のgemも必要となる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem install win32-process    
+</span><span class='line'>$ gem install windows-pr    </span></code></pre></td></tr></table></div></figure>
+
+
+<p>knife-soloのバージョンを表示して正常にインストールできたか確認する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ knife -v
+</span><span class='line'>
+</span><span class='line'>Chef: 11.10.4</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○リソース同期ツールrsync導入</p>
+
+<p>下記サイトよりrsyncの無料版をダウンロードし、インストールする。</p>
+
+<p><a href="https://www.itefix.no/i2/cwrsync">https://www.itefix.no/i2/cwrsync</a></p>
+
+<p>任意のパスに配置しパスを通しておくこと</p>
+
+<p>○リポジトリ（キッチン）の作成</p>
+
+<p>以下のようにして chef-solo 基本ディレクトリを作成する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ knife solo init &lt;リポジトリ名&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>仮にリポジトリ名をchef-repoとすると、下記コマンドにてディレクトリ chef-repo 以下にレシピテンプレートが作成される。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ knife solo init chef-repo</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○ゲストOS（Vagrant上のBOXとして起動しているCentOS6.5）へchef-solo導入</p>
+
+<p>次にゲストOSへ chef-solo を導入するため作成したディレクトリ chef-repo に移動し、下記コマンドを実行する。
+「2222」はゲストOSが稼働しているBoxのポート番号である。所要時間は30分程度。
+この際、.chef/knife.rb が設定ファイルとして出力される</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd chef-repo
+</span><span class='line'>$ knife solo prepare -i "C:\Users\&lt;ユーザー名&gt;\.vagrant.d\insecure_private_key" -p 2222 vagrant@127.0.0.1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○クックブックの作成</p>
+
+<p>クックブック名を仮に mybook として下記コマンドを実行する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ knife cookbook create mybook -o site-cookbooks</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○レシピの作成</p>
+
+<p>レシピファイルを編集しApacheのインストールを行ってみる。
+レシピファイル（\chef-repo\site-cookbooks\mybook\recipes\default.rb）を以下のように編集</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>package "httpd" do
+</span><span class='line'>  action :install
+</span><span class='line'>end
+</span><span class='line'> 
+</span><span class='line'>service "httpd" do
+</span><span class='line'>  action :start
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○実行レシピの指定</p>
+
+<p>JSONファイル \chef-repo\nodes\127.0.0.1.json を編集し、実行レシピを追加する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{"run_list":["mybook"]}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○レシピ実行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ knife solo cook -i "C:\Users\&lt;ユーザー名&gt;\.vagrant.d\insecure_private_key" -p 2222 vagrant@127.0.0.1</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p>chef-solo/knife-soloによるレシピ実行まで、以上</p>
+
+<hr />
+
+<p>■追補</p>
+
+<p>○仮想マシンのメモリ設定（VirtualBoxの場合）</p>
+
+<p>仮想マシン上に例えば2MByteのメモリ領域を設定する場合、Vagrantfileファイルを編集し、以下を追加すること。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  # allocate the memory for the buffer pool
+</span><span class='line'>  config.vm.provider "virtualbox" do |v|
+</span><span class='line'>    v.memory = 2048
+</span><span class='line'>  end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○cookしようとしたときなどに以下のワーニングが出力される場合</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+</span><span class='line'>@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+</span><span class='line'>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下のファイルを削除する</p>
+
+<p>&lt;ユーザホームディレクトリ>.ssh\known_hosts</p>
+
+<p>○boxへのメモリの追加</p>
+
+<p>規定値ではメモリが足りたいため、vagrant box（virtulabox 上の仮想マシン）のメモリを追加すること。
+以下Vagrantfileへ記述を追加する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  # allocate the memory for the buffer pool
+</span><span class='line'>  config.vm.provider "virtualbox" do |v|
+</span><span class='line'>    v.memory = 2048
+</span><span class='line'>  end</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[scala play2 introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/12/15/scala-play2-introduction/"/>
+    <updated>2013-12-15T21:40:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/12/15/scala-play2-introduction</id>
+    <content type="html"><![CDATA[<p>【Scala / play2 導入メモ】2013/12/14～</p>
+
+<p>Play2 version: 2.2.0
+Scala version: 2.10.2 (OpenJDK 64-Bit Server VM, Java 1.6.0_27).</p>
+
+<p>以下、ホームディレクトリにて行う。</p>
+
+<p>■準備</p>
+
+<p>事前に Java 開発環境のインストールをしておくこと。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install openjdk-6-jdk</span></code></pre></td></tr></table></div></figure>
+
+
+<p>■play2 フレームワークの取得と展開</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ wget http://downloads.typesafe.com/play/2.2.0/play-2.2.0.zip
+</span><span class='line'>
+</span><span class='line'>$ unzip play-2.2.0.zip
+</span><span class='line'>
+</span><span class='line'>$ sudo mv play-2.2.0 /usr/local
+</span><span class='line'>
+</span><span class='line'>$ cd /usr/bin
+</span><span class='line'>
+</span><span class='line'>$ sudo ln -s /usr/local/play-2.2.0/play play</span></code></pre></td></tr></table></div></figure>
+
+
+<p>■動作確認</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ play
+</span><span class='line'>
+</span><span class='line'>zsh: correct 'play' to 'aplay' [nyae]? n
+</span><span class='line'>Getting com.typesafe.play console_2.10 2.2.0 ...
+</span><span class='line'>:: retrieving :: org.scala-sbt#boot-app
+</span><span class='line'>confs: [default]
+</span><span class='line'>6 artifacts copied, 0 already retrieved (2012kB/93ms)
+</span><span class='line'>Getting Scala 2.10.2 (for console)...
+</span><span class='line'>:: retrieving :: org.scala-sbt#boot-scala
+</span><span class='line'>confs: [default]
+</span><span class='line'>5 artifacts copied, 0 already retrieved (24390kB/2078ms)
+</span><span class='line'>_
+</span><span class='line'> _ __ | | __ _ _  _
+</span><span class='line'> | '_ \| |/ _' | || |
+</span><span class='line'> |  __/|_|\____|\__ /
+</span><span class='line'> |_|            |__/
+</span><span class='line'>
+</span><span class='line'>play 2.2.0 built with Scala 2.10.2 (running Java 1.6.0_18), http://www.playframework.com
+</span><span class='line'>
+</span><span class='line'>This is not a play application!
+</span><span class='line'>
+</span><span class='line'>Use `play new` to create a new Play application in the current directory,
+</span><span class='line'>or go to an existing application and launch the development console using `play`.
+</span><span class='line'>
+</span><span class='line'>You can also browse the complete documentation at http://www.playframework.com.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>■Scalaプロジェクト作成</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ play new testPlay
+</span><span class='line'>
+</span><span class='line'>zsh: correct 'play' to 'aplay' [nyae]? n
+</span><span class='line'>_
+</span><span class='line'> _ __ | | __ _ _  _
+</span><span class='line'> | '_ \| |/ _' | || |
+</span><span class='line'> |  __/|_|\____|\__ /
+</span><span class='line'> |_|            |__/
+</span><span class='line'>
+</span><span class='line'>play 2.2.0 built with Scala 2.10.2 (running Java 1.6.0_18), http://www.playframework.com
+</span><span class='line'>
+</span><span class='line'>The new application will be created in /home/philippos/testPlay
+</span><span class='line'>
+</span><span class='line'>What is the application name? [testPlay]
+</span><span class='line'>&gt;
+</span><span class='line'>
+</span><span class='line'>Which template do you want to use for this new application?
+</span><span class='line'>
+</span><span class='line'>1             - Create a simple Scala application
+</span><span class='line'>2             - Create a simple Java application
+</span><span class='line'>
+</span><span class='line'>&gt; 1
+</span><span class='line'>OK, application testPlay is created.
+</span><span class='line'>
+</span><span class='line'>Have fun!
+</span><span class='line'>
+</span><span class='line'>$ tree testPlay
+</span><span class='line'>
+</span><span class='line'>testPlay
+</span><span class='line'>|-- README
+</span><span class='line'>|-- app
+</span><span class='line'>|   |-- controllers
+</span><span class='line'>|   |   `-- Application.scala
+</span><span class='line'>|   `-- views
+</span><span class='line'>|       |-- index.scala.html
+</span><span class='line'>|       `-- main.scala.html
+</span><span class='line'>|-- build.sbt
+</span><span class='line'>|-- conf
+</span><span class='line'>|   |-- application.conf
+</span><span class='line'>|   `-- routes
+</span><span class='line'>|-- project
+</span><span class='line'>|   |-- build.properties
+</span><span class='line'>|   `-- plugins.sbt
+</span><span class='line'>|-- public
+</span><span class='line'>|   |-- images
+</span><span class='line'>|   |   `-- favicon.png
+</span><span class='line'>|   |-- javascripts
+</span><span class='line'>|   |   `-- jquery-1.9.0.min.js
+</span><span class='line'>|   `-- stylesheets
+</span><span class='line'>|       `-- main.css
+</span><span class='line'>`-- test
+</span><span class='line'>    |-- ApplicationSpec.scala
+</span><span class='line'>    `-- IntegrationSpec.scala
+</span><span class='line'>
+</span><span class='line'>10 directories, 14 files</span></code></pre></td></tr></table></div></figure>
+
+
+<p>■playアプリケーションの実行</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ play run
+</span><span class='line'>
+</span><span class='line'>[info] Loading project definition from /home/philippos/testPlay/project
+</span><span class='line'>[info] Set current project to testPlay (in build file:/home/philippos/testPlay/)
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Cannot load the JNotify native library (/home/philippos/testPlay/target/native_libraries/64bits/libjnotify.so: /lib/libc.so.6: version `GLIBC_2.12' not found (required by /home/philippos/testPlay/target/native_libraries/64bits/libjnotify.so))
+</span><span class='line'>Play will check file changes for each request, so expect degraded reloading performace.
+</span><span class='line'>
+</span><span class='line'>--- (Running the application from SBT, auto-reloading is enabled) ---
+</span><span class='line'>
+</span><span class='line'>[info] play - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+</span><span class='line'>
+</span><span class='line'>(Server started, use Ctrl+D to stop and go back to the console...)
+</span><span class='line'>
+</span><span class='line'>[info] Compiling 5 Scala sources and 1 Java source to /home/philippos/testPlay/target/scala-2.10/classes...
+</span><span class='line'>[info] play - Application started (Dev)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下記URLでアクセスし動作を確認する。</p>
+
+<p><a href="http://localhost:9000/">http://localhost:9000/</a></p>
+
+<p>■対話型実況環境（REPL）の起動</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ play console                                                                                                                                                                    [21:19:14]
+</span><span class='line'>[info] Loading project definition from /home/philippos/testPlay/project
+</span><span class='line'>[info] Set current project to testPlay (in build file:/home/philippos/testPlay/)
+</span><span class='line'>[info] Starting scala interpreter...
+</span><span class='line'>[info]
+</span><span class='line'>Welcome to Scala version 2.10.2 (OpenJDK 64-Bit Server VM, Java 1.6.0_27).
+</span><span class='line'>Type in expressions to have them evaluated.
+</span><span class='line'>Type :help for more information.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>終了するときは、:quit とする。</p>
+
+<hr />
+
+<p>■参考サイト：</p>
+
+<p><a href="http://www.playframework.com/download">http://www.playframework.com/download</a>  <br/>
+<a href="http://yksris.hatenablog.com/entry/2013/01/06/134353">http://yksris.hatenablog.com/entry/2013/01/06/134353</a>  <br/>
+<a href="http://tech-sketch.jp/2013/11/scala-play2-1.html">http://tech-sketch.jp/2013/11/scala-play2-1.html</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[bookmarks 2013/12]]></title>
+    <link href="http://philippos2.github.io/blog/2013/12/07/bookmarks-2013-12/"/>
+    <updated>2013-12-07T18:41:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/12/07/bookmarks-2013-12</id>
+    <content type="html"><![CDATA[<h3>ここ二ヶ月程でタメになったブログ記事一覧</h3>
+
+<ul>
+<li><h4>肥大化したActiveRecordモデルをリファクタリングする7つの方法(翻訳)</h4>
+
+<p><a href="http://techracho.bpsinc.jp/hachi8833/2013_11_19/14738">http://techracho.bpsinc.jp/hachi8833/2013_11_19/14738</a></p></li>
+<li><h4>Relish Project: RSpec Rails 3.0</h4>
+
+<p><a href="https://relishapp.com/rspec/rspec-rails/docs">https://relishapp.com/rspec/rspec-rails/docs</a></p></li>
+<li><h4>Better Specs { rspec guidelines with ruby }</h4>
+
+<p><a href="http://betterspecs.org/jp/">http://betterspecs.org/jp/</a></p></li>
+<li><h4>メタプログラミングRuby イディオム・黒魔術一覧</h4>
+
+<p><a href="http://d.hatena.ne.jp/tbpg/20130613/1371143345">http://d.hatena.ne.jp/tbpg/20130613/1371143345</a></p></li>
+<li><h4>メタプログラミングRubyのイディオム</h4>
+
+<p><a href="http://maeshima.hateblo.jp/entry/20110519/1305808363">http://maeshima.hateblo.jp/entry/20110519/1305808363</a></p></li>
+<li><h4>「関数型Ruby」という病</h4>
+
+<p><a href="http://yuroyoro.hatenablog.com/entry/2012/08/08/201720">http://yuroyoro.hatenablog.com/entry/2012/08/08/201720</a></p></li>
+<li><h4>Pryが真の力を発揮してくれる19個のコマンドとコマンドの自作方法[Rails]</h4>
+
+<p><a href="http://morizyun.github.io/blog/pry-command-rails-ruby/">http://morizyun.github.io/blog/pry-command-rails-ruby/</a></p></li>
+<li><h4>Ruby on Rails 4.0.1リリース！大量のバグ修正、3系からの移行も少し簡単になりました</h4>
+
+<p><a href="http://techracho.bpsinc.jp/baba/2013_11_02/14645">http://techracho.bpsinc.jp/baba/2013_11_02/14645</a></p></li>
+<li><h4>知って得する！５５のRubyのトリビアな記法</h4>
+
+<p><a href="http://melborne.github.io/2013/03/04/ruby-trivias-you-should-know-4/">http://melborne.github.io/2013/03/04/ruby-trivias-you-should-know-4/</a>
+（←Rubyのcurry化って、こんなふうに使うのか……。）</p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[rails optimization points]]></title>
+    <link href="http://philippos2.github.io/blog/2013/08/11/rails-optimization-points/"/>
+    <updated>2013-08-11T14:44:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/08/11/rails-optimization-points</id>
+    <content type="html"><![CDATA[<h3>ruby on rails 最適化要点メモ</h3>
+
+<h4>1. DBテーブルに適切にインデックスが張られているか？</h4>
+
+<p>インデックスを設定するにあたって、データ取得条件（クエリのWHERE句）に注目すること。 <br/>
+また実行計画解析（explain）を活用し、実際にインデックスが有効になっているか確認すること。</p>
+
+<p>以下のようにして、AvtiveRecordのexplain機能を利用することもできる。</p>
+
+<blockquote><p>User.where(:id => 1).joins(:posts).explain</p></blockquote>
+
+<h4>2. キャッシュが有効に働いているか？</h4>
+
+<p>静的ファイルをブラウザ側でキャッシュする、Webブラウザとして nginx を採用する等。 <br/>
+またMemoryStore、MemCacheStore等、ActiveSupportで提供されるRails標準のキャッシュ機構を利用する。</p>
+
+<h4>3. DBから不必要にレコードセットを取得していないか？</h4>
+
+<p>レコードセットの内容に不必要なものがある場合は、より適切なレコードセット内容に改め、
+内容が重複しているにもかかわらず何度も同じデータを引いている場合は、データ取得自体を止める。</p>
+
+<h4>4. N + 1 問題等が発生していないか？</h4>
+
+<p>N + 1 問題が発生している場合は、レコードセット取得時にテーブル同士の内積を取るようなクエリになるように書き直すこと。 <br/>
+N + 1 問題が起きているかどうか調べるには、bullet (<a href="https://github.com/flyerhzm/bullet">https://github.com/flyerhzm/bullet</a>) 等のツールを利用する。</p>
+
+<hr />
+
+<p>参考サイト： <br/>
+<a href="http://www.infiniteloop.co.jp/blog/2011/03/mysql-index-explain/">http://www.infiniteloop.co.jp/blog/2011/03/mysql-index-explain/</a> <br/>
+<a href="http://www.hitachi.co.jp/Prod/comp/soft1/manual/ws/c3F5500/EEXD0043.HTM">http://www.hitachi.co.jp/Prod/comp/soft1/manual/ws/c3F5500/EEXD0043.HTM</a></p>
+
+<p>WEB+DB PRESS Vol.70 （技術評論社）「実践Rails高速化」</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[logging settings by logrotate]]></title>
+    <link href="http://philippos2.github.io/blog/2013/08/10/logging-settings-by-logrotate/"/>
+    <updated>2013-08-10T14:12:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/08/10/logging-settings-by-logrotate</id>
+    <content type="html"><![CDATA[<h3>■ nginx の logrotate 設定</h3>
+
+<p>今回 squeeze 上に導入した nginx/1.4.1 では特に設定の必要なし。
+以下は既定の設定である。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/var/log/nginx/*.log {
+</span><span class='line'>        daily
+</span><span class='line'>        missingok
+</span><span class='line'>        rotate 52
+</span><span class='line'>        compress
+</span><span class='line'>        delaycompress
+</span><span class='line'>        notifempty
+</span><span class='line'>        create 640 nginx adm
+</span><span class='line'>        sharedscripts
+</span><span class='line'>        postrotate
+</span><span class='line'>                [ -f /var/run/nginx.pid ] && kill -USR1 `cat /var/run/nginx.pid`
+</span><span class='line'>        endscript
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>対象となるログは以下である。 <br/>
+/var/log/nginx/access.log <br/>
+/var/log/nginx/error.log</p>
+
+<p>参考サイト： <br/>
+<a href="http://www.mk-mode.com/octopress/2013/02/17/nginx-logrotation/">http://www.mk-mode.com/octopress/2013/02/17/nginx-logrotation/</a></p>
+
+<hr />
+
+<h3>■ unicorn の logrotate 設定</h3>
+
+<p>rails アプリの logrotate 用設定ファイルを /etc/logrotate.d/[rails_app] に設定する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/home/philippos/[rails_app]/log/unicorn.*.log {
+</span><span class='line'>  daily
+</span><span class='line'>  missingok
+</span><span class='line'>  rotate 60
+</span><span class='line'>  dateext
+</span><span class='line'>
+</span><span class='line'>  # 圧縮設定 (次回のログ循環まで保留)
+</span><span class='line'>  compress
+</span><span class='line'>  delaycompress
+</span><span class='line'>
+</span><span class='line'>  # unicorn master プロセスへ USR1 シグナル送信
+</span><span class='line'>  lastaction
+</span><span class='line'>    pid=/home/philippos/[rails_app]/tmp/pids/unicorn.pid
+</span><span class='line'>    test -s $pid && kill -USR1 "$(cat $pid)"
+</span><span class='line'>  endscript
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上記設定の場合、日次でログ循環し、過去のログファイルは60世代まで確保される。
+日付が付けられた過去のログファイルは圧縮される。</p>
+
+<h4>○補追</h4>
+
+<h5>daily</h5>
+
+<p>日次でログ循環する。週次の場合は <code>weekly</code>、月次の場合は <code>monthly</code> を設定する。</p>
+
+<h5>missingok</h5>
+
+<p>ログファイルが存在しない場合でもエラーとしない。</p>
+
+<h5>rotate n</h5>
+
+<p>n 世代までログファイルを保持する。</p>
+
+<h5>dateext</h5>
+
+<p>過去のログファイルに日付（YYYYMMDD）を付加する。</p>
+
+<h4>○logrotate のオプションについて</h4>
+
+<p>logrotate 設定テスト</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ /usr/sbin/logrotate -d /etc/logrotate.d/[rails_app]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>cron に依らず手動で logrotate してみたい場合</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ /usr/sbin/logrotate -f /etc/logrotate.d/[rails_app]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考サイト： <br/>
+<a href="https://github.com/phusion/unicorn/blob/master/examples/logrotate.conf">https://github.com/phusion/unicorn/blob/master/examples/logrotate.conf</a> <br/>
+<a href="http://linux.kororo.jp/cont/server/logrotate.php">http://linux.kororo.jp/cont/server/logrotate.php</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[rails logging settings]]></title>
+    <link href="http://philippos2.github.io/blog/2013/08/05/rails-logging-settings/"/>
+    <updated>2013-08-05T23:30:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/08/05/rails-logging-settings</id>
+    <content type="html"><![CDATA[<h3>rails ロギング設定</h3>
+
+<p>production 環境のロギング設定を行うには、config/environments/production.rb にて以下のようにすること。</p>
+
+<h4>■ログファイルサイズとログファイル個数で設定したい場合</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>config.logger = Logger.new('log/production.log', 10, 10.megabytes)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上記において ActiveSupport::Logger.new の第二引数がログファイル個数、第三引数がログファイルサイズである。 <br/>
+例えばログファイル個数を 10 とした場合、設定されたログファイルサイズに応じて、production.log、production.log.0～production.log.8 までの10世代のファイルが作成される。</p>
+
+<h4>■時系列で設定したい場合</h4>
+
+<p>日次設定</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>config.logger = Logger.new("log/production.log", 'daily')</span></code></pre></td></tr></table></div></figure>
+
+
+<p>週次設定</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>config.logger = Logger.new("log/production.log", 'weekly')</span></code></pre></td></tr></table></div></figure>
+
+
+<p>月次設定</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>config.logger = Logger.new("log/production.log", 'monthly')</span></code></pre></td></tr></table></div></figure>
+
+
+<p>production.log.YYYYMMDD.N といったログファイルが生成されるが、古いログファイルが自動的に消去されることはないので適宜削除すること。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[vim plugins for git introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/08/04/vim-plugins-for-git-introduction/"/>
+    <updated>2013-08-04T09:45:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/08/04/vim-plugins-for-git-introduction</id>
+    <content type="html"><![CDATA[<h3>git 関連 vim プラグイン導入</h3>
+
+<p>今回 vim 上で git コマンドを実行することのできる vim プラグインをふたつ導入した。 <br/>
+理由は不明だが、BundleInstallでふたついっぺんにインストールしようとするとインストールに失敗してしまうので、ひとつずつインストールすること。</p>
+
+<h4>■fugitive 導入</h4>
+
+<p><a href="https://github.com/tpope/vim-fugitive">https://github.com/tpope/vim-fugitive</a></p>
+
+<p>~/.vimrc に以下を追記後、vim 上からBundleInstallする。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>"for git
+</span><span class='line'>Bundle 'tpope/vim-fugitive'</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■fugitive 使用方法</h4>
+
+<p>具体的な使用方法は、以下のサイトに詳しい。 <br/>
+<a href="http://vimcasts.org/episodes/fugitive-vim---a-complement-to-command-line-git/">http://vimcasts.org/episodes/fugitive-vim&#8212;a-complement-to-command-line-git/</a></p>
+
+<h5>主なコマンド</h5>
+
+<p>fugitive を導入後、vim のコマンドモードで以下のコマンドを使用することができる。</p>
+
+<blockquote><p>Gstatus (= git status : リポジトリ状態) <br/>
+Gdiff (= git diff : 差分) <br/>
+Gwrite (= git add : 追加) <br/>
+Gremove (= git rm : 削除) <br/>
+Gcommit (= git commit : コミット)</p></blockquote>
+
+<hr />
+
+<p>参考サイト： <br/>
+<a href="http://yuku-tech.hatenablog.com/entry/20110427/1303868482">http://yuku-tech.hatenablog.com/entry/20110427/1303868482</a> <br/>
+<a href="http://cohama.hateblo.jp/entry/20120317/1331978764">http://cohama.hateblo.jp/entry/20120317/1331978764</a> <br/>
+<a href="http://www.makies.com/2011/11/302/">http://www.makies.com/2011/11/302/</a></p>
+
+<h4>■gitv 導入</h4>
+
+<p>gitv は GUIによる git 用ツールである gitk と同等の目的と使用感を目指して作成された vim プラグインである。</p>
+
+<p><a href="https://github.com/gregsexton/gitv">https://github.com/gregsexton/gitv</a></p>
+
+<p>~/.vimrc に以下を追記後、vim 上からBundleInstallする。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Bundle 'gitv'</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■gitv 使用方法</h4>
+
+<p>vim のコマンドモードで <code>Gitv</code> とするとブラウザモードに移行する。 <br/>
+また <code>Gitv!</code> とするとファイルモードに移行する。 <br/>
+ブラウザモードでは、これまでのコミット情報を参照できる。 <br/>
+ファイルモードでは、対象とするファイルの履歴を参照できる。</p>
+
+<hr />
+
+<p>参考サイト： <br/>
+<a href="http://cohama.hateblo.jp/entry/20120417/1334679297">http://cohama.hateblo.jp/entry/20120417/1334679297</a> <br/>
+<a href="http://matsu.teraren.com/blog/2012/03/16/gitv/">http://matsu.teraren.com/blog/2012/03/16/gitv/</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[z-shell-introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/08/03/z-shell-introduction/"/>
+    <updated>2013-08-03T18:26:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/08/03/z-shell-introduction</id>
+    <content type="html"><![CDATA[<h3>z-shell 導入</h3>
+
+<p>tmux 上の作業用 shell を bash から bash と比較して多機能かつ高速であるとされる z-shell へ移行した。</p>
+
+<p><a href="http://www.zsh.org/">http://www.zsh.org/</a></p>
+
+<h4>■z-shell のインストール</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install zsh</span></code></pre></td></tr></table></div></figure>
+
+
+<p>tmuxの設定ファイル（.tmux.conf）に、下記の設定を追記する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set-option -g default-shell /bin/zsh</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上記設定を追加後、tmux を再起動する。
+tmux を再起動してから使用されている shell の種類を確認すること。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ echo $SHELL</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>その他</h5>
+
+<p>zsh によるグロッピングが原因で octopress 用のコマンドがエラーとなってしまうため、.zshrc にグロッピング禁止の設定を追加する。 <br/>
+~/.zshrc に以下を追記すること。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>setopt nonomatch # for octopress</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■oh-my-zsh のインストール</h4>
+
+<p>設定ファイル集 oh-my-zsh を利用する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+</span><span class='line'>cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下のサイトのプレビューからテーマを選択する。</p>
+
+<p><a href="http://zshthem.es/all/">http://zshthem.es/all/</a></p>
+
+<p>これらのテーマの中には、ローカルの git リポジトリ状態（対象ブランチ、編集中か否か、等）を shell prompt に表示するものもあるので利用したい。 <br/>
+今回はテーマとして、&#8217;pmcgee&#8217; を採用した。
+.zshrc 中の以下の変数を編集する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ZSH_THEME="pmcgee"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>tmux を再起動してテーマが正しく設定されているか確認すること。</p>
+
+<hr />
+
+<p>参考サイト： <br/>
+<a href="http://news.mynavi.jp/column/zsh/022/index.html">http://news.mynavi.jp/column/zsh/022/index.html</a> <br/>
+<a href="http://shanon-tech.blogspot.jp/2012/10/zsh.html">http://shanon-tech.blogspot.jp/2012/10/zsh.html</a> <br/>
+<a href="http://d.hatena.ne.jp/eitya/20110707/1310023383">http://d.hatena.ne.jp/eitya/20110707/1310023383</a> <br/>
+<a href="http://zshthem.es/all/">http://zshthem.es/all/</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[tmux-introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/08/03/tmux-introduction/"/>
+    <updated>2013-08-03T18:11:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/08/03/tmux-introduction</id>
+    <content type="html"><![CDATA[<h3>仮想端末管理ツール tmux 導入</h3>
+
+<p>端末多重化による作業効率化を期待して tmux を導入した。</p>
+
+<p><a href="http://tmux.sourceforge.net/">http://tmux.sourceforge.net/</a></p>
+
+<h4>■tmux のインストール</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install tmux</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■tmux の自動起動設定</h4>
+
+<p>以下を .bashrc に追記する。
+以下の設定では既に tmux が起動している場合、既存の tmux プロセスへのアタッチのみ行う。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if [ -z $TMUX ]; then
+</span><span class='line'>  if $(tmux has-session 2&gt; /dev/null); then
+</span><span class='line'>    tmux -2 attach
+</span><span class='line'>  else
+</span><span class='line'>    tmux -2
+</span><span class='line'>  fi
+</span><span class='line'>fi</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■tmux で代表的な操作方法</h4>
+
+<p>以下で <code>C-b</code> は、<code>Ctrl + bind</code> の意。</p>
+
+<p>・ウィンドウ作成</p>
+
+<blockquote><p>C-b c</p></blockquote>
+
+<p>・ウィンドウ一覧表示／移動</p>
+
+<blockquote><p>C-b w</p></blockquote>
+
+<p>・前／次のウィンドウ移動</p>
+
+<blockquote><p>C-b p    （pre）<br/>
+C-b n    （next）</p></blockquote>
+
+<p>・ウィンドウを強制終了</p>
+
+<blockquote><p>C-b &amp;</p></blockquote>
+
+<p>・ペイン分割</p>
+
+<blockquote><p>C-b &ldquo;    （横に分割）<br/>
+C-b %    （縦に分割）</p></blockquote>
+
+<p>・ペイン分割解除</p>
+
+<blockquote><p>C-b !</p></blockquote>
+
+<p>・ペイン強制終了</p>
+
+<blockquote><p>C-b x</p></blockquote>
+
+<p>・ペイン間移動</p>
+
+<blockquote><p>C-b o</p></blockquote>
+
+<p>・ペインを入れ替え</p>
+
+<blockquote><p>C-b {</p></blockquote>
+
+<p>・セッションのデタッチ</p>
+
+<blockquote><p>C-b d</p></blockquote>
+
+<hr />
+
+<p>参考サイト： <br/>
+<a href="http://komasaru.github.io/blog/2013/06/06/linux-mint-tmux-auto-attach/">http://komasaru.github.io/blog/2013/06/06/linux-mint-tmux-auto-attach/</a> <br/>
+<a href="http://shanon-tech.blogspot.jp/2012/05/tmux.html">http://shanon-tech.blogspot.jp/2012/05/tmux.html</a> <br/>
+<a href="http://room6933.com/mymemo/tmux/tmux-basic.html">http://room6933.com/mymemo/tmux/tmux-basic.html</a> <br/>
+<a href="http://www.omakase.org/misc/tmux_screen.html">http://www.omakase.org/misc/tmux_screen.html</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA['Module#prepend'-ruby-spec-memo]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/31/module%23prepend-ruby-spec-memo/"/>
+    <updated>2013-07-31T22:28:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/31/module#prepend-ruby-spec-memo</id>
+    <content type="html"><![CDATA[<h3>ruby2.0仕様メモ「Module#prepend」</h3>
+
+<p>ruby2.0より、mix-inした場合、module にて class 側の関数をオーバライドすることができる Module#prepend キーワードが実装された。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>module Fuga
+</span><span class='line'>  def abc=(value)
+</span><span class='line'>    raise ArgumentError unless value
+</span><span class='line'>    @abc = value
+</span><span class='line'>  end
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>class Hoge
+</span><span class='line'>  prepend Fuga
+</span><span class='line'>  attr_accessor :abc
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>&gt; hoge = Hoge.new
+</span><span class='line'>=&gt; #&lt;Hoge:0x0000000354b9d0&gt;
+</span><span class='line'>&gt; hoge.abc
+</span><span class='line'>=&gt; nil
+</span><span class='line'>&gt; hoge.abc = 123
+</span><span class='line'>=&gt; 123
+</span><span class='line'>&gt; hoge.abc = nil
+</span><span class='line'>ArgumentError: ArgumentError</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-spring-the-preloader]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/28/about-spring-the-preloader/"/>
+    <updated>2013-07-28T19:43:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/28/about-spring-the-preloader</id>
+    <content type="html"><![CDATA[<h3>spring 導入</h3>
+
+<p>spork が rails 4.0 に未対応なため、spring という比較的新しいプリローダを利用することとした。</p>
+
+<p>導入は gem を利用して行う。以下を Gemfile に記載し、<code>bundle install</code> する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'spring'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下のように利用する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ spring rspec spec/controllers/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>rspec コマンドの他、rake コマンドその他にも対応している。</p>
+
+<p>time コマンドを利用してコマンド実行にかかる時間を計測してみたが、それなりのボリュームのある rspec を用意できなかったため、速度向上を確認できなかった。
+プリロードの対象となるコマンドがそれなり以上の規模になった場合、効力を発揮することを期待したい。</p>
+
+<hr />
+
+<p>参考サイト：<a href="https://github.com/jonleighton/spring">https://github.com/jonleighton/spring</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-byebug-for-debug-with-pry]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/28/about-byebug-for-debug-with-pry/"/>
+    <updated>2013-07-28T16:09:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/28/about-byebug-for-debug-with-pry</id>
+    <content type="html"><![CDATA[<h3>byebug 導入</h3>
+
+<p>ruby2.0環境下では、pry-nav ならびに pry-debugger のデバッグ機能に不具合があり、また例外補足のためのツール pry-exception_explorer にも不具合があるため、デバッグ用のツールとして同様の機能を持つ byebug および pry-rescue への切り替えを行った。</p>
+
+<p>また今回のタイミングで、コールスタック（バックトレース）を参照するためのツールである pry-stack_explorer の導入も行った。</p>
+
+<p>byebug は pry と同じインタフェイスを持っているとのことで使用法は pry と同じである。</p>
+
+<p>まず、以下の gem は Gemfile から削除した。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'pry-debugger' # あるいは pry-nav
+</span><span class='line'>gem 'pry-exception_explorer'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>そして次の gem を導入する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># pry for debug
+</span><span class='line'>group :development, :test do
+</span><span class='line'>  gem 'pry-rails'               # pry base
+</span><span class='line'>  gem 'pry-byebug'              # debugger for pry
+</span><span class='line'>  gem 'pry-stack_explorer'      # call stack viewer
+</span><span class='line'>  gem 'pry-rescue'              # exception event handler
+</span><span class='line'>  gem 'hirb-unicode'            # hirb
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■pry-rescue使用法</h4>
+
+<p>デバッグ対象をブロックとして括り、その内部で何らかの例外が飛ばされた場合、その位置で binding.pry が起動される。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Pry.rescue do
+</span><span class='line'>  （略）
+</span><span class='line'>  raise XxxException
+</span><span class='line'>  （略）
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■pry-stack_explorer使用法</h4>
+
+<p>pry-stack_explorer を導入することで、binding.pry を利用したデバッグ中に、show-stack コマンドを用いてコールスタックを参照することが可能である。
+以下のコマンドを使ってコールスタックの内容を参照可能である。callerより断然便利。</p>
+
+<p>スタックを上がる</p>
+
+<blockquote><p>up</p></blockquote>
+
+<p>下がる</p>
+
+<blockquote><p>down</p></blockquote>
+
+<p>フレームを指定して移動</p>
+
+<blockquote><p>frame N</p></blockquote>
+
+<hr />
+
+<h4>参考サイト：</h4>
+
+<p><a href="https://github.com/deivid-rodriguez/byebug">https://github.com/deivid-rodriguez/byebug</a>  <br/>
+<a href="https://github.com/pry/pry-stack_explorer">https://github.com/pry/pry-stack_explorer</a>  <br/>
+<a href="http://qiita.com/joker1007/items/f132db1b4a5e3f9278e9">http://qiita.com/joker1007/items/f132db1b4a5e3f9278e9</a></p>
+
+<p>pry 関連のサブツールについて <br/>
+<a href="http://blog.uu59.org/2012-10-13-pry.html">http://blog.uu59.org/2012-10-13-pry.html</a></p>
+
+<p>ruby2.0環境下における pry-debugger の不具合について <br/>
+<a href="https://bugs.ruby-lang.org/issues/7214">https://bugs.ruby-lang.org/issues/7214</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-bootstrap-kaminari-views]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/27/about-bootstrap-kaminari-views/"/>
+    <updated>2013-07-27T10:59:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/27/about-bootstrap-kaminari-views</id>
+    <content type="html"><![CDATA[<h3>bootstrap-kaminari-views 導入</h3>
+
+<p>ruby2.0.0 / rails4.0.0 環境では、従来の方法で kaminari の bootstap view 対応ができなくなったようなので、本gemを利用して kaminari の bootstrap view 対応を行うことにした。</p>
+
+<p>Gemfileに以下を追記し、bundle install する。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'kaminari'
+</span><span class='line'>gem 'bootstrap-kaminari-views'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>view ページにて以下のようにペギネイトする。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>= paginate @posts, :theme =&gt; 'twitter-bootstrap'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>次のようなオプションを指定することもできる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>= paginate @posts, :theme =&gt; 'twitter-bootstrap', 
+</span><span class='line'>                   :pagination_class =&gt; "pagination-small pagination-centered"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>githubページ : <a href="https://github.com/matenia/bootstrap-kaminari-views">https://github.com/matenia/bootstrap-kaminari-views</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[pry-settings-for-debug]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/27/pry-settings-for-debug/"/>
+    <updated>2013-07-27T10:29:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/27/pry-settings-for-debug</id>
+    <content type="html"><![CDATA[<h3>pry 補追</h3>
+
+<p>pry によるデバッグのための .pryrc 設定補追</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># https://github.com/pry/pry/wiki/FAQ#wiki-hirb
+</span><span class='line'>require 'hirb'
+</span><span class='line'>
+</span><span class='line'>Hirb.enable
+</span><span class='line'>
+</span><span class='line'>old_print = Pry.config.print
+</span><span class='line'>Pry.config.print = proc do |output, value|
+</span><span class='line'>  Hirb::View.view_or_page_output(value) || old_print.call(output, value)
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>Pry.commands.alias_command 'c', 'continue'
+</span><span class='line'>Pry.commands.alias_command 's', 'step'
+</span><span class='line'>Pry.commands.alias_command 'n', 'next'
+</span><span class='line'>Pry.commands.alias_command 'f', 'finish'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>この他、binding.pry を利用したデバッグから一気に抜けたい場合、exit-process または exit-program コマンドを利用する。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ruby2.0.0 / rails4.0.0 introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/20/ruby2-dot-0-0-slash-rails4-dot-0-0-introduction/"/>
+    <updated>2013-07-20T15:45:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/20/ruby2-dot-0-0-slash-rails4-dot-0-0-introduction</id>
+    <content type="html"><![CDATA[<h3>【ruby2.0およびROR4.0導入メモ】2013/05/13～</h3>
+
+<hr />
+
+<h4>■対象環境</h4>
+
+<p>OS：Debian 6.0 / 64bit版</p>
+
+<hr />
+
+<h4>■ruby2.0導入</h4>
+
+<p>RVMのバージョンが若干古いので更新する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm get head</span></code></pre></td></tr></table></div></figure>
+
+
+<p>RVMで導入可能なrubyバージョン一覧（安定版のみ指定）を更新する
+また以下を行うことでRVM自体のバージョンも自動的に更新される
+（1.10.3→1.20.5 実行日2013/05/14 / 1.21.12 (stable) 2013/07/18）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm get stable</span></code></pre></td></tr></table></div></figure>
+
+
+<p>RVMにて導入可能なruby処理系を検索し、ruby2.0が導入可能であることを確認する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm list known</span></code></pre></td></tr></table></div></figure>
+
+
+<p>RVMにruby1.9.3の以下のビルドバージョンを導入するように要請されるので導入</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm install ruby-1.9.3-p392</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上記 &lsquo;rvm get stable&rsquo; を実行した時点でrubyの規定バージョンが初期化されるので改めて規定バージョンを設定する
+なお同様にgemsetの設定も初期化される模様</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm use 1.9.3 --default</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ruby2.0を導入する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm install 2.0.0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ruby2.0へ切り替え</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm use 2.0.0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>rubyのバージョンを確認</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby -v
+</span><span class='line'>
+</span><span class='line'>ruby 2.0.0p247 (2013-06-27 revision 41674) [x86_64-linux]</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>■.rvmrcから.ruby-versionへの移行</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm rvmrc to ruby-version</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>■rails4用gemset作成</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm gemset create rails400</span></code></pre></td></tr></table></div></figure>
+
+
+<p>現在のgemsetを確認</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm gemset list
+</span><span class='line'>
+</span><span class='line'>gemsets for ruby-2.0.0-p247 (found in /home/philippos/.rvm/gems/ruby-2.0.0-p247)
+</span><span class='line'>   (default)
+</span><span class='line'>   global
+</span><span class='line'>=&gt; rails400</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>■ROR4.0導入</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem install rails --version 4.0.0
+</span><span class='line'>
+</span><span class='line'>$ rvm use 2.0.0@rails400</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■不要なバージョンのRubyを削除（2013/12/25）</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm list
+</span><span class='line'>
+</span><span class='line'>rvm rubies
+</span><span class='line'>
+</span><span class='line'>   ruby-1.9.3-p125 [ x86_64 ]
+</span><span class='line'>   ruby-1.9.3-p429 [ x86_64 ]
+</span><span class='line'>   ruby-2.0.0-p195 [ x86_64 ]
+</span><span class='line'>=&gt; ruby-2.0.0-p247 [ x86_64 ]
+</span><span class='line'>
+</span><span class='line'># Default ruby not set. Try 'rvm alias create default &lt;ruby&gt;'.
+</span><span class='line'>
+</span><span class='line'># =&gt; - current
+</span><span class='line'># =* - current && default
+</span><span class='line'>#  * - default
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>$ rvm remove 1.9.3-p125
+</span><span class='line'>
+</span><span class='line'>Removing /home/philippos/.rvm/src/ruby-1.9.3-p125... - using Zsh, can not show progress, be patient...
+</span><span class='line'>Removing /home/philippos/.rvm/rubies/ruby-1.9.3-p125... - using Zsh, can not show progress, be patient...
+</span><span class='line'>Removing ruby-1.9.3-p125 aliases...
+</span><span class='line'>Removing ruby-1.9.3-p125 wrappers...
+</span><span class='line'>Removing ruby-1.9.3-p125 environments...
+</span><span class='line'>Removing ruby-1.9.3-p125 binaries...
+</span><span class='line'>
+</span><span class='line'>$ rvm remove 2.0.0-p195
+</span><span class='line'>
+</span><span class='line'>Removing /home/philippos/.rvm/src/ruby-2.0.0-p195... - using Zsh, can not show progress, be patient...
+</span><span class='line'>Removing /home/philippos/.rvm/rubies/ruby-2.0.0-p195... - using Zsh, can not show progress, be patient...
+</span><span class='line'>Removing ruby-2.0.0-p195 aliases...
+</span><span class='line'>Removing ruby-2.0.0-p195 wrappers...
+</span><span class='line'>Removing ruby-2.0.0-p195 environments...
+</span><span class='line'>Removing ruby-2.0.0-p195 binaries...
+</span><span class='line'>
+</span><span class='line'>$ rvm list
+</span><span class='line'>
+</span><span class='line'>rvm rubies
+</span><span class='line'>
+</span><span class='line'>   ruby-1.9.3-p429 [ x86_64 ]
+</span><span class='line'>   ruby-2.0.0-p247 [ x86_64 ]
+</span><span class='line'>
+</span><span class='line'># Default ruby not set. Try 'rvm alias create default &lt;ruby&gt;'.
+</span><span class='line'>
+</span><span class='line'># =&gt; - current
+</span><span class='line'># =* - current && default
+</span><span class='line'>#  * - default
+</span><span class='line'>
+</span><span class='line'>$ rvm use 2.0.0@rails402
+</span><span class='line'>
+</span><span class='line'>$ ruby -v
+</span><span class='line'>
+</span><span class='line'>ruby 2.0.0p247 (2013-06-27 revision 41674) [x86_64-linux]
+</span><span class='line'>
+</span><span class='line'>$ rails -v
+</span><span class='line'>
+</span><span class='line'>Rails 4.0.2</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p>参考サイト：<br/>
+<a href="http://hrst.hatenablog.jp/entry/20110616/1308229846">http://hrst.hatenablog.jp/entry/20110616/1308229846</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-sar-command]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/08/about-sar-command/"/>
+    <updated>2013-07-08T21:20:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/08/about-sar-command</id>
+    <content type="html"><![CDATA[<h3>【その他周辺ツール類】</h3>
+
+<h4>■sarコマンド導入</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install sysstat
+</span><span class='line'>
+</span><span class='line'>sudo dpkg-reconfigure sysstat
+</span><span class='line'>sysstatのcron jobを有効にしますか？→はい</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上</p>
+
+<h4>■sarコマンド使用方法</h4>
+
+<p>○sarコマンドの主要オプション（パラメータ）</p>
+
+<ul>
+<li>-A<br/>
+全情報表示</li>
+<li>-n DEV<br/>
+送信／受信パケットに関する情報</li>
+<li>-n EDEV<br/>
+エラーパケットに関する情報</li>
+<li>-u<br/>
+CPUの利用状況</li>
+<li>-b<br/>
+ディスクI/Oの使用状況</li>
+<li>-r<br/>
+メモリとスワップの使用状況</li>
+<li>-W<br/>
+秒当たりのスワップ情報</li>
+</ul>
+
+
+<p>参考サイト:<br/>
+<a href="http://d.hatena.ne.jp/nabnab/20101028/1288259546">http://d.hatena.ne.jp/nabnab/20101028/1288259546</a> <br/>
+<a href="http://www.syboos.jp/linux/doc/sar-command.html">http://www.syboos.jp/linux/doc/sar-command.html</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[nginx+unicorn-introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/07/nginx-plus-unicorn-introduction/"/>
+    <updated>2013-07-07T11:27:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/07/nginx-plus-unicorn-introduction</id>
+    <content type="html"><![CDATA[<h3>【nginx+unicorn導入メモ】2013/06/02～</h3>
+
+<p>Railsアプリにおいて静的資源をnginxに、rackサーバ上で動作する動的資源についてはunicornに担当させる構成について
+とりあえず導入まで。最適化に関しては別稿に譲る</p>
+
+<hr />
+
+<h4>■nginx導入</h4>
+
+<h5>○nginx導入前準備</h5>
+
+<p>2013/06/02時点において、aptitudeでのnginxパッケージの既定バージョンは0.7.67と古いため、nginx公式サイトをリポジトリに登録し、aptitudeでstable最新版をインストールできるようにする</p>
+
+<h4>1. まずパッケージの公開鍵をダウンロードしてapt-keyで追加する</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ wget "http://nginx.org/keys/nginx_signing.key"
+</span><span class='line'>$ sudo apt-key add nginx_signing.key</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>2. 次にnginx公式サイトをリポジトリに追加する</h4>
+
+<p>次のファイルに追加する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo vim /etc/apt/sources.list</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>deb http://nginx.org/packages/debian/ squeeze nginx
+</span><span class='line'>deb-src http://nginx.org/packages/debian/ squeeze nginx</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>3. リポジトリの追加を反映する</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude update</span></code></pre></td></tr></table></div></figure>
+
+
+<p>インストール可能なバージョンが更新されているか確認する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ aptitude show nginx</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2013/06/02時点でイントール可能なバージョンは、「1.4.1-1~squeeze」である</p>
+
+<h5>○nginx導入</h5>
+
+<p>aptitudeコマンドにてnginxをインストールする</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install nginx</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下のコマンドで正常にインストールできたか確認する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ aptitude show nginx</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>パッケージ: nginx
+</span><span class='line'>状態: インストール済み
+</span><span class='line'>自動的にインストールされた: no
+</span><span class='line'>バージョン: 1.4.1-1~squeeze
+</span><span class='line'>優先度: 任意
+</span><span class='line'>セクション: httpd
+</span><span class='line'>メンテナ: Sergey Budnevitch &lt;sb@nginx.com&gt;
+</span><span class='line'>展開サイズ: 1,102 k
+</span><span class='line'>依存: libc6 (&gt;= 2.10), libpcre3 (&gt;= 7.7), libssl0.9.8 (&gt;= 0.9.8m-1), zlib1g (&gt;= 1:1.1.4), lsb-base, adduser
+</span><span class='line'>提供: httpd
+</span><span class='line'>説明: HTTP and reverse proxy server, as well as a mail proxy server
+</span><span class='line'> written by Igor Sysoev
+</span><span class='line'>ホームページ: http://nginx.org</span></code></pre></td></tr></table></div></figure>
+
+
+<p>バージョン確認</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ /usr/sbin/nginx -v
+</span><span class='line'>
+</span><span class='line'>nginx version: nginx/1.4.1</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>■nginx起動／停止</h4>
+
+<h5>○起動</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo /etc/init.d/nginx start</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://192.168.56.1/">http://192.168.56.1/</a> 等、起動したサーバへアクセスし、「Welcome to nginx!」と表示されるか確認する</p>
+
+<h5>○停止</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo /etc/init.d/nginx stop</span></code></pre></td></tr></table></div></figure>
+
+
+<p>※
+以下のエラーが出る場合には、何らかのプログラムが80番ポートを塞いでいる可能性があるので、そのプログラムを停止しておく</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>例）
+80番ポートを塞いでいるプログラムを探し、停止する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo lsof -i:80
+</span><span class='line'>
+</span><span class='line'>COMMAND  PID     USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+</span><span class='line'>apache2 1768     root    5u  IPv6   4665      0t0  TCP *:www (LISTEN)
+</span><span class='line'>
+</span><span class='line'>$ sudo /etc/init.d/apache2 stop</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>■nginx設定</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/etc/nginx/conf.d/default.conf</span></code></pre></td></tr></table></div></figure>
+
+
+<p>default.confを元に編集した
+元となったdefault.confは、default.conf.backupとして保存した</p>
+
+<h5>○設定のポイント</h5>
+
+<ol>
+<li>ソケットファイルのパスをunicornで設定するそれ（後述）と一致させること</li>
+<li>ポート番号に留意すること</li>
+<li>プロキシパスを設定すること</li>
+</ol>
+
+
+<p>注）コメントアウトされている箇所については割愛した</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>upstream unicorn.railsapp {
+</span><span class='line'>    server unix:/home/philippos/coxcomb/tmp/sockets/unicorn.sock;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>server {
+</span><span class='line'>    listen       80;
+</span><span class='line'>    server_name  localhost;
+</span><span class='line'>
+</span><span class='line'>    location / {
+</span><span class='line'>        root   /home/philippos/coxcomb/public;
+</span><span class='line'>        index  index.html index.htm;
+</span><span class='line'>
+</span><span class='line'>        proxy_pass http://unicorn.railsapp;
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    # redirect server error pages to the static page /50x.html
+</span><span class='line'>    #
+</span><span class='line'>    error_page   500 502 503 504  /50x.html;
+</span><span class='line'>    location = /50x.html {
+</span><span class='line'>        root   /usr/share/nginx/html;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>■unicorn導入</h4>
+
+<ul>
+<li>Railsアプリディレクトリ以下のGemfileにunicornを追加する</li>
+<li>bundle install した後、configフォルダに設定ファイルとして、unicorn_config.rbを作成する</li>
+<li>内容は後述</li>
+</ul>
+
+
+<h5>○起動確認</h5>
+
+<ul>
+<li>-Dオプションを追加することでデーモンとして起動する</li>
+<li>デーモンを停止させるにはpsコマンドで該当プロセルを探し、kill -9 コマンドでpidを指定して停止させる</li>
+</ul>
+
+
+<h5>■起動</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ unicorn_rails -c config/unicorn_config.rb -E production -D</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>■停止</h5>
+
+<p>起動中のプロセスを検索し、unicornのマスタープロセスのみ停止させる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ps aux | grep unicorn
+</span><span class='line'>
+</span><span class='line'>133:1000      9174  0.1 16.9 736356 64496 ?        Sl   06:52   0:01 unicorn_rails master -c config/unicorn_config.rb -E production -D                                                                                                                    
+</span><span class='line'>134:1000      9180  0.0 18.3 746884 69880 ?        Sl   06:52   0:00 unicorn_rails worker[0] -c config/unicorn_config.rb -E production -D                                                                                                                 
+</span><span class='line'>135:1000      9183  0.0 18.5 747356 70280 ?        Sl   06:52   0:00 unicorn_rails worker[1] -c config/unicorn_config.rb -E production -D                                                                                                                 
+</span><span class='line'>136:1000      9186  0.0 16.4 738984 62556 ?        Sl   06:52   0:00 unicorn_rails worker[2] -c config/unicorn_config.rb -E production -D                                                                                                                 
+</span><span class='line'>137:1000      9189  0.0 18.0 745620 68404 ?        Sl   06:52   0:00 unicorn_rails worker[3] -c config/unicorn_config.rb -E production -D                                                                                                                 
+</span><span class='line'>141:1000      9428  0.1  1.1  36220  4204 pts/1    S+   07:01   0:00 vim source/_posts/2013-07-07-nginx-plus-unicorn-introduction.markdown
+</span><span class='line'>143:1000      9452  0.0  0.2  11328   936 pts/0    S+   07:04   0:00 grep -n unicorn
+</span><span class='line'>
+</span><span class='line'>$ kill -9 9174</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>■unicorn設定</h4>
+
+<ul>
+<li>Railsアプリディレクトリ以下connfig/unicorn_config.rb</li>
+<li>ソケットファイルのパス、ポート番号、ログ出力先等に留意する</li>
+<li>それらをnginxの設定と同一にする必要がある</li>
+</ul>
+
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># coding:utf-8
+</span><span class='line'># unicron.rb
+</span><span class='line'>worker_processes  4
+</span><span class='line'>working_directory '/home/philippos/coxcomb'
+</span><span class='line'>
+</span><span class='line'>listen '/home/philippos/coxcomb/tmp/pids/unicorn.sock', :backlog =&gt; 1
+</span><span class='line'>listen 4422, :tcp_nopush =&gt; true
+</span><span class='line'>
+</span><span class='line'>pid '/home/philippos/coxcomb/tmp/sockets/unicorn.pid'
+</span><span class='line'>
+</span><span class='line'>timeout 10
+</span><span class='line'>
+</span><span class='line'>stdout_path '/home/philippos/coxcomb/log/unicorn.stdout.log'
+</span><span class='line'>stderr_path '/home/philippos/coxcomb/log/unicorn.stderr.log'
+</span><span class='line'>
+</span><span class='line'>preload_app true
+</span><span class='line'>GC.respond_to?(:copy_on_write_friendly=) and GC.copy_on_write_friendly = true
+</span><span class='line'>
+</span><span class='line'>before_fork do |server, worker|
+</span><span class='line'>defined?(ActiveRecord::Base) and ActiveRecord::Base.connection.disconnect!
+</span><span class='line'>
+</span><span class='line'>old_pid = "#{server.config[:pid]}.oldbin"
+</span><span class='line'>
+</span><span class='line'>if old_pid != server.pid
+</span><span class='line'>  begin
+</span><span class='line'>    sig = (worker.nr + 1) &gt;= server.worker_processes ? :QUIT : :TTOU
+</span><span class='line'>    Process.kill(sig, File.read(old_pid).to_i)
+</span><span class='line'>  rescue Errno::ENOENT, Errno::ESRCH
+</span><span class='line'>  end
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>sleep 1
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>after_fork do |server, worker|
+</span><span class='line'>  defined?(ActiveRecord::Base) and ActiveRecord::Base.establish_connection
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>■その他</h4>
+
+<p>abコマンド：サイトが1秒間に何アクセス捌けるか確認するコマンド</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ab -c 10 -n 100 http://example.com/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○thinサーバの場合……</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Requests per second:    11.22 [#/sec] (mean)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>○nginx + unicornの場合……</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Requests per second:    105.77 [#/sec] (mean)</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>■rails設定</h5>
+
+<p>config/environments/production.rb内の設定は、以下のようにすること。</p>
+
+<ul>
+<li>静的ファイルの扱いを rails 本体ではなく、nginx に移譲する。</li>
+</ul>
+
+
+<p><code>config.serve_static_assets = false</code></p>
+
+<ul>
+<li>アセットパイプラインのライブコンパイルを有効にする。</li>
+</ul>
+
+
+<p><code>config.assets.compile = true</code></p>
+
+<p>以上</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[startover-twitter-bootstrap]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/06/startover-twitter-bootstrap/"/>
+    <updated>2013-07-06T14:48:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/06/startover-twitter-bootstrap</id>
+    <content type="html"><![CDATA[<h3>【Twitter bootstrap 導入手順】2013/05/29～</h3>
+
+<p>bootstrapの導入が不完全だったため、bootswatchの導入とともに改めてまとめる</p>
+
+<hr />
+
+<h4>■ruby及びrailsのバージョン</h4>
+
+<p>ruby 1.9.3p429<br/>
+Rails 3.2.13</p>
+
+<hr />
+
+<h4>■必要なGem</h4>
+
+<p>以下のふたつのgemをGemfileに記述し、bundle installすること</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'less-rails'                # less
+</span><span class='line'>gem 'twitter-bootstrap-rails'   # twitter boostrap</span></code></pre></td></tr></table></div></figure>
+
+
+<p>※ 以下のGemは何れにしても必要なので追記すること</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem "therubyracer"</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>■bootstrapのインストール</h4>
+
+<h4>1. bootstrapそのもののインストール</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rails generate bootstrap:install less</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>2. 可変レイアウト設定生成</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rails g bootstrap:layout application fluid</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>3. 以下のビューファイルを削除する（同様のslimファイルが既に生成されているため）</h4>
+
+<p>app/views/layouts/application.html.erb</p>
+
+<p>※ 以下のビューファイルも不要のため削除してよし
+public/index.html</p>
+
+<p>ルーティング設定（config/routes.rb）で他のコントローラへ誘導すること</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>root :to =&gt; 'pages#index'</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>4. 以下のスタイルシートファイルを削除する（bootswatchと変数が干渉するため）</h4>
+
+<p>app/assets/stylesheets/scaffolds.css.scss</p>
+
+<hr />
+
+<h4>■bootswatchの導入</h4>
+
+<p>ここまででデザインが適用されるか否かわかりやすいように某かのscaffoldを作成しておくこと</p>
+
+<h4>1. 下記サイトより任意のデザインのvariables.less及びbootswatch.lessを取得する</h4>
+
+<p><a href="http://bootswatch.com/">http://bootswatch.com/</a></p>
+
+<h4>2. 以下のディレクトリを作成し、上記サイトで取得したlessファイルふたつを設置する</h4>
+
+<p>vendor/assets/stylesheets/bootswatch/</p>
+
+<h4>3. 以下のファイルへ上記lessファイルふたつを読み込むように宣言を追記する</h4>
+
+<p>app/assets/stylesheets/bootstrap_and_overrides.css.less</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@import "bootswatch/variables.less";
+</span><span class='line'>@import "bootswatch/bootswatch.less";</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h4>■ Viewテンプレートを生成</h4>
+
+<p>例）
+以下のようにしてビューbooksのbootstrapテンプレートを生成する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rails g bootstrap:themed books -f</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p>参考サイト:</p>
+
+<p><a href="http://qiita.com/items/260a930c5ff95aafebd1  ">http://qiita.com/items/260a930c5ff95aafebd1  </a>
+<a href="http://blog.scimpr.com/2012/08/25/rails%E3%81%ABtwitter-bootstrap%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B%EF%BD%9Etwitter-bootstrap-rails/  ">http://blog.scimpr.com/2012/08/25/rails%E3%81%ABtwitter-bootstrap%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B%EF%BD%9Etwitter-bootstrap-rails/  </a>
+<a href="http://inoccu.net/blog/2013/04/28/112225.html  ">http://inoccu.net/blog/2013/04/28/112225.html  </a>
+<a href="http://gagapi.hatenablog.jp/entry/2013/05/17/222340  ">http://gagapi.hatenablog.jp/entry/2013/05/17/222340  </a>
+<a href="http://shoheik.hatenablog.com/entry/2013/03/09/115015">http://shoheik.hatenablog.com/entry/2013/03/09/115015</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[memcached-introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/06/memcached-introduction/"/>
+    <updated>2013-07-06T14:05:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/06/memcached-introduction</id>
+    <content type="html"><![CDATA[<h3>【Memcached導入に関するメモ】2012/07/11（水）～</h3>
+
+<hr />
+
+<h4>■memcached導入</h4>
+
+<h5>memcached導入方法</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install memcached</span></code></pre></td></tr></table></div></figure>
+
+
+<p>memcachedインストール時にlibevent-1.4-2（非同期イベント通知ライブラリ）もインストールされる模様</p>
+
+<h5>memcached起動方法</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ memcached -u memcached -d</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>memcachedの主なオプション</h5>
+
+<p>・-m &lt;キャッシュメモリ容量>
+デフォルトは64(単位はMB)</p>
+
+<p>・-l &lt;待ち受けネットワークインタフェース>
+デフォルトはINDRR_ANY</p>
+
+<p>・-p ポート番号、規定値は11211</p>
+
+<p>・-u &lt;デーモン実行ユーザ>
+rootでデーモンを起動する際にデーモン実行ユーザを指定する</p>
+
+<p>例) キャッシュ = 1GB、接続許可ホスト = ローカルホスト</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ memcached -u memcached -d -m 1024 -l 127.0.0.1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>memcachedデーモンの起動を確認
+$ ps aux | grep &ldquo;memcached&rdquo;</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nobody 14955  0.0  0.3  62700  1224 ?     Sl 10:28 0:00 /usr/bin/memcached -m 64 -p 11211 -u nobody -l 127.0.0.1
+</span><span class='line'>1000   15156  0.0  0.2   7112   836 pts/0 D+ 10:50 0:00 grep memcached</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>memcached動作確認</h5>
+
+<p>まずtelnetにてmemcachedへ接続</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet localhost 11211</span></code></pre></td></tr></table></div></figure>
+
+
+<p>memcachedへ接続後、statsコマンド他で動作確認を行う
+動作確認後、quitコマンドで接続を切断する</p>
+
+<p>その他：memcachedのバージョンとヘルプを表示</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ memcached -h</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>値の格納と取得</h5>
+
+<p>setコマンドとgetコマンドにて値の格納と取得を行う
+まずsetコマンドは以下のフォーマットで指定する</p>
+
+<p>&lt;コマンド> &lt;キー> &lt;圧縮フラグ(1 or 0)> &lt;有効期間(単位:秒)> &lt;サイズ(単位:Bytes)></p>
+
+<p>例) 「foo」というキーに「123」という3バイトのデータを非圧縮(0)/無期限(0)で格納する。またそれを取り出す。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set foo 0 0 3
+</span><span class='line'>123
+</span><span class='line'>
+</span><span class='line'>=&gt; STORED
+</span><span class='line'>
+</span><span class='line'>get foo
+</span><span class='line'>
+</span><span class='line'>=&gt; VALUE foo 0 3
+</span><span class='line'>=&gt; 123
+</span><span class='line'>=&gt; END
+</span><span class='line'>
+</span><span class='line'>quit</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>その他の操作</h5>
+
+<blockquote><p>stats items ：キャシュされているレコード情報を取得<br/>
+stats cachedump ：キャッシュ内容ダンプ</p></blockquote>
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet localhost 11211
+</span><span class='line'>stats items
+</span><span class='line'>STAT items:1:number 6
+</span><span class='line'>STAT items:1:age 20505
+</span><span class='line'>STAT items:1:evicted 0
+</span><span class='line'>STAT items:1:evicted_time 0
+</span><span class='line'>STAT items:1:outofmemory 0
+</span><span class='line'>STAT items:1:tailrepairs 0
+</span><span class='line'>
+</span><span class='line'> stats cachedump 1 100
+</span><span class='line'>ITEM foo [9 b; 1264464651 s]
+</span><span class='line'>ITEM bar [9 b; 1264464649 s]</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>memcached終了方法</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo killall memcached</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■dalli（memcachedクライアント）導入</h4>
+
+<h5>dalli導入方法</h5>
+
+<p>Gemfileに「gem &lsquo;dalli&#8217;」と一行追加し、bundle installを行う</p>
+
+<h4>■キャッシュストアに設定する方法</h4>
+
+<p>例としてproduction環境で使用する場合は、config/environments/production.rb に次の行を追加する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>config.cache_store = :dalli_store</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■セッションストアに設定する方法</h4>
+
+<p>config/initializers/session_store.rb に以下の行を追加</p>
+
+<p>例）以下はセッション情報を二週間保持する例<br/>
+注）Rails3のデフォルト設定では、ブラウザからのアクセスが切断された時点でセッションも破棄される</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>require 'action_dispatch/middleware/session/dalli_store'
+</span><span class='line'>Railsアプリ名::Application.config.session_store :dalli_store
+</span><span class='line'>Railsアプリ名::Application.config.session_options = {:cookie_only =&gt; false, :expire_after =&gt; 2.weeks}</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■Railsコンソール上でのキャッシュ内容確認</h4>
+
+<h5>キャッシュ設定内容確認</h5>
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; Rails.cache
+</span><span class='line'> =&gt; #&lt;ActiveSupport::Cache::DalliStore:0x00000001e4cf68 @options={:compress=&gt;nil}, @raise_errors=false, @data=#&lt;Dalli::Client:0x00000001e4ce28 @servers=["localhost:11211"], @options={:compress=&gt;nil}, @ring=nil&gt;&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>Railsコンソール上でのsession_optionsの確認</h5>
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; Railsアプリ名::Application.config.session_options
+</span><span class='line'> =&gt; { :cookie_only=&gt;false , :memcache_server =&gt; [ 'localhost:11211']}</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>値の格納と取得</h5>
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; Rails.cache.write("test", {:message =&gt; 'Hello', :time =&gt; Time.now})
+</span><span class='line'> =&gt; true
+</span><span class='line'>&gt; Rails.cache.read("test")
+</span><span class='line'> =&gt; {:message=&gt;"Hello", :time=&gt;2010-09-15 13:26:09 +0900}
+</span><span class='line'>&gt; Rails.cache.clear
+</span><span class='line'> =&gt; [true]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上</p>
+
+<hr />
+
+<p>参考サイト:<br/>
+<a href="http://l-w-i.net/t/memcached/0install_001.txt">memcached導入手順</a><br/>
+<a href="http://l-w-i.net/t/memcached/command_001.txt">memcachedコマンド一覧</a><br/>
+<a href="http://d.hatena.ne.jp/wadap/20100125/1264435692">memcachedでキー一覧を取得したい時に</a><br/>
+<a href="http://www.trajectory.jp/tech/server/memcached.php">memcachedでパフォーマンス向上</a><br/>
+<a href="http://www.banana-systems.com/2010/09/rails3_memcached/">Rails3からmemcachedを利用する</a><br/>
+<a href="http://research.sakura.ad.jp/2010/05/18/kvs-memcached-cas/">memcachedプロトコルCAS操作について</a><br/>
+<a href="http://d.hatena.ne.jp/nobyu/20111225/1324805638">HerokuでMemcacheを使うには</a></p>
+
+<p><a href="http://d.hatena.ne.jp/ux00ff/20111128/1322495435">Ruby on Rails 3.1 でセッションを memcached に保存する</a><br/>
+<a href="http://d.hatena.ne.jp/ux00ff/20120417/1334643127">Rails 3.2 で Dalli を Session Store として利用する際の session_options の罠</a><br/>
+<a href="http://bucato.jp/2012/06/rails3-x%E7%B3%BB%E3%81%A7%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E7%8A%B6%E6%85%8B%E3%82%92%E4%BF%9D%E6%8C%81%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/">Rails3.x系でログイン状態を保持する方法</a><br/>
+<a href="http://d.hatena.ne.jp/shiba_yu36/20100907/1283820213">rails 3でmemcachedを利用する</a><br/>
+<a href="http://d.hatena.ne.jp/yune_kotomi/20101124/1290601189">Rails3系でセッション有効期限の設定</a><br/>
+<a href="http://d.hatena.ne.jp/willnet/20080531/1212239850">railsのクッキーとセッションについてまとめ</a></p>
+
+<p>その他:<br/>
+<a href="http://memo.yomukaku.net/entries/333">各種サーバ構成の速度ベンチマーク</a></p>
+]]></content>
+  </entry>
+  
+</feed>

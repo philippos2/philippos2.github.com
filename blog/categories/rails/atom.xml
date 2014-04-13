@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rails | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[rails optimization points]]></title>
+    <link href="http://philippos2.github.io/blog/2013/08/11/rails-optimization-points/"/>
+    <updated>2013-08-11T14:44:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/08/11/rails-optimization-points</id>
+    <content type="html"><![CDATA[<h3>ruby on rails 最適化要点メモ</h3>
+
+<h4>1. DBテーブルに適切にインデックスが張られているか？</h4>
+
+<p>インデックスを設定するにあたって、データ取得条件（クエリのWHERE句）に注目すること。 <br/>
+また実行計画解析（explain）を活用し、実際にインデックスが有効になっているか確認すること。</p>
+
+<p>以下のようにして、AvtiveRecordのexplain機能を利用することもできる。</p>
+
+<blockquote><p>User.where(:id => 1).joins(:posts).explain</p></blockquote>
+
+<h4>2. キャッシュが有効に働いているか？</h4>
+
+<p>静的ファイルをブラウザ側でキャッシュする、Webブラウザとして nginx を採用する等。 <br/>
+またMemoryStore、MemCacheStore等、ActiveSupportで提供されるRails標準のキャッシュ機構を利用する。</p>
+
+<h4>3. DBから不必要にレコードセットを取得していないか？</h4>
+
+<p>レコードセットの内容に不必要なものがある場合は、より適切なレコードセット内容に改め、
+内容が重複しているにもかかわらず何度も同じデータを引いている場合は、データ取得自体を止める。</p>
+
+<h4>4. N + 1 問題等が発生していないか？</h4>
+
+<p>N + 1 問題が発生している場合は、レコードセット取得時にテーブル同士の内積を取るようなクエリになるように書き直すこと。 <br/>
+N + 1 問題が起きているかどうか調べるには、bullet (<a href="https://github.com/flyerhzm/bullet">https://github.com/flyerhzm/bullet</a>) 等のツールを利用する。</p>
+
+<hr />
+
+<p>参考サイト： <br/>
+<a href="http://www.infiniteloop.co.jp/blog/2011/03/mysql-index-explain/">http://www.infiniteloop.co.jp/blog/2011/03/mysql-index-explain/</a> <br/>
+<a href="http://www.hitachi.co.jp/Prod/comp/soft1/manual/ws/c3F5500/EEXD0043.HTM">http://www.hitachi.co.jp/Prod/comp/soft1/manual/ws/c3F5500/EEXD0043.HTM</a></p>
+
+<p>WEB+DB PRESS Vol.70 （技術評論社）「実践Rails高速化」</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[rails logging settings]]></title>
+    <link href="http://philippos2.github.io/blog/2013/08/05/rails-logging-settings/"/>
+    <updated>2013-08-05T23:30:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/08/05/rails-logging-settings</id>
+    <content type="html"><![CDATA[<h3>rails ロギング設定</h3>
+
+<p>production 環境のロギング設定を行うには、config/environments/production.rb にて以下のようにすること。</p>
+
+<h4>■ログファイルサイズとログファイル個数で設定したい場合</h4>
+
+<p><code>
+config.logger = Logger.new('log/production.log', 10, 10.megabytes)
+</code></p>
+
+<p>上記において ActiveSupport::Logger.new の第二引数がログファイル個数、第三引数がログファイルサイズである。 <br/>
+例えばログファイル個数を 10 とした場合、設定されたログファイルサイズに応じて、production.log、production.log.0～production.log.8 までの10世代のファイルが作成される。</p>
+
+<h4>■時系列で設定したい場合</h4>
+
+<p>日次設定
+<code>
+config.logger = Logger.new("log/production.log", 'daily')
+</code></p>
+
+<p>週次設定
+<code>
+config.logger = Logger.new("log/production.log", 'weekly')
+</code></p>
+
+<p>月次設定</p>
+
+<p><code>
+config.logger = Logger.new("log/production.log", 'monthly')
+</code></p>
+
+<p>production.log.YYYYMMDD.N といったログファイルが生成されるが、古いログファイルが自動的に消去されることはないので適宜削除すること。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-spring-the-preloader]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/28/about-spring-the-preloader/"/>
+    <updated>2013-07-28T19:43:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/28/about-spring-the-preloader</id>
+    <content type="html"><![CDATA[<h3>spring 導入</h3>
+
+<p>spork が rails 4.0 に未対応なため、spring という比較的新しいプリローダを利用することとした。</p>
+
+<p>導入は gem を利用して行う。以下を Gemfile に記載し、<code>bundle install</code> する。</p>
+
+<p><code>
+gem 'spring'
+</code></p>
+
+<p>以下のように利用する。</p>
+
+<p><code>
+$ spring rspec spec/controllers/
+</code></p>
+
+<p>rspec コマンドの他、rake コマンドその他にも対応している。</p>
+
+<p>time コマンドを利用してコマンド実行にかかる時間を計測してみたが、それなりのボリュームのある rspec を用意できなかったため、速度向上を確認できなかった。
+プリロードの対象となるコマンドがそれなり以上の規模になった場合、効力を発揮することを期待したい。</p>
+
+<hr />
+
+<p>参考サイト：<a href="https://github.com/jonleighton/spring">https://github.com/jonleighton/spring</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-byebug-for-debug-with-pry]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/28/about-byebug-for-debug-with-pry/"/>
+    <updated>2013-07-28T16:09:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/28/about-byebug-for-debug-with-pry</id>
+    <content type="html"><![CDATA[<h3>byebug 導入</h3>
+
+<p>ruby2.0環境下では、pry-nav ならびに pry-debugger のデバッグ機能に不具合があり、また例外補足のためのツール pry-exception_explorer にも不具合があるため、デバッグ用のツールとして同様の機能を持つ byebug および pry-rescue への切り替えを行った。</p>
+
+<p>また今回のタイミングで、コールスタック（バックトレース）を参照するためのツールである pry-stack_explorer の導入も行った。</p>
+
+<p>byebug は pry と同じインタフェイスを持っているとのことで使用法は pry と同じである。</p>
+
+<p>まず、以下の gem は Gemfile から削除した。</p>
+
+<p><code>
+gem 'pry-debugger' # あるいは pry-nav
+gem 'pry-exception_explorer'
+</code></p>
+
+<p>そして次の gem を導入する。</p>
+
+<p>```</p>
+
+<h1>pry for debug</h1>
+
+<p>group :development, :test do
+  gem &lsquo;pry-rails&rsquo;               # pry base
+  gem &lsquo;pry-byebug&rsquo;              # debugger for pry
+  gem &lsquo;pry-stack_explorer&rsquo;      # call stack viewer
+  gem &lsquo;pry-rescue&rsquo;              # exception event handler
+  gem &lsquo;hirb-unicode&rsquo;            # hirb
+end
+```</p>
+
+<h4>■pry-rescue使用法</h4>
+
+<p>デバッグ対象をブロックとして括り、その内部で何らかの例外が飛ばされた場合、その位置で binding.pry が起動される。</p>
+
+<p><code>
+Pry.rescue do
+  （略）
+  raise XxxException
+  （略）
+end
+</code></p>
+
+<h4>■pry-stack_explorer使用法</h4>
+
+<p>pry-stack_explorer を導入することで、binding.pry を利用したデバッグ中に、show-stack コマンドを用いてコールスタックを参照することが可能である。
+以下のコマンドを使ってコールスタックの内容を参照可能である。callerより断然便利。</p>
+
+<p>スタックを上がる</p>
+
+<blockquote><p>up</p></blockquote>
+
+<p>下がる</p>
+
+<blockquote><p>down</p></blockquote>
+
+<p>フレームを指定して移動</p>
+
+<blockquote><p>frame N</p></blockquote>
+
+<hr />
+
+<h4>参考サイト：</h4>
+
+<p><a href="https://github.com/deivid-rodriguez/byebug">https://github.com/deivid-rodriguez/byebug</a>  <br/>
+<a href="https://github.com/pry/pry-stack_explorer">https://github.com/pry/pry-stack_explorer</a>  <br/>
+<a href="http://qiita.com/joker1007/items/f132db1b4a5e3f9278e9">http://qiita.com/joker1007/items/f132db1b4a5e3f9278e9</a></p>
+
+<p>pry 関連のサブツールについて <br/>
+<a href="http://blog.uu59.org/2012-10-13-pry.html">http://blog.uu59.org/2012-10-13-pry.html</a></p>
+
+<p>ruby2.0環境下における pry-debugger の不具合について <br/>
+<a href="https://bugs.ruby-lang.org/issues/7214">https://bugs.ruby-lang.org/issues/7214</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-bootstrap-kaminari-views]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/27/about-bootstrap-kaminari-views/"/>
+    <updated>2013-07-27T10:59:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/27/about-bootstrap-kaminari-views</id>
+    <content type="html"><![CDATA[<h3>bootstrap-kaminari-views 導入</h3>
+
+<p>ruby2.0.0 / rails4.0.0 環境では、従来の方法で kaminari の bootstap view 対応ができなくなったようなので、本gemを利用して kaminari の bootstrap view 対応を行うことにした。</p>
+
+<p>Gemfileに以下を追記し、bundle install する。</p>
+
+<p><code>
+gem 'kaminari'
+gem 'bootstrap-kaminari-views'
+</code></p>
+
+<p>view ページにて以下のようにペギネイトする。</p>
+
+<p><code>
+= paginate @posts, :theme =&gt; 'twitter-bootstrap'
+</code></p>
+
+<p>次のようなオプションを指定することもできる。</p>
+
+<p>```
+= paginate @posts, :theme => &lsquo;twitter-bootstrap&rsquo;,</p>
+
+<pre><code>               :pagination_class =&gt; "pagination-small pagination-centered"
+</code></pre>
+
+<p>```</p>
+
+<p>githubページ : <a href="https://github.com/matenia/bootstrap-kaminari-views">https://github.com/matenia/bootstrap-kaminari-views</a></p>
+]]></content>
+  </entry>
+  
+</feed>

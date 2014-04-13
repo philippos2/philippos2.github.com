@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: knife-solo | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/knife-solo/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[vagrant + chef-solo (knife-solo)]]></title>
+    <link href="http://philippos2.github.io/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo/"/>
+    <updated>2014-03-17T01:13:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2014/03/17/vagrant-plus-chef-solo-knife-solo</id>
+    <content type="html"><![CDATA[<p>【vagrant + chef-solo および knife-solo による開発環境構築】(2014/03/15 &ndash; )</p>
+
+<p>■概要</p>
+
+<p>○目的</p>
+
+<p>同一構成の複数の仮想マシンを開発環境として構築することで、開発環境構築の効率化と各開発者間の開発環境の統一を図る。</p>
+
+<p>○構成</p>
+
+<p>各ソフトウェアのバージョンは現時点(2014/03/15)での版である。</p>
+
+<ul>
+<li>ホストOS：              Windows7</li>
+<li>ゲストOS：              CentOS 6.5 64bit</li>
+<li>仮想マシン：            VitualBox ver4.3.8</li>
+<li>仮想マシン管理：        Vagrant ver1.5.1</li>
+<li>自動システム管理：      chef-solo および Knife-solo</li>
+<li>その他：                rsync ver3.1.0</li>
+</ul>
+
+
+<p>その他：  <br/>
+・chef-solo を動作させるため、windows上にver1.9以降のrubyが必要である。1.8系以前のバージョンは非推奨。  <br/>
+・knife-solo は、chef-solo を補助するためのツールである。</p>
+
+<p>○大まかな手順</p>
+
+<p>&mdash; 準備 &mdash;</p>
+
+<ol>
+<li>Vagrant上の仮想マシンテンプレートに対し、chef-solo および knife-solo を利用し開発環境構築を行う。</li>
+<li>上記開発環境のBoxファイルを作成し、Vagrantfile、レシピと共に各開発者に公開する。</li>
+</ol>
+
+
+<p>&mdash; 必要に応じて各開発者が行う &mdash;</p>
+
+<ol>
+<li>各開発者はvirtualboxとVagrantを自分のローカル環境にインストールする。</li>
+<li>各開発者は上記1.で作成したBoxファイルをVagrantコマンドによりダウンロードし、共有されたVagrantfileを利用して仮想マシンを起動する。</li>
+</ol>
+
+
+<hr />
+
+<p>以下より構築手順詳細
+以下はホストOSであるWindows上で行うこと</p>
+
+<p>■Vagrantの準備</p>
+
+<p>○VirtualBox導入</p>
+
+<p>VirtualBoxはVagrant上のBOXを稼働させるために利用する。
+公式サイトからVirtualBoxをダウンロードしインストールする。</p>
+
+<p><a href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a></p>
+
+<p>○ホストOS（Windows）へVagrant導入</p>
+
+<p>・準備</p>
+
+<p>公式サイトからVagrantをダウンロードしインストールする。</p>
+
+<p><a href="http://www.vagrantup.com/">http://www.vagrantup.com/</a></p>
+
+<p>インストール後PCを再帰動し、vagrantが正しくインストールされたか確認するため、DOS窓を開いて以下のようにvagrantのバージョンを表示させる。</p>
+
+<p>```
+$ vagrant -v</p>
+
+<p>Vagrant 1.5.1
+```</p>
+
+<p>・Vagrant上に仮想マシンを追加する</p>
+
+<p>任意のディレクトリへ移動し、下記サイトの「CentOS 6.5 x86_64」の仮想マシンテンプレートを指定してVagrant上に仮想マシンを追加する。
+所要時間は10分から15分程度。</p>
+
+<p><a href="http://www.vagrantbox.es/">http://www.vagrantbox.es/</a></p>
+
+<p><code>
+$ vagrant box add centos6 https://github.com/2creatives/vagrant-centos/releases/download/v6.5.1/centos65-x86_64-20131205.box
+</code></p>
+
+<p>なお下記のVagrant環境のための一連の準備により、ユーザホームディレクトリおよび作業用ディレクトリには以下のファイルが作成される。</p>
+
+<ul>
+<li><p>Vagrantインストール時にWindowsのユーザホームディレクトリ（C:\Users&lt;ユーザ名>）に作成されるファイル<br/>
+.vagrant.d</p></li>
+<li><p>vagrant環境初期化（vagrant init）時に作業用ディレクトリに作成されるファイル<br/>
+Vagrantfile</p></li>
+<li><p>vagrant初回起動時（vagrant up）時に作業用ディレクトリに作成されるファイル<br/>
+.vagrant</p></li>
+</ul>
+
+
+<p>下記の一連の準備を終えたあと上記ファイルが作成されているか確認すること。</p>
+
+<p>・仮想マシン追加完了後、Vagrant環境の初期化を行う</p>
+
+<p><code>
+$ vagrant init
+</code></p>
+
+<p>・仮想マシンの起動を行う</p>
+
+<p><code>
+$ vagrant up
+</code></p>
+
+<p>上記コマンドを実行し以下の様なエラーが出る場合、これはbox名の解決に失敗しているということなので、Vagrantfileファイルの一部を編集して再度仮想マシンの起動を行うこと。</p>
+
+<p>Bringing machine &lsquo;default&rsquo; up with &lsquo;virtualbox&rsquo; provider&hellip;
+==> default: Box &lsquo;base&rsquo; could not be found. Attempting to find and install&hellip;</p>
+
+<p>Vagrantfileファイル13行目</p>
+
+<p>config.vm.box = &ldquo;base&rdquo;</p>
+
+<p>上記の箇所を以下のように編集</p>
+
+<p>config.vm.box = &ldquo;centos65&rdquo;</p>
+
+<p>参考サイト：<a href="http://www.trapon.jp/log/201307/mac_vagrant_centos.html">http://www.trapon.jp/log/201307/mac_vagrant_centos.html</a></p>
+
+<p>仮想マシン起動後、PuTTYやTeraTermなどのSSHクライアントで仮想マシンへアクセス可能である。</p>
+
+<p>Host:   127.0.0.1
+Port:   2222
+ID:     vagrant
+PW:     vagrant</p>
+
+<p>・その他のVagrantコマンド</p>
+
+<p>Vagrantの状況確認を行う</p>
+
+<p><code>
+$ vagrant status
+</code></p>
+
+<p>Vagrant Boxの一覧を表示する</p>
+
+<p><code>
+$ vagrant box list
+</code></p>
+
+<p>Vagrant Boxを削除する</p>
+
+<p><code>
+$ vagrant box remove &lt;Box名&gt; virtualbox
+</code></p>
+
+<p>Vagrantを終了させる</p>
+
+<p><code>
+$ vagrant halt          ……サスペド    
+$ vagrant destroy       ……ターミネー    
+</code></p>
+
+<p>Vagrantの準備は以上。</p>
+
+<hr />
+
+<p>■chef solo の準備</p>
+
+<p>○前提
+ゲストOS側にはknife-soloは導入の必要無し</p>
+
+<p>ホストOS：Windows7
+  chef-solo
+  knife-solo</p>
+
+<p>ゲストOS：CentOS 6.5 64bit
+  chef-solo</p>
+
+<p>また、chef-soloのレシピ群は以下の階層構造で管理される</p>
+
+<p>　レポジトリ（キッチン）＞クックブック＞レシピ</p>
+
+<p>○ホストOS（Windows）へruby2.0導入</p>
+
+<p>ruby公式サイトより Ruby 2.0.0-p451 (x64) をダウンロードしインストールする。</p>
+
+<p><a href="http://rubyinstaller.org/downloads/">http://rubyinstaller.org/downloads/</a></p>
+
+<p><code>
+$ ruby -v
+</code></p>
+
+<p>ruby 2.0.0p451 (2014-02-24) [x64-mingw32]</p>
+
+<p>○ホストOS（Windows）へDevelopment Kit導入</p>
+
+<p>同様にruby公式サイトより DevKit-mingw64-64-4.7.2-20130224-1432-sfx.exe (For use with Ruby 2.0 (x64 64bits only))をダウンロードしインストールする。
+次にインストール先ディレクトリにて以下のコマンドを実行すること。</p>
+
+<p>```
+$ ruby dk.rb init</p>
+
+<p>[INFO] found RubyInstaller v2.0.0 at C:/Ruby200-x64</p>
+
+<p>Initialization complete! Please review and modify the auto-generated
+&lsquo;config.yml&rsquo; file to ensure it contains the root directories to all
+of the installed Rubies you want enhanced by the DevKit.</p>
+
+<p>$ ruby dk.rb install</p>
+
+<p>[INFO] Updating convenience notice gem override for &lsquo;C:/Ruby200-x64&rsquo;
+[INFO] Installing &lsquo;C:/Ruby200-x64/lib/ruby/site_ruby/devkit.rb&rsquo;
+```</p>
+
+<p>○ホストOS（Windows）へknife-solo導入</p>
+
+<p>以下のgemをインストールすることで、chef-soloも同時にインストールできる。</p>
+
+<p><code>
+$ gem install knife-solo
+</code></p>
+
+<p>Windows版には以下のgemも必要となる。</p>
+
+<p><code>
+$ gem install win32-process    
+$ gem install windows-pr    
+</code></p>
+
+<p>knife-soloのバージョンを表示して正常にインストールできたか確認する。</p>
+
+<p>```
+$ knife -v</p>
+
+<p>Chef: 11.10.4
+```</p>
+
+<p>○リソース同期ツールrsync導入</p>
+
+<p>下記サイトよりrsyncの無料版をダウンロードし、インストールする。</p>
+
+<p><a href="https://www.itefix.no/i2/cwrsync">https://www.itefix.no/i2/cwrsync</a></p>
+
+<p>任意のパスに配置しパスを通しておくこと</p>
+
+<p>○リポジトリ（キッチン）の作成</p>
+
+<p>以下のようにして chef-solo 基本ディレクトリを作成する</p>
+
+<p><code>
+$ knife solo init &lt;リポジトリ名&gt;
+</code></p>
+
+<p>仮にリポジトリ名をchef-repoとすると、下記コマンドにてディレクトリ chef-repo 以下にレシピテンプレートが作成される。</p>
+
+<p><code>
+$ knife solo init chef-repo
+</code></p>
+
+<p>○ゲストOS（Vagrant上のBOXとして起動しているCentOS6.5）へchef-solo導入</p>
+
+<p>次にゲストOSへ chef-solo を導入するため作成したディレクトリ chef-repo に移動し、下記コマンドを実行する。
+「2222」はゲストOSが稼働しているBoxのポート番号である。所要時間は30分程度。
+この際、.chef/knife.rb が設定ファイルとして出力される</p>
+
+<p><code>
+$ cd chef-repo
+$ knife solo prepare -i "C:\Users\&lt;ユーザー名&gt;\.vagrant.d\insecure_private_key" -p 2222 vagrant@127.0.0.1
+</code></p>
+
+<p>○クックブックの作成</p>
+
+<p>クックブック名を仮に mybook として下記コマンドを実行する。</p>
+
+<p><code>
+$ knife cookbook create mybook -o site-cookbooks
+</code></p>
+
+<p>○レシピの作成</p>
+
+<p>レシピファイルを編集しApacheのインストールを行ってみる。
+レシピファイル（\chef-repo\site-cookbooks\mybook\recipes\default.rb）を以下のように編集</p>
+
+<p>```
+package &ldquo;httpd&rdquo; do
+  action :install
+end</p>
+
+<p>service &ldquo;httpd&rdquo; do
+  action :start
+end
+```</p>
+
+<p>○実行レシピの指定</p>
+
+<p>JSONファイル \chef-repo\nodes\127.0.0.1.json を編集し、実行レシピを追加する。</p>
+
+<p><code>
+{"run_list":["mybook"]}
+</code></p>
+
+<p>○レシピ実行</p>
+
+<p><code>
+$ knife solo cook -i "C:\Users\&lt;ユーザー名&gt;\.vagrant.d\insecure_private_key" -p 2222 vagrant@127.0.0.1
+</code></p>
+
+<hr />
+
+<p>chef-solo/knife-soloによるレシピ実行まで、以上</p>
+
+<hr />
+
+<p>■追補</p>
+
+<p>○仮想マシンのメモリ設定（VirtualBoxの場合）</p>
+
+<p>仮想マシン上に例えば2MByteのメモリ領域を設定する場合、Vagrantfileファイルを編集し、以下を追加すること。</p>
+
+<p>```
+  # allocate the memory for the buffer pool
+  config.vm.provider &ldquo;virtualbox&rdquo; do |v|</p>
+
+<pre><code>v.memory = 2048
+</code></pre>
+
+<p>  end
+```</p>
+
+<p>○cookしようとしたときなどに以下のワーニングが出力される場合</p>
+
+<p><code>
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+</code></p>
+
+<p>以下のファイルを削除する</p>
+
+<p>&lt;ユーザホームディレクトリ>.ssh\known_hosts</p>
+
+<p>○boxへのメモリの追加</p>
+
+<p>規定値ではメモリが足りたいため、vagrant box（virtulabox 上の仮想マシン）のメモリを追加すること。
+以下Vagrantfileへ記述を追加する。</p>
+
+<p>```
+  # allocate the memory for the buffer pool
+  config.vm.provider &ldquo;virtualbox&rdquo; do |v|</p>
+
+<pre><code>v.memory = 2048
+</code></pre>
+
+<p>  end
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

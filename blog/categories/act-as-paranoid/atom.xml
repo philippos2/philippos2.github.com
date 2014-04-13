@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: act-as-paranoid | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/act-as-paranoid/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[about-rails3-act-as-paranoid]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/03/about-rails3-act-as-paranoid/"/>
+    <updated>2013-07-03T00:06:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/03/about-rails3-act-as-paranoid</id>
+    <content type="html"><![CDATA[<h3>データ論理削除用GEM rails3_act_as_paranoid 導入手順</h3>
+
+<p>Gemfileに以下を追加しbundle installする</p>
+
+<p><code>
+gem 'rails3_acts_as_paranoid'
+</code></p>
+
+<p>論理削除対象モデルにカラム deleted_at:timestamp を予め設けておく</p>
+
+<p><code>
+$ rails g migration AddDaletedAtToUser deleted_at:timestamp
+</code></p>
+
+<p>論理削除対象モデルにacts_as_paranoidを定義</p>
+
+<p>```
+class User &lt; ActiveRecord::Base
+  acts_as_paranoid</p>
+
+<p>  ……
+end
+```</p>
+
+<p>※子モデルも同時に論理削除対象とする場合、以下のようにすること</p>
+
+<p><code>
+$ rails g migration AddDeletedAtToUser deleted_at:timestamp
+$ rails g migration AddDeletedAtToTask deleted_at:timestamp
+</code></p>
+
+<p><code>
+class User &lt; ActiveRecord::Base
+  acts_as_paranoid
+  has_many :task, :dependent =&gt; :destroy
+end
+</code></p>
+
+<p><code>
+class Task &lt; ActiveRecord::Base
+  acts_as_paranoid
+  belongs_to :user
+end
+</code></p>
+
+<h4>その他</h4>
+
+<p>・論理削除されたレコードを取得する</p>
+
+<blockquote><p>User.only_deleted</p></blockquote>
+
+<p>・通常レコードと論理削除されたレコードをまとめて取得する</p>
+
+<blockquote><p>User.with_deleted</p></blockquote>
+
+<p>・論理削除からの復帰</p>
+
+<blockquote><p>User.only_deleted.find(2).recover</p></blockquote>
+
+<p>まとめて復帰するなら</p>
+
+<blockquote><p>User.only_deleted.each &amp;:recover</p></blockquote>
+
+<p>なお、親子関係にあるモデル間において親モデルが論理削除から復帰すると、自動的に小モデルも論理削除から復帰する</p>
+
+<p>参考サイト：<br/>
+<a href="http://d.hatena.ne.jp/choripon/20101229/1293634455">http://d.hatena.ne.jp/choripon/20101229/1293634455</a> <br/>
+<a href="http://doruby.kbmj.com/rick_blog/20090416/Ruby_On_Rails__acts_as_paranoid">http://doruby.kbmj.com/rick_blog/20090416/Ruby_On_Rails__acts_as_paranoid</a></p>
+]]></content>
+  </entry>
+  
+</feed>

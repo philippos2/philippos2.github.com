@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: centos | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/centos/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[centos-on-virtualbox]]></title>
+    <link href="http://philippos2.github.io/blog/2013/06/30/centos-on-virtualbox/"/>
+    <updated>2013-06-30T09:12:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/06/30/centos-on-virtualbox</id>
+    <content type="html"><![CDATA[<h3>【CentOS5.5環境】</h3>
+
+<ul>
+<li><h4>一般</h4>
+
+<p>  OSバージョン : CentOS 5.5<br/>
+  OSタイプ : Red Hat (64 bit)</p></li>
+<li><h4>システム</h4>
+
+<p>  メインメモリ : 512 MB<br/>
+  起動順序 : フロッピー, CD/DVD-ROM, ハードディスク<br/>
+  VT-x/AMD-V : 有効<br/>
+  ネステッドページング : 有効</p></li>
+<li><h4>ディスプレイ</h4>
+
+<p>  ビデオメモリ : 12 MB<br/>
+  3Dアクセラレーション : 無効<br/>
+  2Dビデオ アクセラレーション : 無効<br/>
+  リモートディスプレイ サーバー : 無効</p></li>
+<li><h4>ストレージ</h4>
+
+<p>  IDE コントローラ : IDE セカンダリ マスター (CD/DVD):空<br/>
+  SATA コントローラ : SATA ポート 0:CentOS 5.5.vdi (標準, 8.00 GB)</p></li>
+<li><h4>オーディオ</h4>
+
+<p>  ホスト ドライバ : Windows DirectSound<br/>
+  コントローラ : ICH AC97</p></li>
+<li><h4>ネットワーク</h4>
+
+<p>  アダプタ 1 : Intel PRO/1000 MT Desktop (NAT)<br/>
+  アダプタ 2 : Intel PRO/1000 MT Desktop (ホストオンリー アダプタ, &lsquo;VirtualBox Host-Only Ethernet Adapter&rsquo;)</p></li>
+<li><h4>シリアルポート</h4>
+
+<p>  無効</p></li>
+<li><h4>USB</h4>
+
+<p>  デバイス フィルタ:0 (0 アクティブ)</p></li>
+<li><h4>共有フォルダ</h4>
+
+<p>  なし</p></li>
+<li><h4>デフォルトゲートウェイについて</h4></li>
+</ul>
+
+
+<p><code>
+[Philippos@localhost ~]$ netstat --route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+10.0.2.0        *               255.255.255.0   U         0 0          0 eth0
+192.168.56.0    *               255.255.255.0   U         0 0          0 eth1
+169.254.0.0     *               255.255.0.0     U         0 0          0 eth1
+default         10.0.2.2        0.0.0.0         UG        0 0          0 eth0
+</code></p>
+
+<p>※ネットワーク経路を調べもし default が複数あった場合はデフォルトゲートウェイが競合しているので、デフォルトゲートウェイがひとつになるように設定し直すこと。</p>
+
+<ul>
+<li><h4>補追（2012/04/3）</h4>
+
+以下のように設定し直した
+
+<ul>
+<li>eth0 : IPをDHCPによる自動割り当てではなく、固定に変更。またデフォルトゲートウェイも新たに設定</li>
+<li>eth1 : デフォルトゲートウェイの設定を削除</li>
+</ul>
+</li>
+</ul>
+
+
+<p>以上の設定変更を行い、ホストオンリーアダプタ並びにNAT設定が反映されたことを確認済</p>
+
+<ul>
+<li><h4>共有フォルダのマウント</h4></li>
+</ul>
+
+
+<p>ホストOS（Windows7）の C:\share を共有フォルダとして、ゲストOS（CentOS5）側においてroot権限で以下のようにマウントする</p>
+
+<p>```</p>
+
+<h1>mount -t vboxsf share /mnt/share</h1>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+</feed>

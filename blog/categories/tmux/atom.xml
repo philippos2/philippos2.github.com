@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: tmux | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/tmux/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[tmux-introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/08/03/tmux-introduction/"/>
+    <updated>2013-08-03T18:11:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/08/03/tmux-introduction</id>
+    <content type="html"><![CDATA[<h3>仮想端末管理ツール tmux 導入</h3>
+
+<p>端末多重化による作業効率化を期待して tmux を導入した。</p>
+
+<p><a href="http://tmux.sourceforge.net/">http://tmux.sourceforge.net/</a></p>
+
+<h4>■tmux のインストール</h4>
+
+<p><code>
+$ sudo aptitude install tmux
+</code></p>
+
+<h4>■tmux の自動起動設定</h4>
+
+<p>以下を .bashrc に追記する。
+以下の設定では既に tmux が起動している場合、既存の tmux プロセスへのアタッチのみ行う。</p>
+
+<p>```
+if [ -z $TMUX ]; then
+  if $(tmux has-session 2> /dev/null); then</p>
+
+<pre><code>tmux -2 attach
+</code></pre>
+
+<p>  else</p>
+
+<pre><code>tmux -2
+</code></pre>
+
+<p>  fi
+fi
+```</p>
+
+<h4>■tmux で代表的な操作方法</h4>
+
+<p>以下で <code>C-b</code> は、<code>Ctrl + bind</code> の意。</p>
+
+<p>・ウィンドウ作成</p>
+
+<blockquote><p>C-b c</p></blockquote>
+
+<p>・ウィンドウ一覧表示／移動</p>
+
+<blockquote><p>C-b w</p></blockquote>
+
+<p>・前／次のウィンドウ移動</p>
+
+<blockquote><p>C-b p    （pre）<br/>
+C-b n    （next）</p></blockquote>
+
+<p>・ウィンドウを強制終了</p>
+
+<blockquote><p>C-b &amp;</p></blockquote>
+
+<p>・ペイン分割</p>
+
+<blockquote><p>C-b &ldquo;    （横に分割）<br/>
+C-b %    （縦に分割）</p></blockquote>
+
+<p>・ペイン分割解除</p>
+
+<blockquote><p>C-b !</p></blockquote>
+
+<p>・ペイン強制終了</p>
+
+<blockquote><p>C-b x</p></blockquote>
+
+<p>・ペイン間移動</p>
+
+<blockquote><p>C-b o</p></blockquote>
+
+<p>・ペインを入れ替え</p>
+
+<blockquote><p>C-b {</p></blockquote>
+
+<p>・セッションのデタッチ</p>
+
+<blockquote><p>C-b d</p></blockquote>
+
+<hr />
+
+<p>参考サイト： <br/>
+<a href="http://komasaru.github.io/blog/2013/06/06/linux-mint-tmux-auto-attach/">http://komasaru.github.io/blog/2013/06/06/linux-mint-tmux-auto-attach/</a> <br/>
+<a href="http://shanon-tech.blogspot.jp/2012/05/tmux.html">http://shanon-tech.blogspot.jp/2012/05/tmux.html</a> <br/>
+<a href="http://room6933.com/mymemo/tmux/tmux-basic.html">http://room6933.com/mymemo/tmux/tmux-basic.html</a> <br/>
+<a href="http://www.omakase.org/misc/tmux_screen.html">http://www.omakase.org/misc/tmux_screen.html</a></p>
+]]></content>
+  </entry>
+  
+</feed>

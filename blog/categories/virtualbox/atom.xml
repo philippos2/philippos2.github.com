@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: virtualbox | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/virtualbox/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[centos-on-virtualbox]]></title>
+    <link href="http://philippos2.github.io/blog/2013/06/30/centos-on-virtualbox/"/>
+    <updated>2013-06-30T09:12:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/06/30/centos-on-virtualbox</id>
+    <content type="html"><![CDATA[<h3>【CentOS5.5環境】</h3>
+
+<ul>
+<li><h4>一般</h4>
+
+<p>  OSバージョン : CentOS 5.5<br/>
+  OSタイプ : Red Hat (64 bit)</p></li>
+<li><h4>システム</h4>
+
+<p>  メインメモリ : 512 MB<br/>
+  起動順序 : フロッピー, CD/DVD-ROM, ハードディスク<br/>
+  VT-x/AMD-V : 有効<br/>
+  ネステッドページング : 有効</p></li>
+<li><h4>ディスプレイ</h4>
+
+<p>  ビデオメモリ : 12 MB<br/>
+  3Dアクセラレーション : 無効<br/>
+  2Dビデオ アクセラレーション : 無効<br/>
+  リモートディスプレイ サーバー : 無効</p></li>
+<li><h4>ストレージ</h4>
+
+<p>  IDE コントローラ : IDE セカンダリ マスター (CD/DVD):空<br/>
+  SATA コントローラ : SATA ポート 0:CentOS 5.5.vdi (標準, 8.00 GB)</p></li>
+<li><h4>オーディオ</h4>
+
+<p>  ホスト ドライバ : Windows DirectSound<br/>
+  コントローラ : ICH AC97</p></li>
+<li><h4>ネットワーク</h4>
+
+<p>  アダプタ 1 : Intel PRO/1000 MT Desktop (NAT)<br/>
+  アダプタ 2 : Intel PRO/1000 MT Desktop (ホストオンリー アダプタ, &lsquo;VirtualBox Host-Only Ethernet Adapter&rsquo;)</p></li>
+<li><h4>シリアルポート</h4>
+
+<p>  無効</p></li>
+<li><h4>USB</h4>
+
+<p>  デバイス フィルタ:0 (0 アクティブ)</p></li>
+<li><h4>共有フォルダ</h4>
+
+<p>  なし</p></li>
+<li><h4>デフォルトゲートウェイについて</h4></li>
+</ul>
+
+
+<p><code>
+[Philippos@localhost ~]$ netstat --route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+10.0.2.0        *               255.255.255.0   U         0 0          0 eth0
+192.168.56.0    *               255.255.255.0   U         0 0          0 eth1
+169.254.0.0     *               255.255.0.0     U         0 0          0 eth1
+default         10.0.2.2        0.0.0.0         UG        0 0          0 eth0
+</code></p>
+
+<p>※ネットワーク経路を調べもし default が複数あった場合はデフォルトゲートウェイが競合しているので、デフォルトゲートウェイがひとつになるように設定し直すこと。</p>
+
+<ul>
+<li><h4>補追（2012/04/3）</h4>
+
+以下のように設定し直した
+
+<ul>
+<li>eth0 : IPをDHCPによる自動割り当てではなく、固定に変更。またデフォルトゲートウェイも新たに設定</li>
+<li>eth1 : デフォルトゲートウェイの設定を削除</li>
+</ul>
+</li>
+</ul>
+
+
+<p>以上の設定変更を行い、ホストオンリーアダプタ並びにNAT設定が反映されたことを確認済</p>
+
+<ul>
+<li><h4>共有フォルダのマウント</h4></li>
+</ul>
+
+
+<p>ホストOS（Windows7）の C:\share を共有フォルダとして、ゲストOS（CentOS5）側においてroot権限で以下のようにマウントする</p>
+
+<p>```</p>
+
+<h1>mount -t vboxsf share /mnt/share</h1>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[about-virtualbox]]></title>
+    <link href="http://philippos2.github.io/blog/2013/06/29/about-virtualbox/"/>
+    <updated>2013-06-29T21:35:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/06/29/about-virtualbox</id>
+    <content type="html"><![CDATA[<h2>VirtualBoxメモ（2011/04/07～）</h2>
+
+<h3>VirtualBoxのネットワーク設定に関して……</h3>
+
+<p>ver : <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox-4.2.12-84980-Win</a></p>
+
+<h4>アダプター1 : NAT</h4>
+
+<p>ゲスト OS からインターネットへ接続する</p>
+
+<h4>アダプター2 : ホストオンリーアダプタ</h4>
+
+<p>ホスト OS と ゲスト OS 間のネットワーク</p>
+
+<h3>ホストOS側の設定</h3>
+
+<p>VirtualBox用のローカルエリア接続の設定</p>
+
+<p>IPアドレス : 192.168.56.1<br/>
+サブネットマスク : 255.255.255.0<br/>
+デフォルトゲートウェイ : 192.168.56.0</p>
+
+<h3>ゲストOS側の設定</h3>
+
+<p>OS：Debian 6.0 / 64bit版</p>
+
+<h4>以下でネットワーク経路確認</h4>
+
+<p><code>
+$ netstat -r
+</code></p>
+
+<h5>カーネルIP経路テーブル</h5>
+
+<p><code>
+受信先サイト    ゲートウェイ    ネットマスク   フラグ   MSS Window  irtt インタフェース
+10.0.2.0       *            255.255.255.0   U       0   0       0    eth0
+192.168.56.0   *            255.255.255.0   U       0   0       0    eth1
+default        10.0.2.2     0.0.0.0         UG      0   0       0    eth0
+</code></p>
+
+<h4>参考サイト：</h4>
+
+<p><a href="http://blog.earthyworld.com/archives/ubuntu-ssh-http/">VirtualBox内のUbuntu にssh ,httpでアクセス</a><br/>
+<a href="http://digitalbox.jp/happy-go-lucky-computing/centos/constructing-a-local-development-environment-using-virtualbox-and-centos/">VirtualBox + CentOS でローカル開発環境を作る</a></p>
+
+<h3>共有フォルダ設定</h3>
+
+<p>ディレクトリ/mnt/shareを作成し、「/etc/rc.local」に以下を追加</p>
+
+<p><code>
+mount -t vboxsf share /mnt/share
+</code></p>
+
+<hr />
+
+<h3>※VirtualBox補追（2013/12/15）</h3>
+
+<p>■ディスク容量拡張メモ</p>
+
+<h4>ストレージ領域拡張</h4>
+
+<p>ホストOS（Windows7）にてMS-DOS上で以下のようにストレージ領域を拡張</p>
+
+<p><code>
+C:\Users\Philippos\VirtualBox VMs\squeeze 64bit 20131215001&gt;"C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" modifyhd  "squeeze 64bit 20131215001.vdi" --resize 102400
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+</code></p>
+
+<h4>GPartedによるパーティーション再設定</h4>
+
+<p>CD-ROMにGPartedのイメージファイル（gparted-live-0.16.2-11-i486）をマウントし、ゲストOS（sqeeze64bit）を起動させる。
+GPartedが起動するので、パーティーションを再設定する
+GPartedのイメージファイルは公式サイトより入手。</p>
+
+<p><a href="http://gparted.sourceforge.net/download.php">http://gparted.sourceforge.net/download.php</a></p>
+
+<h4>ディスク容量確認</h4>
+
+<p>ゲストOS上にてディスク容量確認</p>
+
+<p>```
+$ df -h</p>
+
+<p>Filesystem            Size  Used Avail Use% マウント位置
+/dev/sda1              12G  7.0G  4.3G  63% /
+tmpfs                 502M     0  502M   0% /lib/init/rw
+udev                  497M  176K  497M   1% /dev
+tmpfs                 502M     0  502M   0% /dev/shm
+```</p>
+
+<hr />
+
+<p>■参考サイト：</p>
+
+<p><a href="http://dust-memorys.blogspot.jp/2013/02/virtual-box.html">http://dust-memorys.blogspot.jp/2013/02/virtual-box.html</a>  <br/>
+<a href="http://www.natzworks.com/digital/2011/489.html">http://www.natzworks.com/digital/2011/489.html</a>  <br/>
+<a href="http://tesiri.hateblo.jp/entry/2013/11/26/203400">http://tesiri.hateblo.jp/entry/2013/11/26/203400</a>  <br/>
+<a href="http://hanagurotanuki.blogspot.jp/2009/04/gparted.html">http://hanagurotanuki.blogspot.jp/2009/04/gparted.html</a>  <br/>
+<a href="http://www.bitgram.net/blog/archives/1777">http://www.bitgram.net/blog/archives/1777</a></p>
+]]></content>
+  </entry>
+  
+</feed>

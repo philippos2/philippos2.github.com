@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: cancan | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/cancan/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[about-cancan]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/04/about-cancan/"/>
+    <updated>2013-07-04T07:10:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/04/about-cancan</id>
+    <content type="html"><![CDATA[<h4>認証用GEM cancan 導入手順 （2012/04/20～）</h4>
+
+<h4>1. Gemfileに以下を追加しbundle installする</h4>
+
+<p><code>
+gem 'cancan'
+</code></p>
+
+<h4>2. Abilityクラスの生成を行う</h4>
+
+<p><code>
+$ rails g cancan:ability
+</code></p>
+
+<h4>3. User（ここでは管理者）モデルへroleカラムを追加する</h4>
+
+<p><code>
+$ rails g migration AddRoleToUser role:string
+</code></p>
+
+<h4>4. app/models/users.rbにroleの記述を追加</h4>
+
+<p>例）
+<code>
+(省略)
+attr_accessible :role
+ROLES = %w[admin member]
+(省略)
+</code></p>
+
+<h4>5. app/models/ability.rbの関数initializeを編集（ここで権限内容を制御する）</h4>
+
+<p>例）
+```
+(省略)
+def initialize(user)
+  user ||= User.new # guest user (not logged in)
+  if user.role == &ldquo;admin&rdquo;</p>
+
+<pre><code>can :manage, :all
+</code></pre>
+
+<p>  else</p>
+
+<pre><code>can :read, :all
+</code></pre>
+
+<p>  end
+end
+(省略)
+```</p>
+
+<h4>6. 管理者権限スコープ（role）の編集（管理者追加／編集時）</h4>
+
+<p>画面にセレクタコントロールを追加する</p>
+
+<p>app/views/devise/registrations/new.html.rbと <br/>
+app/views/devise/registrations/edit.html.rbに以下を追加</p>
+
+<p><code>
+(省略)
+&lt;%= f.label :role %&gt;
+&lt;%= f.collection_select :role, User::ROLES, :to_s, :humanize%&gt;
+(省略)
+</code></p>
+
+<h4>7. app/views/hoges/index.html.erbを編集（ここではadminだけにEditを表示させる）</h4>
+
+<p>&lsquo;Admin'でのユーザ登録者のみが「Edit」できるようにする<br/>
+その他のユーザは「Edit」できない</p>
+
+<p><code>
+&lt;% if can? :manage, hoge %&gt;
+&lt;%= link_to 'Edit', edit_hoge_path(hoge) %&gt;
+&lt;% end %&gt;
+</code></p>
+
+<h4>8. 管理者権限による制限を付与するコントローラに以下のフィルタを追加する</h4>
+
+<p><code>
+class TaskController &lt; ApplicationController
+  （略）
+  load_and_authorize_resource
+  （略）
+end
+</code></p>
+
+<p>参考サイト：<br/>
+<a href="http://d.hatena.ne.jp/dimros/20110326/1301145073  ">http://d.hatena.ne.jp/dimros/20110326/1301145073  </a>
+<a href="http://blog.livedoor.jp/nizoraul/archives/3711303.html  ">http://blog.livedoor.jp/nizoraul/archives/3711303.html  </a>
+<a href="http://yorunocafe.blogspot.jp/2011/08/rails-cancan.html">http://yorunocafe.blogspot.jp/2011/08/rails-cancan.html</a></p>
+]]></content>
+  </entry>
+  
+</feed>

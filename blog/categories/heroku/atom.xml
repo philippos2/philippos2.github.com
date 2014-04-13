@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: heroku | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/heroku/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[about-heroku]]></title>
+    <link href="http://philippos2.github.io/blog/2013/07/05/about-heroku/"/>
+    <updated>2013-07-05T00:17:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/07/05/about-heroku</id>
+    <content type="html"><![CDATA[<h3>Heroku 利用手順 （2012/04/20～）</h3>
+
+<p><a href="https://addons.heroku.com/">https://addons.heroku.com/</a> <br/>
+<a href="http://mealslog.heroku.com/">http://mealslog.heroku.com/</a></p>
+
+<p>・heroku上でアプリを新規作成する
+rails3以降のアプリは cedar stack 上で稼働させること</p>
+
+<p><code>
+$ heroku create mealslog --stack cedar
+</code></p>
+
+<p>初回はherokuのIDとパスワードを要求される</p>
+
+<p><code>
+Enter your Heroku credentials.
+Email: yuufjt@da2.so-net.ne.jp
+Password (typing will be hidden):
+Could not find an existing public key.
+Would you like to generate one? [Yn] Y
+Generating new SSH public key.
+Uploading SSH public key /home/philippos/.ssh/id_rsa.pub
+Creating mealslog... done, stack is bamboo-mri-1.9.2
+http://mealslog.heroku.com/ | git@heroku.com:mealslog.git
+Git remote heroku added
+</code></p>
+
+<p>・ローカルリポジトリをherokuへプッシュ</p>
+
+<p><code>
+$ git push heroku master
+</code></p>
+
+<p>・heroku上でマイグレーション</p>
+
+<p><code>
+$ heroku run rake db:migrate
+</code></p>
+
+<p>・動作確認</p>
+
+<p><code>
+$ heroku open
+</code></p>
+
+<p>・アプリ情報参照</p>
+
+<p><code>
+$ heroku info
+</code></p>
+
+<p><code>
+Addons:        Shared Database 5MB
+Domain Name:   mealslog.herokuapp.com
+Git URL:       git@heroku.com:mealslog.git
+Owner:         yuufjt@da2.so-net.ne.jp
+Repo Size:     11M
+Slug Size:     26M
+Stack:         cedar
+Web URL:       http://mealslog.herokuapp.com/
+</code></p>
+
+<p>・heroku上でshellを起動する</p>
+
+<p><code>
+$ heroku run bash
+</code></p>
+
+<p>・heroku上でcronタスクを実行する</p>
+
+<p><code>
+$ heroku run rake cron
+</code></p>
+
+<p>・heroku にrails dbconsole したのと同じ状態で接続</p>
+
+<p>```
+$ heroku update</p>
+
+<p>$ heroku plugins:install git://github.com/ddollar/heroku-sql-console.git</p>
+
+<p>$ heroku sql &mdash;app APPLICATION_NAME
+```</p>
+
+<p>・タイムゾーン設定</p>
+
+<p><code>
+$ heroku config:add TZ=Asia/Tokyo
+</code></p>
+
+<p>○Heroku上のDBのバックアップを取る</p>
+
+<p>まずは準備
+Heroku上のDBのバックアップを取るには、tapsとsqlite3が必要</p>
+
+<p>```
+$ gem install taps</p>
+
+<p>$ sudo aptitude install sqlite3</p>
+
+<p>$ sudo aptitude install libsqlite3-dev</p>
+
+<p>$ gem install sqlite3
+```</p>
+
+<p>準備ここまで
+Heroku上のDBをローカルDBへコピーする
+規定値でdevelopment環境へコピーする</p>
+
+<p><code>
+$ heroku db:pull
+</code></p>
+
+<p>参考サイト：<br/>
+<a href="http://d.hatena.ne.jp/xyk/20101102">http://d.hatena.ne.jp/xyk/20101102</a></p>
+]]></content>
+  </entry>
+  
+</feed>

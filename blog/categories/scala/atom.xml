@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: scala | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/scala/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-04-13T11:48:06+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[scalatra introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2014/04/13/scalatra-introduction/"/>
+    <updated>2014-04-13T11:16:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2014/04/13/scalatra-introduction</id>
+    <content type="html"><![CDATA[<p>【scalatra 環境構築メモ】</p>
+
+<p>■scalatra本体、関連ツール導入</p>
+
+<ol>
+<li>Scala本体</li>
+</ol>
+
+
+<p>Scala公式サイト（<a href="http://www.scala-lang.org/download/%EF%BC%89%E3%82%88%E3%82%8A%E3%83%90%E3%82%A4%E3%83%8A%E3%83%AA%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%88tgz%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%89%E3%82%92%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%81%97%E3%80%81/usr/bin%E4%BB%A5%E4%B8%8B%E3%81%AB%E5%B1%95%E9%96%8B%E3%80%82">http://www.scala-lang.org/download/%EF%BC%89%E3%82%88%E3%82%8A%E3%83%90%E3%82%A4%E3%83%8A%E3%83%AA%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%88tgz%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%EF%BC%89%E3%82%92%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%81%97%E3%80%81/usr/bin%E4%BB%A5%E4%B8%8B%E3%81%AB%E5%B1%95%E9%96%8B%E3%80%82</a></p>
+
+<ol>
+<li>SBT</li>
+</ol>
+
+
+<p>SBT公式サイト（<a href="http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html#unix%EF%BC%89%E3%81%8B%E3%82%89sbt-launch.jar%E3%82%92%E5%8F%96%E5%BE%97%E3%81%97%E3%80%81~/bin%E3%81%AB%E9%85%8D%E7%BD%AE%E3%80%82">http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html#unix%EF%BC%89%E3%81%8B%E3%82%89sbt-launch.jar%E3%82%92%E5%8F%96%E5%BE%97%E3%81%97%E3%80%81~/bin%E3%81%AB%E9%85%8D%E7%BD%AE%E3%80%82</a>
+SBT公式サイトの勧めに従い、起動用スクリプトを作成する。単に以下をコピペし、~/bin/sbtとして保存。</p>
+
+<p><code>
+SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
+java $SBT_OPTS -jar `dirname $0`/sbt-launch.jar "$@"
+</code></p>
+
+<ol>
+<li>Conscript</li>
+</ol>
+
+
+<p>以下を実行する。</p>
+
+<p><code>
+$ curl https://raw.github.com/n8han/conscript/master/setup.sh | sh
+</code></p>
+
+<p>結果、スクリプト ~/bin/cs が作成されたことを確認すること。</p>
+
+<ol>
+<li>giter8</li>
+</ol>
+
+
+<p>以下を実行する。</p>
+
+<p><code>
+$ cs n8han/giter8
+</code></p>
+
+<p>結果、スクリプト ~/bin/g8 が作成されたことを確認すること。</p>
+
+<p>■scalatraプロジェクトの作成</p>
+
+<p>任意のパスで以下を実行し、ドメイン設定、パッケージ名、プロジェクト名等を設定しscalatraプロジェクトを作成する。</p>
+
+<p><code>
+$ g8 scalatra/scalatra-sbt
+</code></p>
+
+<p>■scalatraサーバの起動</p>
+
+<p>プロジェクトディレクトリ以下に移動し、sbtを起動し、コマンド <code>container:start</code> としてscalatraサーバを起ち上げる。</p>
+
+<hr />
+
+<p>参考サイト：
+<a href="https://gist.github.com/kmizu/1876800">https://gist.github.com/kmizu/1876800</a>
+<a href="http://scalajp.github.io/sbt-getting-started-guide-ja/">http://scalajp.github.io/sbt-getting-started-guide-ja/</a>
+<a href="http://qiita.com/k_ui/items/65def414bd7ec54aedeb">http://qiita.com/k_ui/items/65def414bd7ec54aedeb</a>
+<a href="http://diario.hatenablog.com/entry/2013/08/25/041417">http://diario.hatenablog.com/entry/2013/08/25/041417</a>
+<a href="http://sgykfjsm.github.io/blog/2013/02/22/scalatra-tutorial-001/">http://sgykfjsm.github.io/blog/2013/02/22/scalatra-tutorial-001/</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[scala play2 introduction]]></title>
+    <link href="http://philippos2.github.io/blog/2013/12/15/scala-play2-introduction/"/>
+    <updated>2013-12-15T21:40:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2013/12/15/scala-play2-introduction</id>
+    <content type="html"><![CDATA[<p>【Scala / play2 導入メモ】2013/12/14～</p>
+
+<p>Play2 version: 2.2.0
+Scala version: 2.10.2 (OpenJDK 64-Bit Server VM, Java 1.6.0_27).</p>
+
+<p>以下、ホームディレクトリにて行う。</p>
+
+<p>■準備</p>
+
+<p>事前に Java 開発環境のインストールをしておくこと。</p>
+
+<p><code>
+$ sudo aptitude install openjdk-6-jdk
+</code></p>
+
+<p>■play2 フレームワークの取得と展開</p>
+
+<p>```
+$ wget <a href="http://downloads.typesafe.com/play/2.2.0/play-2.2.0.zip">http://downloads.typesafe.com/play/2.2.0/play-2.2.0.zip</a></p>
+
+<p>$ unzip play-2.2.0.zip</p>
+
+<p>$ sudo mv play-2.2.0 /usr/local</p>
+
+<p>$ cd /usr/bin</p>
+
+<p>$ sudo ln -s /usr/local/play-2.2.0/play play
+```</p>
+
+<p>■動作確認</p>
+
+<p>```
+$ play</p>
+
+<p>zsh: correct &lsquo;play&rsquo; to &lsquo;aplay&rsquo; [nyae]? n
+Getting com.typesafe.play console_2.10 2.2.0 &hellip;
+:: retrieving :: org.scala-sbt#boot-app
+confs: [default]
+6 artifacts copied, 0 already retrieved (2012kB/93ms)
+Getting Scala 2.10.2 (for console)&hellip;
+:: retrieving :: org.scala-sbt#boot-scala
+confs: [default]
+5 artifacts copied, 0 already retrieved (24390kB/2078ms)
+_
+ _ <strong> | | </strong> _ _  _
+ | &lsquo;<em> \| |/ </em>&rsquo; | || |
+ |  <strong>/|<em>|_</em></strong>|_<em> /
+ |</em>|            |__/</p>
+
+<p>play 2.2.0 built with Scala 2.10.2 (running Java 1.6.0_18), <a href="http://www.playframework.com">http://www.playframework.com</a></p>
+
+<p>This is not a play application!</p>
+
+<p>Use <code>play new</code> to create a new Play application in the current directory,
+or go to an existing application and launch the development console using <code>play</code>.</p>
+
+<p>You can also browse the complete documentation at <a href="http://www.playframework.com.">http://www.playframework.com.</a>
+```</p>
+
+<p>■Scalaプロジェクト作成</p>
+
+<p>```
+$ play new testPlay</p>
+
+<p>zsh: correct &lsquo;play&rsquo; to &lsquo;aplay&rsquo; [nyae]? n
+_
+ _ <strong> | | </strong> _ _  _
+ | &lsquo;<em> \| |/ </em>&rsquo; | || |
+ |  <strong>/|<em>|_</em></strong>|_<em> /
+ |</em>|            |__/</p>
+
+<p>play 2.2.0 built with Scala 2.10.2 (running Java 1.6.0_18), <a href="http://www.playframework.com">http://www.playframework.com</a></p>
+
+<p>The new application will be created in /home/philippos/testPlay</p>
+
+<p>What is the application name? [testPlay]</p>
+
+<blockquote></blockquote>
+
+<p>Which template do you want to use for this new application?</p>
+
+<p>1             &ndash; Create a simple Scala application
+2             &ndash; Create a simple Java application</p>
+
+<blockquote><p>1
+OK, application testPlay is created.</p></blockquote>
+
+<p>Have fun!</p>
+
+<p>$ tree testPlay</p>
+
+<p>testPlay
+|&mdash; README
+|&mdash; app
+|   |&mdash; controllers
+|   |   <code>-- Application.scala
+|  </code>&mdash; views
+|       |&mdash; index.scala.html
+|       <code>-- main.scala.html
+|-- build.sbt
+|-- conf
+|   |-- application.conf
+|  </code>&mdash; routes
+|&mdash; project
+|   |&mdash; build.properties
+|   <code>-- plugins.sbt
+|-- public
+|   |-- images
+|   |  </code>&mdash; favicon.png
+|   |&mdash; javascripts
+|   |   <code>-- jquery-1.9.0.min.js
+|  </code>&mdash; stylesheets
+|       <code>-- main.css
+</code>&mdash; test</p>
+
+<pre><code>|-- ApplicationSpec.scala
+`-- IntegrationSpec.scala
+</code></pre>
+
+<p>10 directories, 14 files
+```</p>
+
+<p>■playアプリケーションの実行</p>
+
+<p>```
+$ play run</p>
+
+<p>[info] Loading project definition from /home/philippos/testPlay/project
+[info] Set current project to testPlay (in build file:/home/philippos/testPlay/)</p>
+
+<p>Cannot load the JNotify native library (/home/philippos/testPlay/target/native_libraries/64bits/libjnotify.so: /lib/libc.so.6: version `GLIBC_2.12' not found (required by /home/philippos/testPlay/target/native_libraries/64bits/libjnotify.so))
+Play will check file changes for each request, so expect degraded reloading performace.</p>
+
+<p>&mdash;&ndash; (Running the application from SBT, auto-reloading is enabled) &mdash;&ndash;</p>
+
+<p>[info] play &ndash; Listening for HTTP on /0:0:0:0:0:0:0:0:9000</p>
+
+<p>(Server started, use Ctrl+D to stop and go back to the console&hellip;)</p>
+
+<p>[info] Compiling 5 Scala sources and 1 Java source to /home/philippos/testPlay/target/scala-2.10/classes&hellip;
+[info] play &ndash; Application started (Dev)
+```</p>
+
+<p>下記URLでアクセスし動作を確認する。</p>
+
+<p><a href="http://localhost:9000/">http://localhost:9000/</a></p>
+
+<p>■対話型実況環境（REPL）の起動</p>
+
+<p><code>
+$ play console                                                                                                                                                                    [21:19:14]
+[info] Loading project definition from /home/philippos/testPlay/project
+[info] Set current project to testPlay (in build file:/home/philippos/testPlay/)
+[info] Starting scala interpreter...
+[info]
+Welcome to Scala version 2.10.2 (OpenJDK 64-Bit Server VM, Java 1.6.0_27).
+Type in expressions to have them evaluated.
+Type :help for more information.
+</code></p>
+
+<p>終了するときは、:quit とする。</p>
+
+<hr />
+
+<p>■参考サイト：</p>
+
+<p><a href="http://www.playframework.com/download">http://www.playframework.com/download</a>  <br/>
+<a href="http://yksris.hatenablog.com/entry/2013/01/06/134353">http://yksris.hatenablog.com/entry/2013/01/06/134353</a>  <br/>
+<a href="http://tech-sketch.jp/2013/11/scala-play2-1.html">http://tech-sketch.jp/2013/11/scala-play2-1.html</a></p>
+]]></content>
+  </entry>
+  
+</feed>
