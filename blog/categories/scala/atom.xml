@@ -4,7 +4,7 @@
   <title><![CDATA[Category: scala | Philippos Blue Book]]></title>
   <link href="http://philippos2.github.io/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://philippos2.github.io/"/>
-  <updated>2014-04-13T13:20:41+09:00</updated>
+  <updated>2014-04-13T14:33:45+09:00</updated>
   <id>http://philippos2.github.io/</id>
   <author>
     <name><![CDATA[Philippos]]></name>
@@ -22,17 +22,11 @@
 
 <p>■scalatra本体、関連ツール導入</p>
 
-<ol>
-<li>Scala本体</li>
-</ol>
-
+<h1>1. Scala本体</h1>
 
 <p>Scala公式サイト(<a href="http://www.scala-lang.org/download/">http://www.scala-lang.org/download/</a>) よりバイナリファイル (tgzファイル)をダウンロードし、/usr/bin以下に展開。</p>
 
-<ol>
-<li>SBT</li>
-</ol>
-
+<h1>2. SBT</h1>
 
 <p>SBT公式サイト(<a href="http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html#unix">http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html#unix</a>)からsbt-launch.jarを取得し、~/binに配置。
 SBT公式サイトの勧めに従い、起動用スクリプトを作成する。単に以下をコピペし、~/bin/sbtとして保存。</p>
@@ -42,10 +36,7 @@ SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSiz
 java $SBT_OPTS -jar `dirname $0`/sbt-launch.jar "$@"
 </code></p>
 
-<ol>
-<li>Conscript</li>
-</ol>
-
+<h1>3. Conscript</h1>
 
 <p>以下を実行する。</p>
 
@@ -55,10 +46,7 @@ $ curl https://raw.github.com/n8han/conscript/master/setup.sh | sh
 
 <p>結果、スクリプト ~/bin/cs が作成されたことを確認すること。</p>
 
-<ol>
-<li>giter8</li>
-</ol>
-
+<h1>4. giter8</h1>
 
 <p>以下を実行する。</p>
 

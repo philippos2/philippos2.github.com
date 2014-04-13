@@ -9,7 +9,7 @@
   <meta name="author" content="Philippos">
 
   
-  <meta name="description" content="【scalatra 環境構築メモ】 ■scalatra本体、関連ツール導入 Scala本体 Scala公式サイト(http://www.scala-lang.org/download/) よりバイナリファイル (tgzファイル)をダウンロードし、/usr/bin以下に展開。 SBT &hellip;">
+  <meta name="description" content="【scalatra 環境構築メモ】 ■scalatra本体、関連ツール導入 1. Scala本体 Scala公式サイト(http://www.scala-lang.org/download/) よりバイナリファイル (tgzファイル)をダウンロードし、/usr/bin以下に展開。 2. SBT &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -109,17 +109,11 @@
 
 <p>■scalatra本体、関連ツール導入</p>
 
-<ol>
-<li>Scala本体</li>
-</ol>
-
+<h1>1. Scala本体</h1>
 
 <p>Scala公式サイト(<a href="http://www.scala-lang.org/download/">http://www.scala-lang.org/download/</a>) よりバイナリファイル (tgzファイル)をダウンロードし、/usr/bin以下に展開。</p>
 
-<ol>
-<li>SBT</li>
-</ol>
-
+<h1>2. SBT</h1>
 
 <p>SBT公式サイト(<a href="http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html#unix">http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html#unix</a>)からsbt-launch.jarを取得し、~/binに配置。
 SBT公式サイトの勧めに従い、起動用スクリプトを作成する。単に以下をコピペし、~/bin/sbtとして保存。</p>
@@ -130,10 +124,7 @@ SBT公式サイトの勧めに従い、起動用スクリプトを作成する�
 </span><span class='line'>java $SBT_OPTS -jar `dirname $0`/sbt-launch.jar "$@"</span></code></pre></td></tr></table></div></figure>
 
 
-<ol>
-<li>Conscript</li>
-</ol>
-
+<h1>3. Conscript</h1>
 
 <p>以下を実行する。</p>
 
@@ -143,10 +134,7 @@ SBT公式サイトの勧めに従い、起動用スクリプトを作成する�
 
 <p>結果、スクリプト ~/bin/cs が作成されたことを確認すること。</p>
 
-<ol>
-<li>giter8</li>
-</ol>
-
+<h1>4. giter8</h1>
 
 <p>以下を実行する。</p>
 
