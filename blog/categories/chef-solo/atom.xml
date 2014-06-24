@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef-solo | Philippos Blue Book]]></title>
   <link href="http://philippos2.github.io/blog/categories/chef-solo/atom.xml" rel="self"/>
   <link href="http://philippos2.github.io/"/>
-  <updated>2014-04-19T20:08:54+09:00</updated>
+  <updated>2014-06-25T02:04:25+09:00</updated>
   <id>http://philippos2.github.io/</id>
   <author>
     <name><![CDATA[Philippos]]></name>
@@ -174,8 +174,8 @@ $ vagrant box remove &lt;Box名&gt; virtualbox
 <p>Vagrantを終了させる</p>
 
 <p><code>
-$ vagrant halt          ……サスペド    
-$ vagrant destroy       ……ターミネー    
+$ vagrant halt          ……サスペンド   
+$ vagrant destroy       ……ターミネート  
 </code></p>
 
 <p>Vagrantの準備は以上。</p>
