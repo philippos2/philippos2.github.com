@@ -5,16 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>ruby1.9-rails3-introduction - Philippos Blue Book</title>
+  <title>haskell development environment - Philippos Blue Book</title>
   <meta name="author" content="Philippos">
 
   
-  <meta name="description" content="【Ruby1.9系/Rails3導入覚書】2012/03/18～ 0. 対象環境 OS：Debian 6.0 / 64bit版 以下でネットワーク経路確認 1
-$ netstat -r カーネルIP経路テーブル 1
+  <meta name="description" content="【Haskell in ubuntu-14.10-server-amd64 関連メモ】（2014/12/28 &ndash; ） ghcおよびhaskell-platform導入メモ ghc-7.6.3導入 事前にシンボリックリンクlibgmp.so.3を作成する 1
 2
-3
-4
-受信先サイト ゲートウェイ ネットマスク フラグ MSS Window &hellip;">
+$ cd /usr/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -23,7 +20,7 @@ $ netstat -r カーネルIP経路テーブル 1
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://philippos2.github.io/blog/2013/06/30/ruby1-dot-9-rails3-introduction/">
+  <link rel="canonical" href="http://philippos2.github.io/blog/2014/12/31/haskell-development-environment/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -87,7 +84,7 @@ $ netstat -r カーネルIP経路テーブル 1
   
   <header>
     
-      <h1 class="entry-title">ruby1.9-rails3-introduction</h1>
+      <h1 class="entry-title">Haskell Development Environment</h1>
     
     
       <p class="meta">
@@ -103,240 +100,340 @@ $ netstat -r カーネルIP経路テーブル 1
   
 
 
-<time datetime="2013-06-30T21:56:00+09:00" pubdate data-updated="true">Jun 30<span>th</span>, 2013</time>
+<time datetime="2014-12-31T05:46:00+09:00" pubdate data-updated="true">Dec 31<span>st</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>【Ruby1.9系/Rails3導入覚書】2012/03/18～</p>
+<div class="entry-content"><p>【Haskell in ubuntu-14.10-server-amd64 関連メモ】（2014/12/28 &ndash; ）</p>
 
-<hr />
+<h3>ghcおよびhaskell-platform導入メモ</h3>
 
-<h3>0. 対象環境</h3>
+<h4>ghc-7.6.3導入</h4>
 
-<p>OS：Debian 6.0 / 64bit版</p>
-
-<h4>以下でネットワーク経路確認</h4>
+<p>事前にシンボリックリンクlibgmp.so.3を作成する</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ netstat -r</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd /usr/lib/x86_64-linux-gnu/
+</span><span class='line'>$ sudo ln -s libgmp.so.10 libgmp.so.3</span></code></pre></td></tr></table></div></figure>
 
 
-<p>カーネルIP経路テーブル</p>
+<h4>ghc-7.6.3本体の導入</h4>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>受信先サイト    ゲートウェイ    ネットマスク   フラグ   MSS Window  irtt インタフェース
-</span><span class='line'>10.0.2.0       *            255.255.255.0   U       0   0       0    eth0
-</span><span class='line'>192.168.56.0   *            255.255.255.0   U       0   0       0    eth1
-</span><span class='line'>default        10.0.2.2     0.0.0.0         UG      0   0       0    eth0</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd /usr/local/src/
+</span><span class='line'>$ sudo wget http://www.haskell.org/ghc/dist/7.6.3/ghc-7.6.3-x86_64-unknown-linux.tar.bz2
+</span><span class='line'>$ sudo tar xvf ghc-7.6.3-x86_64-unknown-linux.tar.bz2
+</span><span class='line'>$ cd ghc-7.6.3
+</span><span class='line'>$ sudo ./configure
+</span><span class='line'>
+</span><span class='line'>...(略)...
+</span><span class='line'>
+</span><span class='line'>$ sudo make install
+</span><span class='line'>
+</span><span class='line'>...(略)...
+</span><span class='line'>
+</span><span class='line'>$ ghc --version
+</span><span class='line'>The Glorious Glasgow Haskell Compilation System, version 7.6.3</span></code></pre></td></tr></table></div></figure>
 
 
-<hr />
+<h4>haskell-platform導入</h4>
 
-<h3>1. MySQL 導入</h3>
-
-<h4>以下、root権限で実行</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># aptitude -y install mysql-server</span></code></pre></td></tr></table></div></figure>
-
-
-<p>バージョン：5.1.61</p>
-
-<p>また、libmysqlclient-dev が導入済であることを確認する</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># aptitude search libmysqlclient-dev</span></code></pre></td></tr></table></div></figure>
-
-
-<p>参考：<br/>
-<a href="http://pentan.info/server/linux/mysql.html#debianins  ">http://pentan.info/server/linux/mysql.html#debianins  </a>
-<a href="http://d.hatena.ne.jp/yyuto/20110829/1314582372">http://d.hatena.ne.jp/yyuto/20110829/1314582372</a></p>
-
-<hr />
-
-<h3>2. RVM 導入</h3>
-
-<h4>curlを導入</h4>
-
-<p>root権限で以下を実行</p>
+<p>・予め必要なパッケージを導入する</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># aptitude -y install curl</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install libgmp-dev</span></code></pre></td></tr></table></div></figure>
 
 
-<h4>RVM 導入</h4>
-
-<p>ユーザに戻って以下を実行</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ bash -s stable &lt; &lt;(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>バージョン：1.10.3</p>
-
-<h4>rvm を最新に更新する</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm get head</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>アップデートしたrvmの再読み込み</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm reload</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>インストール可能なRuby実装の一覧を見る</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm list known</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>インストール済パッケージリスト</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm list</span></code></pre></td></tr></table></div></figure>
-
-
-<p>参考：<br/>
-<a href="https://rvm.beginrescueend.com/releases/rvm-install-head  ">https://rvm.beginrescueend.com/releases/rvm-install-head  </a>
-<a href="http://qwik.jp/asakusarb/rvm.html">http://qwik.jp/asakusarb/rvm.html</a></p>
-
-<hr />
-
-<h3>3. ruby 1.9.3 導入</h3>
-
-<p>[準備]</p>
-
-<h4>root権限で g++ をインストール</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># aptitude -y install g++</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>root権限で automake をインストール</h4>
-
-<p>バージョン：1.11.1</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># aptitude -y install automake</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>root権限で libreadline6-dev をインストール</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># aptitude -y install libreadline6-dev</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>root権限で zlib1g-dev をインストール</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># aptitude -y install zlib1g-dev</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>root権限で libssl-dev をインストール</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># aptitude -y install libssl-dev</span></code></pre></td></tr></table></div></figure>
-
-
-<p>[本体]
-&ndash; ruby 1.9.3 をインストール
-&ndash; ruby1.9系をインストールすることで、同時にrubygemsもインストールできる</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm install 1.9.3</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>~/.bashrc に以下の行を追加</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # This loads RVM</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>規定バージョン設定　例）ruby1.9.3 を規定バージョンとして設定する</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm use 1.9.3 --default</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>rubygemsのバージョン確認</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem -v
-</span><span class='line'>1.8.21</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>root権限で ruby-dev をインストール</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># aptitude -y install ruby-dev</span></code></pre></td></tr></table></div></figure>
-
-
-<p>参考：<br/>
-<a href="http://nzwsch.info/">http://nzwsch.info/</a> <br/>
-<a href="http://d.hatena.ne.jp/shokai/20101115/1289818334">http://d.hatena.ne.jp/shokai/20101115/1289818334</a></p>
-
-<hr />
-
-<h3>4. 動作確認用rails3アプリ作成／動作確認</h3>
-
-<h4>コントローラを追加して動作確認</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ rails generate controller &lt;コントローラ名&gt; &lt;アクション名&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>例）</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ rails generate controller hello index</span></code></pre></td></tr></table></div></figure>
-
-
-<p>以下のURLへアクセスし、railsアプリ／コントローラの動作確認を行う</p>
-
-<p><a href="http://192.168.56.101:3000/hello/index/">http://192.168.56.101:3000/hello/index/</a></p>
-
-<h4>scaffold作成例</h4>
+<p>・haskell-platform本体の導入</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ rails g scaffold user name:string age:integer
-</span><span class='line'>$ rake db:create
-</span><span class='line'>$ rake db:migrate
-</span><span class='line'>$ rails server</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd /usr/local/src/
+</span><span class='line'>$ sudo wget https://downloads.haskell.org/~platform/2014.2.0.0/haskell-platform-2014.2.0.0-unknown-linux-x86_64.tar.gz
+</span><span class='line'>$ sudo tar xzvf haskell-platform-2014.2.0.0-unknown-linux-x86_64.tar.gz
+</span><span class='line'>
+</span><span class='line'>展開された /usr/local/haskell 以下を /usr/local/ へ移動し、パスを通す
+</span><span class='line'>
+</span><span class='line'>$ cabal --version
+</span><span class='line'>cabal-install version 1.18.0.5
+</span><span class='line'>using version 1.18.1.3 of the Cabal library</span></code></pre></td></tr></table></div></figure>
 
 
-<p>以下のURLへアクセスし、MySQLとの連携が正常か動作確認を行う</p>
+<hr />
 
-<p><a href="http://192.168.56.101:3000/users/">http://192.168.56.101:3000/users/</a></p>
+<h3>Haskell開発支援ツールとvimプラグイン導入メモ</h3>
 
-<h4>routes.rbで定義したルートを表示</h4>
+<h4>cab、ghc-mod その他の導入</h4>
+
+<p>cabalにてパッケージ管理ツール cab と haskell便利ツール ghc-mod その他のツールを導入する</p>
+
+<p>まずcabal本体を更新する</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake routes</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install libghc-zlib-dev
+</span><span class='line'>$ cabal update
+</span><span class='line'>$ cabal install cabal-install</span></code></pre></td></tr></table></div></figure>
 
 
-<h4>railsアプリ統計情報を表示</h4>
+<p>この後、/.cabal/bin にパスを通しておく</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake stats</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cabal --version
+</span><span class='line'>cabal-install version 1.20.0.5
+</span><span class='line'>using version 1.20.0.3 of the Cabal library</span></code></pre></td></tr></table></div></figure>
 
 
-<p>参考:<br/>
-<a href="http://opentechnica.blogspot.jp/2012/01/ubuntu1110ruby-192-rails-32.html  ">http://opentechnica.blogspot.jp/2012/01/ubuntu1110ruby-192-rails-32.html  </a>
-<a href="http://d.hatena.ne.jp/InvokeTwoA/20111007">http://d.hatena.ne.jp/InvokeTwoA/20111007</a></p>
+<p>サンドボックスの初期化を行う</p>
 
-<p>&mdash; Ruby1.9系/Rails3導入手順ここまで &mdash;</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cabal sandbox init</span></code></pre></td></tr></table></div></figure>
+
+
+<p>プロジェクトディレクトリ以下の /.cabal-sandbox/bin にパスを通しておく</p>
+
+<p>ghc-modのインストールを行う</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cabal install happy
+</span><span class='line'>$ cabal install haskell-src-exts
+</span><span class='line'>$ cabal install monad-control-0.3.3.0
+</span><span class='line'>$ cabal install ghc-mod
+</span><span class='line'>$ cabal install hoogle
+</span><span class='line'>
+</span><span class='line'>$ ghc-mod --version
+</span><span class='line'>ghc-mod version 5.2.1.1 compiled by GHC 7.6.3
+</span><span class='line'>
+</span><span class='line'>$ hoogle --version
+</span><span class='line'>Hoogle v4.2.36, (C) Neil Mitchell 2004-2012</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考：<br/>
+<a href="http://maoe.hatenadiary.jp/entry/2013/08/16/224031  ">http://maoe.hatenadiary.jp/entry/2013/08/16/224031  </a>
+<a href="http://qiita.com/junsumida/items/9e763a8b54222f235759">http://qiita.com/junsumida/items/9e763a8b54222f235759</a></p>
+
+<hr />
+
+<h4>NeoBundle導入</h4>
+
+<p>vimにてプラグイン管理ツール NeoBundle を使えるようにする</p>
+
+<p>配置先のディレクトリを作成</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ mkdir -p ~/.vim/bundle</span></code></pre></td></tr></table></div></figure>
+
+
+<p>NeoBundleをリポジトリから取得</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim</span></code></pre></td></tr></table></div></figure>
+
+
+<p>vimrcに以下のように記述を追加し、ghc-modの機能をvimで扱うようにできるプラグインghcmod-vimや、補完機能を提供するプラグインneco-ghc等を導入する</p>
+
+<p>参考：<br/>
+<a href="http://qiita.com/joker1007/items/59ac3fa162df7c9cc952  ">http://qiita.com/joker1007/items/59ac3fa162df7c9cc952  </a>
+<a href="http://cohama.hateblo.jp/entry/2013/09/01/013944">http://cohama.hateblo.jp/entry/2013/09/01/013944</a></p>
+
+<hr />
+
+<p>~/.vimrc</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>"オムニ補完有効化
+</span><span class='line'>setlocal omnifunc=necoghc#omnifunc
+</span><span class='line'>
+</span><span class='line'>"plugins for haskell
+</span><span class='line'>set nocompatible
+</span><span class='line'>filetype plugin indent off
+</span><span class='line'>
+</span><span class='line'>if has('vim_starting')
+</span><span class='line'>  set runtimepath+=~/.vim/bundle/neobundle.vim
+</span><span class='line'>endif
+</span><span class='line'>
+</span><span class='line'>call neobundle#begin(expand('~/.vim/bundle/'))
+</span><span class='line'>
+</span><span class='line'>NeoBundleFetch 'Shougo/neobundle.vim'
+</span><span class='line'>NeoBundle 'Shougo/unite.vim'
+</span><span class='line'>NeoBundle 'Shougo/neosnippet.vim'
+</span><span class='line'>NeoBundle 'Shougo/vimproc.vim'
+</span><span class='line'>NeoBundle 'thinca/vim-quickrun'
+</span><span class='line'>
+</span><span class='line'>NeoBundle 'kana/vim-filetype-haskell'
+</span><span class='line'>NeoBundle 'eagletmt/ghcmod-vim'
+</span><span class='line'>NeoBundle 'dag/vim2hs'
+</span><span class='line'>NeoBundle 'ujihisa/neco-ghc'
+</span><span class='line'>NeoBundle "ctrlpvim/ctrlp.vim"
+</span><span class='line'>NeoBundle 'eagletmt/unite-haddock'
+</span><span class='line'>
+</span><span class='line'>call neobundle#end()
+</span><span class='line'>filetype plugin indent on
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>vim上からコマンドNeoBundleInstallを実行し、各プラグインをインストールする</p>
+
+<p>※NeoBundleのコマンド</p>
+
+<p><strong>NeoBundleInstall</strong><br/>
+  インストール</p>
+
+<p><strong>NeoBundleUpdate</strong><br/>
+  更新</p>
+
+<p><strong>NeoBundleClear</strong><br/>
+  ~/.vimrcからプラグインを削除した場合、:NeoBundleClearとしてプラグインをアンインストールすること</p>
+
+<p>参考：<br/>
+<a href="http://qiita.com/muran001/items/3080c4816b7c2e65e40b  ">http://qiita.com/muran001/items/3080c4816b7c2e65e40b  </a>
+<a href="http://eagletmt.hateblo.jp/entry/2012/02/23/130526">http://eagletmt.hateblo.jp/entry/2012/02/23/130526</a></p>
+
+<hr />
+
+<h4>vimprocをmakeする</h4>
+
+<p>makeしてvimprocのsoファイルを作成する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd ~/.vim/bundle/vimproc.vim/
+</span><span class='line'>$ make</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考：<br/>
+<a href="http://d.hatena.ne.jp/pospome/20140906">http://d.hatena.ne.jp/pospome/20140906</a></p>
+
+<hr />
+
+<h4>vim2hs</h4>
+
+<p>‘za’で折り畳み箇所の開閉を行う。</p>
+
+<h4>neocomplcache-ghc (neco-ghc)</h4>
+
+<p>~/.vimrc に以下を設定する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>setlocal omnifunc=necoghc#omnifunc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考：<br/>
+<a href="https://github.com/eagletmt/neco-ghc">https://github.com/eagletmt/neco-ghc</a></p>
+
+<hr />
+
+<h4>hoogle</h4>
+
+<p>予めcabalでhoogleをインストールしておくこと</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cabal install hoogle</span></code></pre></td></tr></table></div></figure>
+
+
+<p>~/.vimrc に以下を設定する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NeoBundle 'eagletmt/unite-haddock'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下を行ってhoogleデータベースを設定</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ hoogle data</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>:Unite hoogle</strong><br/>
+  パッケージにカーソルを合わせて p でプレビューできる</p>
+
+<p><strong>:Unite -auto-preview hoogle</strong><br/>
+  検索結果一覧にカーソルを移動するだけでプレビューを表示する</p>
+
+<p><strong>:UniteWithCursorWord hoogle</strong><br/>
+  カーソル位置にある単語で検索する</p>
+
+<p>参考：<br/>
+<a href="http://eagletmt.hateblo.jp/entry/2012/03/17/194950  ">http://eagletmt.hateblo.jp/entry/2012/03/17/194950  </a>
+<a href="http://qiita.com/shiena/items/1b6c97f32e3905e15c2b">http://qiita.com/shiena/items/1b6c97f32e3905e15c2b</a></p>
+
+<hr />
+
+<h4>ctrlp</h4>
+
+<p>ctrlpについては、画面の水平分割を行おうとCTRL-Sとすると、ターミナルがデータの受信を停止してしまう（CTRL-Qで脱出）
+そのため、以下のコマンドでターミナルドライバのフローコントロールをオフにすること。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ stty -ixon -ixoff</span></code></pre></td></tr></table></div></figure>
+
+
+
 </div>
 
 
@@ -359,12 +456,12 @@ $ netstat -r カーネルIP経路テーブル 1
   
 
 
-<time datetime="2013-06-30T21:56:00+09:00" pubdate data-updated="true">Jun 30<span>th</span>, 2013</time>
+<time datetime="2014-12-31T05:46:00+09:00" pubdate data-updated="true">Dec 31<span>st</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/debian/'>debian</a>, <a class='category' href='/blog/categories/introduction/'>introduction</a>, <a class='category' href='/blog/categories/mysql/'>mysql</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+    <a class='category' href='/blog/categories/haskell/'>haskell</a>, <a class='category' href='/blog/categories/vim/'>vim</a>
   
 </span>
 
@@ -373,7 +470,7 @@ $ netstat -r カーネルIP経路テーブル 1
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://philippos2.github.io/blog/2013/06/30/ruby1-dot-9-rails3-introduction/" data-via="" data-counturl="http://philippos2.github.io/blog/2013/06/30/ruby1-dot-9-rails3-introduction/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://philippos2.github.io/blog/2014/12/31/haskell-development-environment/" data-via="" data-counturl="http://philippos2.github.io/blog/2014/12/31/haskell-development-environment/" >Tweet</a>
   
   
   
@@ -382,10 +479,8 @@ $ netstat -r カーネルIP経路テーブル 1
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/06/30/centos-on-virtualbox/" title="Previous Post: centos-on-virtualbox">&laquo; centos-on-virtualbox</a>
+        <a class="basic-alignment left" href="/blog/2014/04/13/scalatra-introduction/" title="Previous Post: scalatra introduction">&laquo; scalatra introduction</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/07/01/ruby1-dot-9-rails3-appendix/" title="Next Post: ruby1.9-rails3-appendix">ruby1.9-rails3-appendix &raquo;</a>
       
     </p>
   </footer>

@@ -9,11 +9,11 @@
   <meta name="author" content="Philippos">
 
   
-  <meta name="description" content="5. 補足その他 aptitude パッケージ一覧更新（root権限で実行） 1
-# aptitude update rubygemsでのパッケージ検索 1
-2
-$ gem search --remote &lt;検索文字列&gt;
-$ gem search -r &lt;検索文字列&gt; &hellip;">
+  <meta name="description" content="9. vim各種プラグイン vim各種プラグイン x vundle : プラグイン管理
+x neocomplcache : 単語補完機能
+x vim-ref : マニュアル参照機能
+n quickrun : vimからソースコード実行、これは不要か
+n rails.vim : &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -83,6 +83,406 @@ $ gem search -r &lt;検索文字列&gt; &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/01/about-vim-settings/">About-vim-settings</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-01T23:51:00+09:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>9. vim各種プラグイン</h3>
+
+<ul>
+<li><h4>vim各種プラグイン</h4>
+
+<p>x vundle : プラグイン管理<br/>
+x neocomplcache : 単語補完機能<br/>
+x vim-ref : マニュアル参照機能<br/>
+n quickrun : vimからソースコード実行、これは不要か<br/>
+n rails.vim : vimからrails用コマンド実行、これも不要か</p></li>
+</ul>
+
+
+<p>まずはvundle導入</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle</span></code></pre></td></tr></table></div></figure>
+
+
+<p>.vimrc を編集</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vim ~/.vimrc</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>"viとの互換性OFF
+</span><span class='line'>set nocompatible
+</span><span class='line'>"ファイル形式の検出を無効にする
+</span><span class='line'>filetype off
+</span><span class='line'>
+</span><span class='line'>"Vundleを初期化して
+</span><span class='line'>"Vundle自身もVundleで管理
+</span><span class='line'>set rtp+=~/.vim/bundle/vundle/
+</span><span class='line'>call vundle#rc()
+</span><span class='line'>Bundle 'gmarik/vundle'
+</span><span class='line'>
+</span><span class='line'>"プラグイン各種
+</span><span class='line'>Bundle 'Shougo/neocomplcache'
+</span><span class='line'>Bundle 'thinca/vim-ref'
+</span><span class='line'>"Bundle 'thinca/vim-quickrun'
+</span><span class='line'>"Bundle 'tpope/vim-rails' "rails.vim
+</span><span class='line'>
+</span><span class='line'>"ファイル形式検出、プラグイン、インデントをON
+</span><span class='line'>filetype plugin indent on</span></code></pre></td></tr></table></div></figure>
+
+
+<p>プラグイン各種のインストールを行う</p>
+
+<p> :BundleInstall</p>
+
+<p>インストールは以上で終了、引き続き設定を行う</p>
+
+<hr />
+
+<h3>9-1. neocomplcache設定</h3>
+
+<p>設定ファイル（~/.vim/bundle/neocomplcache/doc/neocomplcache.txt）よりコピペ
+以下の記述を.vimrcへ追加する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>----------------------------------------
+</span><span class='line'>"*** for neocomplcache ***
+</span><span class='line'>" Disable AutoComplPop.
+</span><span class='line'>let g:acp_enableAtStartup = 0
+</span><span class='line'>" Use neocomplcache.
+</span><span class='line'>let g:neocomplcache_enable_at_startup = 1
+</span><span class='line'>" Use smartcase.
+</span><span class='line'>let g:neocomplcache_enable_smart_case = 1
+</span><span class='line'>" Use camel case completion.
+</span><span class='line'>let g:neocomplcache_enable_camel_case_completion = 1
+</span><span class='line'>" Use underbar completion.
+</span><span class='line'>let g:neocomplcache_enable_underbar_completion = 1
+</span><span class='line'>" Set minimum syntax keyword length.
+</span><span class='line'>let g:neocomplcache_min_syntax_length = 3
+</span><span class='line'>let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+</span><span class='line'>
+</span><span class='line'>" Define dictionary.
+</span><span class='line'>let g:neocomplcache_dictionary_filetype_lists = {
+</span><span class='line'>    \ 'default' : '',
+</span><span class='line'>    \ 'vimshell' : $HOME.'/.vimshell_hist',
+</span><span class='line'>    \ 'scheme' : $HOME.'/.gosh_completions'
+</span><span class='line'>        \ }
+</span><span class='line'>
+</span><span class='line'>" Define keyword.
+</span><span class='line'>if !exists('g:neocomplcache_keyword_patterns')
+</span><span class='line'>    let g:neocomplcache_keyword_patterns = {}
+</span><span class='line'>endif
+</span><span class='line'>let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+</span><span class='line'>
+</span><span class='line'>" Plugin key-mappings.
+</span><span class='line'>inoremap &lt;expr&gt;&lt;C-g&gt;     neocomplcache#undo_completion()
+</span><span class='line'>inoremap &lt;expr&gt;&lt;C-l&gt;     neocomplcache#complete_common_string()
+</span><span class='line'>
+</span><span class='line'>" Recommended key-mappings.
+</span><span class='line'>" &lt;CR&gt;: close popup and save indent.
+</span><span class='line'>inoremap &lt;expr&gt;&lt;CR&gt;  neocomplcache#close_popup() . "\&lt;CR&gt;"
+</span><span class='line'>" &lt;TAB&gt;: completion.
+</span><span class='line'>inoremap &lt;expr&gt;&lt;TAB&gt;  pumvisible() ? "\&lt;C-n&gt;" : "\&lt;TAB&gt;"
+</span><span class='line'>" &lt;C-h&gt;, &lt;BS&gt;: close popup and delete backword char.
+</span><span class='line'>inoremap &lt;expr&gt;&lt;C-h&gt; neocomplcache#smart_close_popup()."\&lt;C-h&gt;"
+</span><span class='line'>inoremap &lt;expr&gt;&lt;BS&gt; neocomplcache#smart_close_popup()."\&lt;C-h&gt;"
+</span><span class='line'>inoremap &lt;expr&gt;&lt;C-y&gt;  neocomplcache#close_popup()
+</span><span class='line'>inoremap &lt;expr&gt;&lt;C-e&gt;  neocomplcache#cancel_popup()
+</span><span class='line'>
+</span><span class='line'>" For cursor moving in insert mode(Not recommended)
+</span><span class='line'>"inoremap &lt;expr&gt;&lt;Left&gt;  neocomplcache#close_popup() . "\&lt;Left&gt;"
+</span><span class='line'>"inoremap &lt;expr&gt;&lt;Right&gt; neocomplcache#close_popup() . "\&lt;Right&gt;"
+</span><span class='line'>"inoremap &lt;expr&gt;&lt;Up&gt;    neocomplcache#close_popup() . "\&lt;Up&gt;"
+</span><span class='line'>"inoremap &lt;expr&gt;&lt;Down&gt;  neocomplcache#close_popup() . "\&lt;Down&gt;"
+</span><span class='line'>" Or set this.
+</span><span class='line'>"let g:neocomplcache_enable_cursor_hold_i = 1
+</span><span class='line'>
+</span><span class='line'>"*** for neocomplcache ***
+</span><span class='line'>function InsertTabWrapper()
+</span><span class='line'>  if pumvisible()
+</span><span class='line'>    return "\&lt;c-n&gt;"
+</span><span class='line'>  endif
+</span><span class='line'>  let col = col('.') - 1
+</span><span class='line'>  if !col || getline('.')[col - 1] !~ '\k\|&lt;\|/'
+</span><span class='line'>    return "\&lt;tab&gt;"
+</span><span class='line'>  elseif exists('&omnifunc') && &omnifunc == ''
+</span><span class='line'>    return "\&lt;c-n&gt;"
+</span><span class='line'>  else
+</span><span class='line'>    return "\&lt;c-x&gt;\&lt;c-o&gt;"
+</span><span class='line'>  endif
+</span><span class='line'>endfunction
+</span><span class='line'>inoremap &lt;tab&gt; &lt;c-r&gt;=InsertTabWrapper()&lt;cr&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h3>9-2. vim-ref設定</h3>
+
+<p>vimでw3mのPATHを通すため、以下の記述を.vimrcへ追加する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>let $PATH = $PATH . ':/usr/bin/w3m'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>vim上で「:echo $PATH」として、vimでw3mのPATHが通っているか確認する
+次にrubyリファレンスの取得と展開を行う</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd ~/Documents/Reference
+</span><span class='line'>$ wget http://doc.okkez.net/archives/201106/ruby-refm-1.9.2-dynamic-20110629.tar.gz
+</span><span class='line'>$ tar zxvf ruby-refm-1.9.2-dynamic-20110629.tar.gz
+</span><span class='line'>$ mv ruby-refm-1.9.2-dynamic-20110629 rubyrefm</span></code></pre></td></tr></table></div></figure>
+
+
+<p>refeファイル（コマンド）を作成する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vim /usr/local/bin/refe</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh
+</span><span class='line'>
+</span><span class='line'>exec ruby -Ke -I ~/Documents/Reference/rubyrefm/bitclust/lib ~/Documents/Reference/rubyrefm/bitclust/bin/refe.rb -d ~/Documents/Reference/rubyrefm/db-1_9_2 "$@"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>refeファイル（コマンド）のパーミッションを変更する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo chmod 755 /usr/local/bin/refe</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上でrubyのマニュアルを引きことが可能となる</p>
+
+<p>参考：<br/>
+<a href="http://d.hatena.ne.jp/holypp/20110703/1309711799  ">http://d.hatena.ne.jp/holypp/20110703/1309711799  </a>
+<a href="http://d.hatena.ne.jp/holypp/20110515/1305443997  ">http://d.hatena.ne.jp/holypp/20110515/1305443997  </a>
+<a href="http://d.hatena.ne.jp/diffshare/20111118/1321606902  ">http://d.hatena.ne.jp/diffshare/20111118/1321606902  </a>
+<a href="http://iiidevelop.blogspot.jp/2011/07/vimvundle.html  ">http://iiidevelop.blogspot.jp/2011/07/vimvundle.html  </a>
+<a href="http://slumbers99.blogspot.jp/2012/02/vim-vundle.html  ">http://slumbers99.blogspot.jp/2012/02/vim-vundle.html  </a>
+<a href="http://blog.blueblack.net/item_133">http://blog.blueblack.net/item_133</a> <br/>
+<a href="http://masterka.seesaa.net/article/161781923.html">http://masterka.seesaa.net/article/161781923.html</a></p>
+
+<hr />
+
+<h3>vim設定補追(2013/08/02)</h3>
+
+<p>上記プラグイン関連の設定以外の設定を以下に記す。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>"行番号設定
+</span><span class='line'>set number
+</span><span class='line'>
+</span><span class='line'>"タブ文字、行末など不可視文字を表示する
+</span><span class='line'>set list
+</span><span class='line'>
+</span><span class='line'>"インクリメンタルサーチON
+</span><span class='line'>set incsearch
+</span><span class='line'>
+</span><span class='line'>"閉じ括弧が入力されたとき、対応する括弧を表示する
+</span><span class='line'>set showmatch
+</span><span class='line'>
+</span><span class='line'>"検索時に大文字を含んでいたら大/小を区別
+</span><span class='line'>set smartcase
+</span><span class='line'>
+</span><span class='line'>"シフト移動幅
+</span><span class='line'>set shiftwidth=2
+</span><span class='line'>
+</span><span class='line'>"Insertモードで: &lt;Tab&gt; を挿入するのに、適切な数の空白を使う
+</span><span class='line'>set expandtab
+</span><span class='line'>
+</span><span class='line'>"新しい行を作ったときに高度な自動インデントを行う
+</span><span class='line'>set smartindent
+</span><span class='line'>
+</span><span class='line'>"行頭の余白内で Tab を打ち込むと、'shiftwidth' の数だけインデントする
+</span><span class='line'>set smarttab
+</span><span class='line'>
+</span><span class='line'>"ファイル内の &lt;Tab&gt; が対応する空白の数
+</span><span class='line'>"set tabstop=4
+</span><span class='line'>
+</span><span class='line'>"カーソルを行頭、行末で止まらないようにする
+</span><span class='line'>"set whichwrap=b,s,h,l,&lt;,&gt;,[,]
+</span><span class='line'>
+</span><span class='line'>"検索をファイルの先頭へループしない
+</span><span class='line'>set nowrapscan
+</span><span class='line'>
+</span><span class='line'>"色設定ON
+</span><span class='line'>syntax on
+</span><span class='line'>set background=dark
+</span><span class='line'>
+</span><span class='line'>"日本語全角記号を全角として扱うよう設定
+</span><span class='line'>set ambiwidth=double</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1117,6 +1517,10 @@ GPartedのイメージファイルは公式サイトより入手。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/12/31/haskell-development-environment/">haskell development environment</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/04/13/scalatra-introduction/">scalatra introduction</a>
       </li>
     
@@ -1132,15 +1536,11 @@ GPartedのイメージファイルは公式サイトより入手。</p>
         <a href="/blog/2013/12/07/bookmarks-2013-12/">bookmarks 2013/12</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/08/11/rails-optimization-points/">rails optimization points</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/act-as-paranoid' style='font-size: 103.52941176470588%'>act-as-paranoid(1)</a> <a href='/blog/categories/authentication' style='font-size: 110.58823529411765%'>authentication(3)</a> <a href='/blog/categories/bookmarks' style='font-size: 103.52941176470588%'>bookmarks(1)</a> <a href='/blog/categories/byebug' style='font-size: 103.52941176470588%'>byebug(1)</a> <a href='/blog/categories/cancan' style='font-size: 103.52941176470588%'>cancan(1)</a> <a href='/blog/categories/centos' style='font-size: 103.52941176470588%'>centos(1)</a> <a href='/blog/categories/chef-solo' style='font-size: 103.52941176470588%'>chef-solo(1)</a> <a href='/blog/categories/debian' style='font-size: 103.52941176470588%'>debian(1)</a> <a href='/blog/categories/devise' style='font-size: 103.52941176470588%'>devise(1)</a> <a href='/blog/categories/git' style='font-size: 110.58823529411765%'>git(3)</a> <a href='/blog/categories/heroku' style='font-size: 103.52941176470588%'>heroku(1)</a> <a href='/blog/categories/introduction' style='font-size: 145.88235294117646%'>introduction(13)</a> <a href='/blog/categories/knife-solo' style='font-size: 103.52941176470588%'>knife-solo(1)</a> <a href='/blog/categories/logrotate' style='font-size: 103.52941176470588%'>logrotate(1)</a> <a href='/blog/categories/memcached' style='font-size: 103.52941176470588%'>memcached(1)</a> <a href='/blog/categories/mysql' style='font-size: 103.52941176470588%'>mysql(1)</a> <a href='/blog/categories/nginx' style='font-size: 107.05882352941177%'>nginx(2)</a> <a href='/blog/categories/octopress' style='font-size: 103.52941176470588%'>octopress(1)</a> <a href='/blog/categories/play2' style='font-size: 103.52941176470588%'>play2(1)</a> <a href='/blog/categories/plugins' style='font-size: 131.76470588235293%'>plugins(9)</a> <a href='/blog/categories/postgresql' style='font-size: 107.05882352941177%'>postgresql(2)</a> <a href='/blog/categories/pry' style='font-size: 110.58823529411765%'>pry(3)</a> <a href='/blog/categories/rails' style='font-size: 160.0%'>rails(17)</a> <a href='/blog/categories/rspec' style='font-size: 103.52941176470588%'>rspec(1)</a> <a href='/blog/categories/ruby' style='font-size: 142.35294117647058%'>ruby(12)</a> <a href='/blog/categories/scala' style='font-size: 107.05882352941177%'>scala(2)</a> <a href='/blog/categories/scalatra' style='font-size: 103.52941176470588%'>scalatra(1)</a> <a href='/blog/categories/slim' style='font-size: 103.52941176470588%'>slim(1)</a> <a href='/blog/categories/sorcery' style='font-size: 103.52941176470588%'>sorcery(1)</a> <a href='/blog/categories/tmux' style='font-size: 103.52941176470588%'>tmux(1)</a> <a href='/blog/categories/tools' style='font-size: 103.52941176470588%'>tools(1)</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap(2)</a> <a href='/blog/categories/unicorn' style='font-size: 107.05882352941177%'>unicorn(2)</a> <a href='/blog/categories/vagrant' style='font-size: 103.52941176470588%'>vagrant(1)</a> <a href='/blog/categories/vim' style='font-size: 107.05882352941177%'>vim(2)</a> <a href='/blog/categories/virtualbox' style='font-size: 107.05882352941177%'>virtualbox(2)</a> <a href='/blog/categories/z-shell' style='font-size: 103.52941176470588%'>z-shell(1)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/act-as-paranoid' style='font-size: 103.52941176470588%'>act-as-paranoid(1)</a> <a href='/blog/categories/authentication' style='font-size: 110.58823529411765%'>authentication(3)</a> <a href='/blog/categories/bookmarks' style='font-size: 103.52941176470588%'>bookmarks(1)</a> <a href='/blog/categories/byebug' style='font-size: 103.52941176470588%'>byebug(1)</a> <a href='/blog/categories/cancan' style='font-size: 103.52941176470588%'>cancan(1)</a> <a href='/blog/categories/centos' style='font-size: 103.52941176470588%'>centos(1)</a> <a href='/blog/categories/chef-solo' style='font-size: 103.52941176470588%'>chef-solo(1)</a> <a href='/blog/categories/debian' style='font-size: 103.52941176470588%'>debian(1)</a> <a href='/blog/categories/devise' style='font-size: 103.52941176470588%'>devise(1)</a> <a href='/blog/categories/git' style='font-size: 110.58823529411765%'>git(3)</a> <a href='/blog/categories/haskell' style='font-size: 103.52941176470588%'>haskell(1)</a> <a href='/blog/categories/heroku' style='font-size: 103.52941176470588%'>heroku(1)</a> <a href='/blog/categories/introduction' style='font-size: 145.88235294117646%'>introduction(13)</a> <a href='/blog/categories/knife-solo' style='font-size: 103.52941176470588%'>knife-solo(1)</a> <a href='/blog/categories/logrotate' style='font-size: 103.52941176470588%'>logrotate(1)</a> <a href='/blog/categories/memcached' style='font-size: 103.52941176470588%'>memcached(1)</a> <a href='/blog/categories/mysql' style='font-size: 103.52941176470588%'>mysql(1)</a> <a href='/blog/categories/nginx' style='font-size: 107.05882352941177%'>nginx(2)</a> <a href='/blog/categories/octopress' style='font-size: 103.52941176470588%'>octopress(1)</a> <a href='/blog/categories/play2' style='font-size: 103.52941176470588%'>play2(1)</a> <a href='/blog/categories/plugins' style='font-size: 131.76470588235293%'>plugins(9)</a> <a href='/blog/categories/postgresql' style='font-size: 107.05882352941177%'>postgresql(2)</a> <a href='/blog/categories/pry' style='font-size: 110.58823529411765%'>pry(3)</a> <a href='/blog/categories/rails' style='font-size: 160.0%'>rails(17)</a> <a href='/blog/categories/rspec' style='font-size: 103.52941176470588%'>rspec(1)</a> <a href='/blog/categories/ruby' style='font-size: 142.35294117647058%'>ruby(12)</a> <a href='/blog/categories/scala' style='font-size: 107.05882352941177%'>scala(2)</a> <a href='/blog/categories/scalatra' style='font-size: 103.52941176470588%'>scalatra(1)</a> <a href='/blog/categories/slim' style='font-size: 103.52941176470588%'>slim(1)</a> <a href='/blog/categories/sorcery' style='font-size: 103.52941176470588%'>sorcery(1)</a> <a href='/blog/categories/tmux' style='font-size: 103.52941176470588%'>tmux(1)</a> <a href='/blog/categories/tools' style='font-size: 103.52941176470588%'>tools(1)</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap(2)</a> <a href='/blog/categories/unicorn' style='font-size: 107.05882352941177%'>unicorn(2)</a> <a href='/blog/categories/vagrant' style='font-size: 103.52941176470588%'>vagrant(1)</a> <a href='/blog/categories/vim' style='font-size: 110.58823529411765%'>vim(3)</a> <a href='/blog/categories/virtualbox' style='font-size: 107.05882352941177%'>virtualbox(2)</a> <a href='/blog/categories/z-shell' style='font-size: 103.52941176470588%'>z-shell(1)</a> </span>
 </section>
 
 

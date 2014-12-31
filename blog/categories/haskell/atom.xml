@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: haskell | Philippos Blue Book]]></title>
+  <link href="http://philippos2.github.io/blog/categories/haskell/atom.xml" rel="self"/>
+  <link href="http://philippos2.github.io/"/>
+  <updated>2014-12-31T11:18:31+09:00</updated>
+  <id>http://philippos2.github.io/</id>
+  <author>
+    <name><![CDATA[Philippos]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[haskell development environment]]></title>
+    <link href="http://philippos2.github.io/blog/2014/12/31/haskell-development-environment/"/>
+    <updated>2014-12-31T05:46:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2014/12/31/haskell-development-environment</id>
+    <content type="html"><![CDATA[<p>【Haskell in ubuntu-14.10-server-amd64 関連メモ】（2014/12/28 &ndash; ）</p>
+
+<h3>ghcおよびhaskell-platform導入メモ</h3>
+
+<h4>ghc-7.6.3導入</h4>
+
+<p>事前にシンボリックリンクlibgmp.so.3を作成する</p>
+
+<p><code>
+$ cd /usr/lib/x86_64-linux-gnu/
+$ sudo ln -s libgmp.so.10 libgmp.so.3
+</code></p>
+
+<h4>ghc-7.6.3本体の導入</h4>
+
+<p>```
+$ cd /usr/local/src/
+$ sudo wget <a href="http://www.haskell.org/ghc/dist/7.6.3/ghc-7.6.3-x86_64-unknown-linux.tar.bz2">http://www.haskell.org/ghc/dist/7.6.3/ghc-7.6.3-x86_64-unknown-linux.tar.bz2</a>
+$ sudo tar xvf ghc-7.6.3-x86_64-unknown-linux.tar.bz2
+$ cd ghc-7.6.3
+$ sudo ./configure</p>
+
+<p>&hellip;(略)&hellip;</p>
+
+<p>$ sudo make install</p>
+
+<p>&hellip;(略)&hellip;</p>
+
+<p>$ ghc &mdash;version
+The Glorious Glasgow Haskell Compilation System, version 7.6.3
+```</p>
+
+<h4>haskell-platform導入</h4>
+
+<p>・予め必要なパッケージを導入する</p>
+
+<p><code>
+$ sudo aptitude install libgmp-dev
+</code></p>
+
+<p>・haskell-platform本体の導入</p>
+
+<p>```
+$ cd /usr/local/src/
+$ sudo wget <a href="https://downloads.haskell.org/~platform/2014.2.0.0/haskell-platform-2014.2.0.0-unknown-linux-x86_64.tar.gz">https://downloads.haskell.org/~platform/2014.2.0.0/haskell-platform-2014.2.0.0-unknown-linux-x86_64.tar.gz</a>
+$ sudo tar xzvf haskell-platform-2014.2.0.0-unknown-linux-x86_64.tar.gz</p>
+
+<p>展開された /usr/local/haskell 以下を /usr/local/ へ移動し、パスを通す</p>
+
+<p>$ cabal &mdash;version
+cabal-install version 1.18.0.5
+using version 1.18.1.3 of the Cabal library
+```</p>
+
+<hr />
+
+<h3>Haskell開発支援ツールとvimプラグイン導入メモ</h3>
+
+<h4>cab、ghc-mod その他の導入</h4>
+
+<p>cabalにてパッケージ管理ツール cab と haskell便利ツール ghc-mod その他のツールを導入する</p>
+
+<p>まずcabal本体を更新する</p>
+
+<p><code>
+$ sudo aptitude install libghc-zlib-dev
+$ cabal update
+$ cabal install cabal-install
+</code></p>
+
+<p>この後、/.cabal/bin にパスを通しておく</p>
+
+<p><code>
+$ cabal --version
+cabal-install version 1.20.0.5
+using version 1.20.0.3 of the Cabal library
+</code></p>
+
+<p>サンドボックスの初期化を行う</p>
+
+<p><code>
+$ cabal sandbox init
+</code></p>
+
+<p>プロジェクトディレクトリ以下の /.cabal-sandbox/bin にパスを通しておく</p>
+
+<p>ghc-modのインストールを行う</p>
+
+<p>```
+$ cabal install happy
+$ cabal install haskell-src-exts
+$ cabal install monad-control-0.3.3.0
+$ cabal install ghc-mod
+$ cabal install hoogle</p>
+
+<p>$ ghc-mod &mdash;version
+ghc-mod version 5.2.1.1 compiled by GHC 7.6.3</p>
+
+<p>$ hoogle &mdash;version
+Hoogle v4.2.36, &copy; Neil Mitchell 2004-2012
+```</p>
+
+<p>参考：<br/>
+<a href="http://maoe.hatenadiary.jp/entry/2013/08/16/224031  ">http://maoe.hatenadiary.jp/entry/2013/08/16/224031  </a>
+<a href="http://qiita.com/junsumida/items/9e763a8b54222f235759">http://qiita.com/junsumida/items/9e763a8b54222f235759</a></p>
+
+<hr />
+
+<h4>NeoBundle導入</h4>
+
+<p>vimにてプラグイン管理ツール NeoBundle を使えるようにする</p>
+
+<p>配置先のディレクトリを作成</p>
+
+<p><code>
+$ mkdir -p ~/.vim/bundle
+</code></p>
+
+<p>NeoBundleをリポジトリから取得</p>
+
+<p><code>
+$ git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+</code></p>
+
+<p>vimrcに以下のように記述を追加し、ghc-modの機能をvimで扱うようにできるプラグインghcmod-vimや、補完機能を提供するプラグインneco-ghc等を導入する</p>
+
+<p>参考：<br/>
+<a href="http://qiita.com/joker1007/items/59ac3fa162df7c9cc952  ">http://qiita.com/joker1007/items/59ac3fa162df7c9cc952  </a>
+<a href="http://cohama.hateblo.jp/entry/2013/09/01/013944">http://cohama.hateblo.jp/entry/2013/09/01/013944</a></p>
+
+<hr />
+
+<p>~/.vimrc</p>
+
+<p>```</p>
+
+<p>&ldquo;オムニ補完有効化
+setlocal omnifunc=necoghc#omnifunc</p>
+
+<p>&ldquo;plugins for haskell
+set nocompatible
+filetype plugin indent off</p>
+
+<p>if has(&lsquo;vim_starting&rsquo;)
+  set runtimepath+=~/.vim/bundle/neobundle.vim
+endif</p>
+
+<p>call neobundle#begin(expand(&lsquo;~/.vim/bundle/&rsquo;))</p>
+
+<p>NeoBundleFetch &lsquo;Shougo/neobundle.vim&rsquo;
+NeoBundle &lsquo;Shougo/unite.vim&rsquo;
+NeoBundle &lsquo;Shougo/neosnippet.vim&rsquo;
+NeoBundle &lsquo;Shougo/vimproc.vim&rsquo;
+NeoBundle &lsquo;thinca/vim-quickrun&rsquo;</p>
+
+<p>NeoBundle &lsquo;kana/vim-filetype-haskell&rsquo;
+NeoBundle &lsquo;eagletmt/ghcmod-vim&rsquo;
+NeoBundle &lsquo;dag/vim2hs&rsquo;
+NeoBundle &lsquo;ujihisa/neco-ghc&rsquo;
+NeoBundle &ldquo;ctrlpvim/ctrlp.vim&rdquo;
+NeoBundle &lsquo;eagletmt/unite-haddock&rsquo;</p>
+
+<p>call neobundle#end()
+filetype plugin indent on</p>
+
+<p>```</p>
+
+<p>vim上からコマンドNeoBundleInstallを実行し、各プラグインをインストールする</p>
+
+<p>※NeoBundleのコマンド</p>
+
+<p><strong>NeoBundleInstall</strong><br/>
+  インストール</p>
+
+<p><strong>NeoBundleUpdate</strong><br/>
+  更新</p>
+
+<p><strong>NeoBundleClear</strong><br/>
+  ~/.vimrcからプラグインを削除した場合、:NeoBundleClearとしてプラグインをアンインストールすること</p>
+
+<p>参考：<br/>
+<a href="http://qiita.com/muran001/items/3080c4816b7c2e65e40b  ">http://qiita.com/muran001/items/3080c4816b7c2e65e40b  </a>
+<a href="http://eagletmt.hateblo.jp/entry/2012/02/23/130526">http://eagletmt.hateblo.jp/entry/2012/02/23/130526</a></p>
+
+<hr />
+
+<h4>vimprocをmakeする</h4>
+
+<p>makeしてvimprocのsoファイルを作成する</p>
+
+<p><code>
+$ cd ~/.vim/bundle/vimproc.vim/
+$ make
+</code></p>
+
+<p>参考：<br/>
+<a href="http://d.hatena.ne.jp/pospome/20140906">http://d.hatena.ne.jp/pospome/20140906</a></p>
+
+<hr />
+
+<h4>vim2hs</h4>
+
+<p>‘za’で折り畳み箇所の開閉を行う。</p>
+
+<h4>neocomplcache-ghc (neco-ghc)</h4>
+
+<p>~/.vimrc に以下を設定する</p>
+
+<p><code>
+setlocal omnifunc=necoghc#omnifunc
+</code></p>
+
+<p>参考：<br/>
+<a href="https://github.com/eagletmt/neco-ghc">https://github.com/eagletmt/neco-ghc</a></p>
+
+<hr />
+
+<h4>hoogle</h4>
+
+<p>予めcabalでhoogleをインストールしておくこと</p>
+
+<p><code>
+$ cabal install hoogle
+</code></p>
+
+<p>~/.vimrc に以下を設定する</p>
+
+<p><code>
+NeoBundle 'eagletmt/unite-haddock'
+</code></p>
+
+<p>以下を行ってhoogleデータベースを設定</p>
+
+<p><code>
+$ hoogle data
+</code></p>
+
+<p><strong>:Unite hoogle</strong><br/>
+  パッケージにカーソルを合わせて p でプレビューできる</p>
+
+<p><strong>:Unite -auto-preview hoogle</strong><br/>
+  検索結果一覧にカーソルを移動するだけでプレビューを表示する</p>
+
+<p><strong>:UniteWithCursorWord hoogle</strong><br/>
+  カーソル位置にある単語で検索する</p>
+
+<p>参考：<br/>
+<a href="http://eagletmt.hateblo.jp/entry/2012/03/17/194950  ">http://eagletmt.hateblo.jp/entry/2012/03/17/194950  </a>
+<a href="http://qiita.com/shiena/items/1b6c97f32e3905e15c2b">http://qiita.com/shiena/items/1b6c97f32e3905e15c2b</a></p>
+
+<hr />
+
+<h4>ctrlp</h4>
+
+<p>ctrlpについては、画面の水平分割を行おうとCTRL-Sとすると、ターミナルがデータの受信を停止してしまう（CTRL-Qで脱出）
+そのため、以下のコマンドでターミナルドライバのフローコントロールをオフにすること。</p>
+
+<p><code>
+$ stty -ixon -ixoff
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

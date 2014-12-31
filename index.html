@@ -9,7 +9,9 @@
   <meta name="author" content="Philippos">
 
   
-  <meta name="description" content="【scalatra 環境構築メモ】 ■scalatra本体、関連ツール導入 1. Scala本体 Scala公式サイト(http://www.scala-lang.org/download/) よりバイナリファイル (tgzファイル)をダウンロードし、/usr/bin以下に展開。 2. SBT &hellip;">
+  <meta name="description" content="【Haskell in ubuntu-14.10-server-amd64 関連メモ】（2014/12/28 &ndash; ） ghcおよびhaskell-platform導入メモ ghc-7.6.3導入 事前にシンボリックリンクlibgmp.so.3を作成する 1
+2
+$ cd /usr/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +81,368 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/12/31/haskell-development-environment/">Haskell Development Environment</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-31T05:46:00+09:00" pubdate data-updated="true">Dec 31<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>【Haskell in ubuntu-14.10-server-amd64 関連メモ】（2014/12/28 &ndash; ）</p>
+
+<h3>ghcおよびhaskell-platform導入メモ</h3>
+
+<h4>ghc-7.6.3導入</h4>
+
+<p>事前にシンボリックリンクlibgmp.so.3を作成する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd /usr/lib/x86_64-linux-gnu/
+</span><span class='line'>$ sudo ln -s libgmp.so.10 libgmp.so.3</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>ghc-7.6.3本体の導入</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd /usr/local/src/
+</span><span class='line'>$ sudo wget http://www.haskell.org/ghc/dist/7.6.3/ghc-7.6.3-x86_64-unknown-linux.tar.bz2
+</span><span class='line'>$ sudo tar xvf ghc-7.6.3-x86_64-unknown-linux.tar.bz2
+</span><span class='line'>$ cd ghc-7.6.3
+</span><span class='line'>$ sudo ./configure
+</span><span class='line'>
+</span><span class='line'>...(略)...
+</span><span class='line'>
+</span><span class='line'>$ sudo make install
+</span><span class='line'>
+</span><span class='line'>...(略)...
+</span><span class='line'>
+</span><span class='line'>$ ghc --version
+</span><span class='line'>The Glorious Glasgow Haskell Compilation System, version 7.6.3</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>haskell-platform導入</h4>
+
+<p>・予め必要なパッケージを導入する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install libgmp-dev</span></code></pre></td></tr></table></div></figure>
+
+
+<p>・haskell-platform本体の導入</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd /usr/local/src/
+</span><span class='line'>$ sudo wget https://downloads.haskell.org/~platform/2014.2.0.0/haskell-platform-2014.2.0.0-unknown-linux-x86_64.tar.gz
+</span><span class='line'>$ sudo tar xzvf haskell-platform-2014.2.0.0-unknown-linux-x86_64.tar.gz
+</span><span class='line'>
+</span><span class='line'>展開された /usr/local/haskell 以下を /usr/local/ へ移動し、パスを通す
+</span><span class='line'>
+</span><span class='line'>$ cabal --version
+</span><span class='line'>cabal-install version 1.18.0.5
+</span><span class='line'>using version 1.18.1.3 of the Cabal library</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h3>Haskell開発支援ツールとvimプラグイン導入メモ</h3>
+
+<h4>cab、ghc-mod その他の導入</h4>
+
+<p>cabalにてパッケージ管理ツール cab と haskell便利ツール ghc-mod その他のツールを導入する</p>
+
+<p>まずcabal本体を更新する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install libghc-zlib-dev
+</span><span class='line'>$ cabal update
+</span><span class='line'>$ cabal install cabal-install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>この後、/.cabal/bin にパスを通しておく</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cabal --version
+</span><span class='line'>cabal-install version 1.20.0.5
+</span><span class='line'>using version 1.20.0.3 of the Cabal library</span></code></pre></td></tr></table></div></figure>
+
+
+<p>サンドボックスの初期化を行う</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cabal sandbox init</span></code></pre></td></tr></table></div></figure>
+
+
+<p>プロジェクトディレクトリ以下の /.cabal-sandbox/bin にパスを通しておく</p>
+
+<p>ghc-modのインストールを行う</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cabal install happy
+</span><span class='line'>$ cabal install haskell-src-exts
+</span><span class='line'>$ cabal install monad-control-0.3.3.0
+</span><span class='line'>$ cabal install ghc-mod
+</span><span class='line'>$ cabal install hoogle
+</span><span class='line'>
+</span><span class='line'>$ ghc-mod --version
+</span><span class='line'>ghc-mod version 5.2.1.1 compiled by GHC 7.6.3
+</span><span class='line'>
+</span><span class='line'>$ hoogle --version
+</span><span class='line'>Hoogle v4.2.36, (C) Neil Mitchell 2004-2012</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考：<br/>
+<a href="http://maoe.hatenadiary.jp/entry/2013/08/16/224031  ">http://maoe.hatenadiary.jp/entry/2013/08/16/224031  </a>
+<a href="http://qiita.com/junsumida/items/9e763a8b54222f235759">http://qiita.com/junsumida/items/9e763a8b54222f235759</a></p>
+
+<hr />
+
+<h4>NeoBundle導入</h4>
+
+<p>vimにてプラグイン管理ツール NeoBundle を使えるようにする</p>
+
+<p>配置先のディレクトリを作成</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ mkdir -p ~/.vim/bundle</span></code></pre></td></tr></table></div></figure>
+
+
+<p>NeoBundleをリポジトリから取得</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim</span></code></pre></td></tr></table></div></figure>
+
+
+<p>vimrcに以下のように記述を追加し、ghc-modの機能をvimで扱うようにできるプラグインghcmod-vimや、補完機能を提供するプラグインneco-ghc等を導入する</p>
+
+<p>参考：<br/>
+<a href="http://qiita.com/joker1007/items/59ac3fa162df7c9cc952  ">http://qiita.com/joker1007/items/59ac3fa162df7c9cc952  </a>
+<a href="http://cohama.hateblo.jp/entry/2013/09/01/013944">http://cohama.hateblo.jp/entry/2013/09/01/013944</a></p>
+
+<hr />
+
+<p>~/.vimrc</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>"オムニ補完有効化
+</span><span class='line'>setlocal omnifunc=necoghc#omnifunc
+</span><span class='line'>
+</span><span class='line'>"plugins for haskell
+</span><span class='line'>set nocompatible
+</span><span class='line'>filetype plugin indent off
+</span><span class='line'>
+</span><span class='line'>if has('vim_starting')
+</span><span class='line'>  set runtimepath+=~/.vim/bundle/neobundle.vim
+</span><span class='line'>endif
+</span><span class='line'>
+</span><span class='line'>call neobundle#begin(expand('~/.vim/bundle/'))
+</span><span class='line'>
+</span><span class='line'>NeoBundleFetch 'Shougo/neobundle.vim'
+</span><span class='line'>NeoBundle 'Shougo/unite.vim'
+</span><span class='line'>NeoBundle 'Shougo/neosnippet.vim'
+</span><span class='line'>NeoBundle 'Shougo/vimproc.vim'
+</span><span class='line'>NeoBundle 'thinca/vim-quickrun'
+</span><span class='line'>
+</span><span class='line'>NeoBundle 'kana/vim-filetype-haskell'
+</span><span class='line'>NeoBundle 'eagletmt/ghcmod-vim'
+</span><span class='line'>NeoBundle 'dag/vim2hs'
+</span><span class='line'>NeoBundle 'ujihisa/neco-ghc'
+</span><span class='line'>NeoBundle "ctrlpvim/ctrlp.vim"
+</span><span class='line'>NeoBundle 'eagletmt/unite-haddock'
+</span><span class='line'>
+</span><span class='line'>call neobundle#end()
+</span><span class='line'>filetype plugin indent on
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>vim上からコマンドNeoBundleInstallを実行し、各プラグインをインストールする</p>
+
+<p>※NeoBundleのコマンド</p>
+
+<p><strong>NeoBundleInstall</strong><br/>
+  インストール</p>
+
+<p><strong>NeoBundleUpdate</strong><br/>
+  更新</p>
+
+<p><strong>NeoBundleClear</strong><br/>
+  ~/.vimrcからプラグインを削除した場合、:NeoBundleClearとしてプラグインをアンインストールすること</p>
+
+<p>参考：<br/>
+<a href="http://qiita.com/muran001/items/3080c4816b7c2e65e40b  ">http://qiita.com/muran001/items/3080c4816b7c2e65e40b  </a>
+<a href="http://eagletmt.hateblo.jp/entry/2012/02/23/130526">http://eagletmt.hateblo.jp/entry/2012/02/23/130526</a></p>
+
+<hr />
+
+<h4>vimprocをmakeする</h4>
+
+<p>makeしてvimprocのsoファイルを作成する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd ~/.vim/bundle/vimproc.vim/
+</span><span class='line'>$ make</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考：<br/>
+<a href="http://d.hatena.ne.jp/pospome/20140906">http://d.hatena.ne.jp/pospome/20140906</a></p>
+
+<hr />
+
+<h4>vim2hs</h4>
+
+<p>‘za’で折り畳み箇所の開閉を行う。</p>
+
+<h4>neocomplcache-ghc (neco-ghc)</h4>
+
+<p>~/.vimrc に以下を設定する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>setlocal omnifunc=necoghc#omnifunc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考：<br/>
+<a href="https://github.com/eagletmt/neco-ghc">https://github.com/eagletmt/neco-ghc</a></p>
+
+<hr />
+
+<h4>hoogle</h4>
+
+<p>予めcabalでhoogleをインストールしておくこと</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cabal install hoogle</span></code></pre></td></tr></table></div></figure>
+
+
+<p>~/.vimrc に以下を設定する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NeoBundle 'eagletmt/unite-haddock'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下を行ってhoogleデータベースを設定</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ hoogle data</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>:Unite hoogle</strong><br/>
+  パッケージにカーソルを合わせて p でプレビューできる</p>
+
+<p><strong>:Unite -auto-preview hoogle</strong><br/>
+  検索結果一覧にカーソルを移動するだけでプレビューを表示する</p>
+
+<p><strong>:UniteWithCursorWord hoogle</strong><br/>
+  カーソル位置にある単語で検索する</p>
+
+<p>参考：<br/>
+<a href="http://eagletmt.hateblo.jp/entry/2012/03/17/194950  ">http://eagletmt.hateblo.jp/entry/2012/03/17/194950  </a>
+<a href="http://qiita.com/shiena/items/1b6c97f32e3905e15c2b">http://qiita.com/shiena/items/1b6c97f32e3905e15c2b</a></p>
+
+<hr />
+
+<h4>ctrlp</h4>
+
+<p>ctrlpについては、画面の水平分割を行おうとCTRL-Sとすると、ターミナルがデータの受信を停止してしまう（CTRL-Qで脱出）
+そのため、以下のコマンドでターミナルドライバのフローコントロールをオフにすること。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ stty -ixon -ixoff</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1457,127 +1821,6 @@ tmux を再起動してから使用されている shell の種類を確認す�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/03/tmux-introduction/">Tmux-introduction</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-03T18:11:00+09:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>仮想端末管理ツール tmux 導入</h3>
-
-<p>端末多重化による作業効率化を期待して tmux を導入した。</p>
-
-<p><a href="http://tmux.sourceforge.net/">http://tmux.sourceforge.net/</a></p>
-
-<h4>■tmux のインストール</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install tmux</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>■tmux の自動起動設定</h4>
-
-<p>以下を .bashrc に追記する。
-以下の設定では既に tmux が起動している場合、既存の tmux プロセスへのアタッチのみ行う。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if [ -z $TMUX ]; then
-</span><span class='line'>  if $(tmux has-session 2&gt; /dev/null); then
-</span><span class='line'>    tmux -2 attach
-</span><span class='line'>  else
-</span><span class='line'>    tmux -2
-</span><span class='line'>  fi
-</span><span class='line'>fi</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>■tmux で代表的な操作方法</h4>
-
-<p>以下で <code>C-b</code> は、<code>Ctrl + bind</code> の意。</p>
-
-<p>・ウィンドウ作成</p>
-
-<blockquote><p>C-b c</p></blockquote>
-
-<p>・ウィンドウ一覧表示／移動</p>
-
-<blockquote><p>C-b w</p></blockquote>
-
-<p>・前／次のウィンドウ移動</p>
-
-<blockquote><p>C-b p    （pre）<br/>
-C-b n    （next）</p></blockquote>
-
-<p>・ウィンドウを強制終了</p>
-
-<blockquote><p>C-b &amp;</p></blockquote>
-
-<p>・ペイン分割</p>
-
-<blockquote><p>C-b &ldquo;    （横に分割）<br/>
-C-b %    （縦に分割）</p></blockquote>
-
-<p>・ペイン分割解除</p>
-
-<blockquote><p>C-b !</p></blockquote>
-
-<p>・ペイン強制終了</p>
-
-<blockquote><p>C-b x</p></blockquote>
-
-<p>・ペイン間移動</p>
-
-<blockquote><p>C-b o</p></blockquote>
-
-<p>・ペインを入れ替え</p>
-
-<blockquote><p>C-b {</p></blockquote>
-
-<p>・セッションのデタッチ</p>
-
-<blockquote><p>C-b d</p></blockquote>
-
-<hr />
-
-<p>参考サイト： <br/>
-<a href="http://komasaru.github.io/blog/2013/06/06/linux-mint-tmux-auto-attach/">http://komasaru.github.io/blog/2013/06/06/linux-mint-tmux-auto-attach/</a> <br/>
-<a href="http://shanon-tech.blogspot.jp/2012/05/tmux.html">http://shanon-tech.blogspot.jp/2012/05/tmux.html</a> <br/>
-<a href="http://room6933.com/mymemo/tmux/tmux-basic.html">http://room6933.com/mymemo/tmux/tmux-basic.html</a> <br/>
-<a href="http://www.omakase.org/misc/tmux_screen.html">http://www.omakase.org/misc/tmux_screen.html</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1591,6 +1834,10 @@ C-b %    （縦に分割）</p></blockquote>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/12/31/haskell-development-environment/">haskell development environment</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/04/13/scalatra-introduction/">scalatra introduction</a>
@@ -1608,15 +1855,11 @@ C-b %    （縦に分割）</p></blockquote>
         <a href="/blog/2013/12/07/bookmarks-2013-12/">bookmarks 2013/12</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/08/11/rails-optimization-points/">rails optimization points</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/act-as-paranoid' style='font-size: 103.52941176470588%'>act-as-paranoid(1)</a> <a href='/blog/categories/authentication' style='font-size: 110.58823529411765%'>authentication(3)</a> <a href='/blog/categories/bookmarks' style='font-size: 103.52941176470588%'>bookmarks(1)</a> <a href='/blog/categories/byebug' style='font-size: 103.52941176470588%'>byebug(1)</a> <a href='/blog/categories/cancan' style='font-size: 103.52941176470588%'>cancan(1)</a> <a href='/blog/categories/centos' style='font-size: 103.52941176470588%'>centos(1)</a> <a href='/blog/categories/chef-solo' style='font-size: 103.52941176470588%'>chef-solo(1)</a> <a href='/blog/categories/debian' style='font-size: 103.52941176470588%'>debian(1)</a> <a href='/blog/categories/devise' style='font-size: 103.52941176470588%'>devise(1)</a> <a href='/blog/categories/git' style='font-size: 110.58823529411765%'>git(3)</a> <a href='/blog/categories/heroku' style='font-size: 103.52941176470588%'>heroku(1)</a> <a href='/blog/categories/introduction' style='font-size: 145.88235294117646%'>introduction(13)</a> <a href='/blog/categories/knife-solo' style='font-size: 103.52941176470588%'>knife-solo(1)</a> <a href='/blog/categories/logrotate' style='font-size: 103.52941176470588%'>logrotate(1)</a> <a href='/blog/categories/memcached' style='font-size: 103.52941176470588%'>memcached(1)</a> <a href='/blog/categories/mysql' style='font-size: 103.52941176470588%'>mysql(1)</a> <a href='/blog/categories/nginx' style='font-size: 107.05882352941177%'>nginx(2)</a> <a href='/blog/categories/octopress' style='font-size: 103.52941176470588%'>octopress(1)</a> <a href='/blog/categories/play2' style='font-size: 103.52941176470588%'>play2(1)</a> <a href='/blog/categories/plugins' style='font-size: 131.76470588235293%'>plugins(9)</a> <a href='/blog/categories/postgresql' style='font-size: 107.05882352941177%'>postgresql(2)</a> <a href='/blog/categories/pry' style='font-size: 110.58823529411765%'>pry(3)</a> <a href='/blog/categories/rails' style='font-size: 160.0%'>rails(17)</a> <a href='/blog/categories/rspec' style='font-size: 103.52941176470588%'>rspec(1)</a> <a href='/blog/categories/ruby' style='font-size: 142.35294117647058%'>ruby(12)</a> <a href='/blog/categories/scala' style='font-size: 107.05882352941177%'>scala(2)</a> <a href='/blog/categories/scalatra' style='font-size: 103.52941176470588%'>scalatra(1)</a> <a href='/blog/categories/slim' style='font-size: 103.52941176470588%'>slim(1)</a> <a href='/blog/categories/sorcery' style='font-size: 103.52941176470588%'>sorcery(1)</a> <a href='/blog/categories/tmux' style='font-size: 103.52941176470588%'>tmux(1)</a> <a href='/blog/categories/tools' style='font-size: 103.52941176470588%'>tools(1)</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap(2)</a> <a href='/blog/categories/unicorn' style='font-size: 107.05882352941177%'>unicorn(2)</a> <a href='/blog/categories/vagrant' style='font-size: 103.52941176470588%'>vagrant(1)</a> <a href='/blog/categories/vim' style='font-size: 107.05882352941177%'>vim(2)</a> <a href='/blog/categories/virtualbox' style='font-size: 107.05882352941177%'>virtualbox(2)</a> <a href='/blog/categories/z-shell' style='font-size: 103.52941176470588%'>z-shell(1)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/act-as-paranoid' style='font-size: 103.52941176470588%'>act-as-paranoid(1)</a> <a href='/blog/categories/authentication' style='font-size: 110.58823529411765%'>authentication(3)</a> <a href='/blog/categories/bookmarks' style='font-size: 103.52941176470588%'>bookmarks(1)</a> <a href='/blog/categories/byebug' style='font-size: 103.52941176470588%'>byebug(1)</a> <a href='/blog/categories/cancan' style='font-size: 103.52941176470588%'>cancan(1)</a> <a href='/blog/categories/centos' style='font-size: 103.52941176470588%'>centos(1)</a> <a href='/blog/categories/chef-solo' style='font-size: 103.52941176470588%'>chef-solo(1)</a> <a href='/blog/categories/debian' style='font-size: 103.52941176470588%'>debian(1)</a> <a href='/blog/categories/devise' style='font-size: 103.52941176470588%'>devise(1)</a> <a href='/blog/categories/git' style='font-size: 110.58823529411765%'>git(3)</a> <a href='/blog/categories/haskell' style='font-size: 103.52941176470588%'>haskell(1)</a> <a href='/blog/categories/heroku' style='font-size: 103.52941176470588%'>heroku(1)</a> <a href='/blog/categories/introduction' style='font-size: 145.88235294117646%'>introduction(13)</a> <a href='/blog/categories/knife-solo' style='font-size: 103.52941176470588%'>knife-solo(1)</a> <a href='/blog/categories/logrotate' style='font-size: 103.52941176470588%'>logrotate(1)</a> <a href='/blog/categories/memcached' style='font-size: 103.52941176470588%'>memcached(1)</a> <a href='/blog/categories/mysql' style='font-size: 103.52941176470588%'>mysql(1)</a> <a href='/blog/categories/nginx' style='font-size: 107.05882352941177%'>nginx(2)</a> <a href='/blog/categories/octopress' style='font-size: 103.52941176470588%'>octopress(1)</a> <a href='/blog/categories/play2' style='font-size: 103.52941176470588%'>play2(1)</a> <a href='/blog/categories/plugins' style='font-size: 131.76470588235293%'>plugins(9)</a> <a href='/blog/categories/postgresql' style='font-size: 107.05882352941177%'>postgresql(2)</a> <a href='/blog/categories/pry' style='font-size: 110.58823529411765%'>pry(3)</a> <a href='/blog/categories/rails' style='font-size: 160.0%'>rails(17)</a> <a href='/blog/categories/rspec' style='font-size: 103.52941176470588%'>rspec(1)</a> <a href='/blog/categories/ruby' style='font-size: 142.35294117647058%'>ruby(12)</a> <a href='/blog/categories/scala' style='font-size: 107.05882352941177%'>scala(2)</a> <a href='/blog/categories/scalatra' style='font-size: 103.52941176470588%'>scalatra(1)</a> <a href='/blog/categories/slim' style='font-size: 103.52941176470588%'>slim(1)</a> <a href='/blog/categories/sorcery' style='font-size: 103.52941176470588%'>sorcery(1)</a> <a href='/blog/categories/tmux' style='font-size: 103.52941176470588%'>tmux(1)</a> <a href='/blog/categories/tools' style='font-size: 103.52941176470588%'>tools(1)</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap(2)</a> <a href='/blog/categories/unicorn' style='font-size: 107.05882352941177%'>unicorn(2)</a> <a href='/blog/categories/vagrant' style='font-size: 103.52941176470588%'>vagrant(1)</a> <a href='/blog/categories/vim' style='font-size: 110.58823529411765%'>vim(3)</a> <a href='/blog/categories/virtualbox' style='font-size: 107.05882352941177%'>virtualbox(2)</a> <a href='/blog/categories/z-shell' style='font-size: 103.52941176470588%'>z-shell(1)</a> </span>
 </section>
 
 

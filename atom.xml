@@ -4,7 +4,7 @@
   <title><![CDATA[Philippos Blue Book]]></title>
   <link href="http://philippos2.github.io/atom.xml" rel="self"/>
   <link href="http://philippos2.github.io/"/>
-  <updated>2014-06-25T02:04:25+09:00</updated>
+  <updated>2014-12-31T11:18:31+09:00</updated>
   <id>http://philippos2.github.io/</id>
   <author>
     <name><![CDATA[Philippos]]></name>
@@ -12,6 +12,341 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[haskell development environment]]></title>
+    <link href="http://philippos2.github.io/blog/2014/12/31/haskell-development-environment/"/>
+    <updated>2014-12-31T05:46:00+09:00</updated>
+    <id>http://philippos2.github.io/blog/2014/12/31/haskell-development-environment</id>
+    <content type="html"><![CDATA[<p>【Haskell in ubuntu-14.10-server-amd64 関連メモ】（2014/12/28 &ndash; ）</p>
+
+<h3>ghcおよびhaskell-platform導入メモ</h3>
+
+<h4>ghc-7.6.3導入</h4>
+
+<p>事前にシンボリックリンクlibgmp.so.3を作成する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd /usr/lib/x86_64-linux-gnu/
+</span><span class='line'>$ sudo ln -s libgmp.so.10 libgmp.so.3</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>ghc-7.6.3本体の導入</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd /usr/local/src/
+</span><span class='line'>$ sudo wget http://www.haskell.org/ghc/dist/7.6.3/ghc-7.6.3-x86_64-unknown-linux.tar.bz2
+</span><span class='line'>$ sudo tar xvf ghc-7.6.3-x86_64-unknown-linux.tar.bz2
+</span><span class='line'>$ cd ghc-7.6.3
+</span><span class='line'>$ sudo ./configure
+</span><span class='line'>
+</span><span class='line'>...(略)...
+</span><span class='line'>
+</span><span class='line'>$ sudo make install
+</span><span class='line'>
+</span><span class='line'>...(略)...
+</span><span class='line'>
+</span><span class='line'>$ ghc --version
+</span><span class='line'>The Glorious Glasgow Haskell Compilation System, version 7.6.3</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>haskell-platform導入</h4>
+
+<p>・予め必要なパッケージを導入する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install libgmp-dev</span></code></pre></td></tr></table></div></figure>
+
+
+<p>・haskell-platform本体の導入</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd /usr/local/src/
+</span><span class='line'>$ sudo wget https://downloads.haskell.org/~platform/2014.2.0.0/haskell-platform-2014.2.0.0-unknown-linux-x86_64.tar.gz
+</span><span class='line'>$ sudo tar xzvf haskell-platform-2014.2.0.0-unknown-linux-x86_64.tar.gz
+</span><span class='line'>
+</span><span class='line'>展開された /usr/local/haskell 以下を /usr/local/ へ移動し、パスを通す
+</span><span class='line'>
+</span><span class='line'>$ cabal --version
+</span><span class='line'>cabal-install version 1.18.0.5
+</span><span class='line'>using version 1.18.1.3 of the Cabal library</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h3>Haskell開発支援ツールとvimプラグイン導入メモ</h3>
+
+<h4>cab、ghc-mod その他の導入</h4>
+
+<p>cabalにてパッケージ管理ツール cab と haskell便利ツール ghc-mod その他のツールを導入する</p>
+
+<p>まずcabal本体を更新する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install libghc-zlib-dev
+</span><span class='line'>$ cabal update
+</span><span class='line'>$ cabal install cabal-install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>この後、/.cabal/bin にパスを通しておく</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cabal --version
+</span><span class='line'>cabal-install version 1.20.0.5
+</span><span class='line'>using version 1.20.0.3 of the Cabal library</span></code></pre></td></tr></table></div></figure>
+
+
+<p>サンドボックスの初期化を行う</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cabal sandbox init</span></code></pre></td></tr></table></div></figure>
+
+
+<p>プロジェクトディレクトリ以下の /.cabal-sandbox/bin にパスを通しておく</p>
+
+<p>ghc-modのインストールを行う</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cabal install happy
+</span><span class='line'>$ cabal install haskell-src-exts
+</span><span class='line'>$ cabal install monad-control-0.3.3.0
+</span><span class='line'>$ cabal install ghc-mod
+</span><span class='line'>$ cabal install hoogle
+</span><span class='line'>
+</span><span class='line'>$ ghc-mod --version
+</span><span class='line'>ghc-mod version 5.2.1.1 compiled by GHC 7.6.3
+</span><span class='line'>
+</span><span class='line'>$ hoogle --version
+</span><span class='line'>Hoogle v4.2.36, (C) Neil Mitchell 2004-2012</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考：<br/>
+<a href="http://maoe.hatenadiary.jp/entry/2013/08/16/224031  ">http://maoe.hatenadiary.jp/entry/2013/08/16/224031  </a>
+<a href="http://qiita.com/junsumida/items/9e763a8b54222f235759">http://qiita.com/junsumida/items/9e763a8b54222f235759</a></p>
+
+<hr />
+
+<h4>NeoBundle導入</h4>
+
+<p>vimにてプラグイン管理ツール NeoBundle を使えるようにする</p>
+
+<p>配置先のディレクトリを作成</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ mkdir -p ~/.vim/bundle</span></code></pre></td></tr></table></div></figure>
+
+
+<p>NeoBundleをリポジトリから取得</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim</span></code></pre></td></tr></table></div></figure>
+
+
+<p>vimrcに以下のように記述を追加し、ghc-modの機能をvimで扱うようにできるプラグインghcmod-vimや、補完機能を提供するプラグインneco-ghc等を導入する</p>
+
+<p>参考：<br/>
+<a href="http://qiita.com/joker1007/items/59ac3fa162df7c9cc952  ">http://qiita.com/joker1007/items/59ac3fa162df7c9cc952  </a>
+<a href="http://cohama.hateblo.jp/entry/2013/09/01/013944">http://cohama.hateblo.jp/entry/2013/09/01/013944</a></p>
+
+<hr />
+
+<p>~/.vimrc</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>"オムニ補完有効化
+</span><span class='line'>setlocal omnifunc=necoghc#omnifunc
+</span><span class='line'>
+</span><span class='line'>"plugins for haskell
+</span><span class='line'>set nocompatible
+</span><span class='line'>filetype plugin indent off
+</span><span class='line'>
+</span><span class='line'>if has('vim_starting')
+</span><span class='line'>  set runtimepath+=~/.vim/bundle/neobundle.vim
+</span><span class='line'>endif
+</span><span class='line'>
+</span><span class='line'>call neobundle#begin(expand('~/.vim/bundle/'))
+</span><span class='line'>
+</span><span class='line'>NeoBundleFetch 'Shougo/neobundle.vim'
+</span><span class='line'>NeoBundle 'Shougo/unite.vim'
+</span><span class='line'>NeoBundle 'Shougo/neosnippet.vim'
+</span><span class='line'>NeoBundle 'Shougo/vimproc.vim'
+</span><span class='line'>NeoBundle 'thinca/vim-quickrun'
+</span><span class='line'>
+</span><span class='line'>NeoBundle 'kana/vim-filetype-haskell'
+</span><span class='line'>NeoBundle 'eagletmt/ghcmod-vim'
+</span><span class='line'>NeoBundle 'dag/vim2hs'
+</span><span class='line'>NeoBundle 'ujihisa/neco-ghc'
+</span><span class='line'>NeoBundle "ctrlpvim/ctrlp.vim"
+</span><span class='line'>NeoBundle 'eagletmt/unite-haddock'
+</span><span class='line'>
+</span><span class='line'>call neobundle#end()
+</span><span class='line'>filetype plugin indent on
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>vim上からコマンドNeoBundleInstallを実行し、各プラグインをインストールする</p>
+
+<p>※NeoBundleのコマンド</p>
+
+<p><strong>NeoBundleInstall</strong><br/>
+  インストール</p>
+
+<p><strong>NeoBundleUpdate</strong><br/>
+  更新</p>
+
+<p><strong>NeoBundleClear</strong><br/>
+  ~/.vimrcからプラグインを削除した場合、:NeoBundleClearとしてプラグインをアンインストールすること</p>
+
+<p>参考：<br/>
+<a href="http://qiita.com/muran001/items/3080c4816b7c2e65e40b  ">http://qiita.com/muran001/items/3080c4816b7c2e65e40b  </a>
+<a href="http://eagletmt.hateblo.jp/entry/2012/02/23/130526">http://eagletmt.hateblo.jp/entry/2012/02/23/130526</a></p>
+
+<hr />
+
+<h4>vimprocをmakeする</h4>
+
+<p>makeしてvimprocのsoファイルを作成する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd ~/.vim/bundle/vimproc.vim/
+</span><span class='line'>$ make</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考：<br/>
+<a href="http://d.hatena.ne.jp/pospome/20140906">http://d.hatena.ne.jp/pospome/20140906</a></p>
+
+<hr />
+
+<h4>vim2hs</h4>
+
+<p>‘za’で折り畳み箇所の開閉を行う。</p>
+
+<h4>neocomplcache-ghc (neco-ghc)</h4>
+
+<p>~/.vimrc に以下を設定する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>setlocal omnifunc=necoghc#omnifunc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考：<br/>
+<a href="https://github.com/eagletmt/neco-ghc">https://github.com/eagletmt/neco-ghc</a></p>
+
+<hr />
+
+<h4>hoogle</h4>
+
+<p>予めcabalでhoogleをインストールしておくこと</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cabal install hoogle</span></code></pre></td></tr></table></div></figure>
+
+
+<p>~/.vimrc に以下を設定する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NeoBundle 'eagletmt/unite-haddock'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下を行ってhoogleデータベースを設定</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ hoogle data</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>:Unite hoogle</strong><br/>
+  パッケージにカーソルを合わせて p でプレビューできる</p>
+
+<p><strong>:Unite -auto-preview hoogle</strong><br/>
+  検索結果一覧にカーソルを移動するだけでプレビューを表示する</p>
+
+<p><strong>:UniteWithCursorWord hoogle</strong><br/>
+  カーソル位置にある単語で検索する</p>
+
+<p>参考：<br/>
+<a href="http://eagletmt.hateblo.jp/entry/2012/03/17/194950  ">http://eagletmt.hateblo.jp/entry/2012/03/17/194950  </a>
+<a href="http://qiita.com/shiena/items/1b6c97f32e3905e15c2b">http://qiita.com/shiena/items/1b6c97f32e3905e15c2b</a></p>
+
+<hr />
+
+<h4>ctrlp</h4>
+
+<p>ctrlpについては、画面の水平分割を行おうとCTRL-Sとすると、ターミナルがデータの受信を停止してしまう（CTRL-Qで脱出）
+そのため、以下のコマンドでターミナルドライバのフローコントロールをオフにすること。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ stty -ixon -ixoff</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[scalatra introduction]]></title>
@@ -2301,244 +2636,6 @@ public/index.html</p>
 <a href="http://inoccu.net/blog/2013/04/28/112225.html  ">http://inoccu.net/blog/2013/04/28/112225.html  </a>
 <a href="http://gagapi.hatenablog.jp/entry/2013/05/17/222340  ">http://gagapi.hatenablog.jp/entry/2013/05/17/222340  </a>
 <a href="http://shoheik.hatenablog.com/entry/2013/03/09/115015">http://shoheik.hatenablog.com/entry/2013/03/09/115015</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[memcached-introduction]]></title>
-    <link href="http://philippos2.github.io/blog/2013/07/06/memcached-introduction/"/>
-    <updated>2013-07-06T14:05:00+09:00</updated>
-    <id>http://philippos2.github.io/blog/2013/07/06/memcached-introduction</id>
-    <content type="html"><![CDATA[<h3>【Memcached導入に関するメモ】2012/07/11（水）～</h3>
-
-<hr />
-
-<h4>■memcached導入</h4>
-
-<h5>memcached導入方法</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install memcached</span></code></pre></td></tr></table></div></figure>
-
-
-<p>memcachedインストール時にlibevent-1.4-2（非同期イベント通知ライブラリ）もインストールされる模様</p>
-
-<h5>memcached起動方法</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ memcached -u memcached -d</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>memcachedの主なオプション</h5>
-
-<p>・-m &lt;キャッシュメモリ容量>
-デフォルトは64(単位はMB)</p>
-
-<p>・-l &lt;待ち受けネットワークインタフェース>
-デフォルトはINDRR_ANY</p>
-
-<p>・-p ポート番号、規定値は11211</p>
-
-<p>・-u &lt;デーモン実行ユーザ>
-rootでデーモンを起動する際にデーモン実行ユーザを指定する</p>
-
-<p>例) キャッシュ = 1GB、接続許可ホスト = ローカルホスト</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ memcached -u memcached -d -m 1024 -l 127.0.0.1</span></code></pre></td></tr></table></div></figure>
-
-
-<p>memcachedデーモンの起動を確認
-$ ps aux | grep &ldquo;memcached&rdquo;</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>nobody 14955  0.0  0.3  62700  1224 ?     Sl 10:28 0:00 /usr/bin/memcached -m 64 -p 11211 -u nobody -l 127.0.0.1
-</span><span class='line'>1000   15156  0.0  0.2   7112   836 pts/0 D+ 10:50 0:00 grep memcached</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>memcached動作確認</h5>
-
-<p>まずtelnetにてmemcachedへ接続</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet localhost 11211</span></code></pre></td></tr></table></div></figure>
-
-
-<p>memcachedへ接続後、statsコマンド他で動作確認を行う
-動作確認後、quitコマンドで接続を切断する</p>
-
-<p>その他：memcachedのバージョンとヘルプを表示</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ memcached -h</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>値の格納と取得</h5>
-
-<p>setコマンドとgetコマンドにて値の格納と取得を行う
-まずsetコマンドは以下のフォーマットで指定する</p>
-
-<p>&lt;コマンド> &lt;キー> &lt;圧縮フラグ(1 or 0)> &lt;有効期間(単位:秒)> &lt;サイズ(単位:Bytes)></p>
-
-<p>例) 「foo」というキーに「123」という3バイトのデータを非圧縮(0)/無期限(0)で格納する。またそれを取り出す。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>set foo 0 0 3
-</span><span class='line'>123
-</span><span class='line'>
-</span><span class='line'>=&gt; STORED
-</span><span class='line'>
-</span><span class='line'>get foo
-</span><span class='line'>
-</span><span class='line'>=&gt; VALUE foo 0 3
-</span><span class='line'>=&gt; 123
-</span><span class='line'>=&gt; END
-</span><span class='line'>
-</span><span class='line'>quit</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>その他の操作</h5>
-
-<blockquote><p>stats items ：キャシュされているレコード情報を取得<br/>
-stats cachedump ：キャッシュ内容ダンプ</p></blockquote>
-
-<p>例）</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet localhost 11211
-</span><span class='line'>stats items
-</span><span class='line'>STAT items:1:number 6
-</span><span class='line'>STAT items:1:age 20505
-</span><span class='line'>STAT items:1:evicted 0
-</span><span class='line'>STAT items:1:evicted_time 0
-</span><span class='line'>STAT items:1:outofmemory 0
-</span><span class='line'>STAT items:1:tailrepairs 0
-</span><span class='line'>
-</span><span class='line'> stats cachedump 1 100
-</span><span class='line'>ITEM foo [9 b; 1264464651 s]
-</span><span class='line'>ITEM bar [9 b; 1264464649 s]</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>memcached終了方法</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo killall memcached</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>■dalli（memcachedクライアント）導入</h4>
-
-<h5>dalli導入方法</h5>
-
-<p>Gemfileに「gem &lsquo;dalli&#8217;」と一行追加し、bundle installを行う</p>
-
-<h4>■キャッシュストアに設定する方法</h4>
-
-<p>例としてproduction環境で使用する場合は、config/environments/production.rb に次の行を追加する</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>config.cache_store = :dalli_store</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>■セッションストアに設定する方法</h4>
-
-<p>config/initializers/session_store.rb に以下の行を追加</p>
-
-<p>例）以下はセッション情報を二週間保持する例<br/>
-注）Rails3のデフォルト設定では、ブラウザからのアクセスが切断された時点でセッションも破棄される</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>require 'action_dispatch/middleware/session/dalli_store'
-</span><span class='line'>Railsアプリ名::Application.config.session_store :dalli_store
-</span><span class='line'>Railsアプリ名::Application.config.session_options = {:cookie_only =&gt; false, :expire_after =&gt; 2.weeks}</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>■Railsコンソール上でのキャッシュ内容確認</h4>
-
-<h5>キャッシュ設定内容確認</h5>
-
-<p>例）</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; Rails.cache
-</span><span class='line'> =&gt; #&lt;ActiveSupport::Cache::DalliStore:0x00000001e4cf68 @options={:compress=&gt;nil}, @raise_errors=false, @data=#&lt;Dalli::Client:0x00000001e4ce28 @servers=["localhost:11211"], @options={:compress=&gt;nil}, @ring=nil&gt;&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Railsコンソール上でのsession_optionsの確認</h5>
-
-<p>例）</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; Railsアプリ名::Application.config.session_options
-</span><span class='line'> =&gt; { :cookie_only=&gt;false , :memcache_server =&gt; [ 'localhost:11211']}</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>値の格納と取得</h5>
-
-<p>例）</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; Rails.cache.write("test", {:message =&gt; 'Hello', :time =&gt; Time.now})
-</span><span class='line'> =&gt; true
-</span><span class='line'>&gt; Rails.cache.read("test")
-</span><span class='line'> =&gt; {:message=&gt;"Hello", :time=&gt;2010-09-15 13:26:09 +0900}
-</span><span class='line'>&gt; Rails.cache.clear
-</span><span class='line'> =&gt; [true]</span></code></pre></td></tr></table></div></figure>
-
-
-<p>以上</p>
-
-<hr />
-
-<p>参考サイト:<br/>
-<a href="http://l-w-i.net/t/memcached/0install_001.txt">memcached導入手順</a><br/>
-<a href="http://l-w-i.net/t/memcached/command_001.txt">memcachedコマンド一覧</a><br/>
-<a href="http://d.hatena.ne.jp/wadap/20100125/1264435692">memcachedでキー一覧を取得したい時に</a><br/>
-<a href="http://www.trajectory.jp/tech/server/memcached.php">memcachedでパフォーマンス向上</a><br/>
-<a href="http://www.banana-systems.com/2010/09/rails3_memcached/">Rails3からmemcachedを利用する</a><br/>
-<a href="http://research.sakura.ad.jp/2010/05/18/kvs-memcached-cas/">memcachedプロトコルCAS操作について</a><br/>
-<a href="http://d.hatena.ne.jp/nobyu/20111225/1324805638">HerokuでMemcacheを使うには</a></p>
-
-<p><a href="http://d.hatena.ne.jp/ux00ff/20111128/1322495435">Ruby on Rails 3.1 でセッションを memcached に保存する</a><br/>
-<a href="http://d.hatena.ne.jp/ux00ff/20120417/1334643127">Rails 3.2 で Dalli を Session Store として利用する際の session_options の罠</a><br/>
-<a href="http://bucato.jp/2012/06/rails3-x%E7%B3%BB%E3%81%A7%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E7%8A%B6%E6%85%8B%E3%82%92%E4%BF%9D%E6%8C%81%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/">Rails3.x系でログイン状態を保持する方法</a><br/>
-<a href="http://d.hatena.ne.jp/shiba_yu36/20100907/1283820213">rails 3でmemcachedを利用する</a><br/>
-<a href="http://d.hatena.ne.jp/yune_kotomi/20101124/1290601189">Rails3系でセッション有効期限の設定</a><br/>
-<a href="http://d.hatena.ne.jp/willnet/20080531/1212239850">railsのクッキーとセッションについてまとめ</a></p>
-
-<p>その他:<br/>
-<a href="http://memo.yomukaku.net/entries/333">各種サーバ構成の速度ベンチマーク</a></p>
 ]]></content>
   </entry>
   

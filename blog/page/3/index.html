@@ -9,7 +9,8 @@
   <meta name="author" content="Philippos">
 
   
-  <meta name="description" content="postgresqlのメンテナンス用クエリ データベースサイズチェック方法 select pg_size_pretty(pg_database_size(&lsquo;database_name&rsquo;)); テーブルサイズチェック方法 select pg_size_pretty( &hellip;">
+  <meta name="description" content="【Memcached導入に関するメモ】2012/07/11（水）～ ■memcached導入 memcached導入方法 1
+$ sudo aptitude install memcached memcachedインストール時にlibevent-1.4-2（非同期イベント通知ライブラリ） &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,271 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/06/memcached-introduction/">Memcached-introduction</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-06T14:05:00+09:00" pubdate data-updated="true">Jul 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>【Memcached導入に関するメモ】2012/07/11（水）～</h3>
+
+<hr />
+
+<h4>■memcached導入</h4>
+
+<h5>memcached導入方法</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo aptitude install memcached</span></code></pre></td></tr></table></div></figure>
+
+
+<p>memcachedインストール時にlibevent-1.4-2（非同期イベント通知ライブラリ）もインストールされる模様</p>
+
+<h5>memcached起動方法</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ memcached -u memcached -d</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>memcachedの主なオプション</h5>
+
+<p>・-m &lt;キャッシュメモリ容量>
+デフォルトは64(単位はMB)</p>
+
+<p>・-l &lt;待ち受けネットワークインタフェース>
+デフォルトはINDRR_ANY</p>
+
+<p>・-p ポート番号、規定値は11211</p>
+
+<p>・-u &lt;デーモン実行ユーザ>
+rootでデーモンを起動する際にデーモン実行ユーザを指定する</p>
+
+<p>例) キャッシュ = 1GB、接続許可ホスト = ローカルホスト</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ memcached -u memcached -d -m 1024 -l 127.0.0.1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>memcachedデーモンの起動を確認
+$ ps aux | grep &ldquo;memcached&rdquo;</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nobody 14955  0.0  0.3  62700  1224 ?     Sl 10:28 0:00 /usr/bin/memcached -m 64 -p 11211 -u nobody -l 127.0.0.1
+</span><span class='line'>1000   15156  0.0  0.2   7112   836 pts/0 D+ 10:50 0:00 grep memcached</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>memcached動作確認</h5>
+
+<p>まずtelnetにてmemcachedへ接続</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet localhost 11211</span></code></pre></td></tr></table></div></figure>
+
+
+<p>memcachedへ接続後、statsコマンド他で動作確認を行う
+動作確認後、quitコマンドで接続を切断する</p>
+
+<p>その他：memcachedのバージョンとヘルプを表示</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ memcached -h</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>値の格納と取得</h5>
+
+<p>setコマンドとgetコマンドにて値の格納と取得を行う
+まずsetコマンドは以下のフォーマットで指定する</p>
+
+<p>&lt;コマンド> &lt;キー> &lt;圧縮フラグ(1 or 0)> &lt;有効期間(単位:秒)> &lt;サイズ(単位:Bytes)></p>
+
+<p>例) 「foo」というキーに「123」という3バイトのデータを非圧縮(0)/無期限(0)で格納する。またそれを取り出す。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>set foo 0 0 3
+</span><span class='line'>123
+</span><span class='line'>
+</span><span class='line'>=&gt; STORED
+</span><span class='line'>
+</span><span class='line'>get foo
+</span><span class='line'>
+</span><span class='line'>=&gt; VALUE foo 0 3
+</span><span class='line'>=&gt; 123
+</span><span class='line'>=&gt; END
+</span><span class='line'>
+</span><span class='line'>quit</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>その他の操作</h5>
+
+<blockquote><p>stats items ：キャシュされているレコード情報を取得<br/>
+stats cachedump ：キャッシュ内容ダンプ</p></blockquote>
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet localhost 11211
+</span><span class='line'>stats items
+</span><span class='line'>STAT items:1:number 6
+</span><span class='line'>STAT items:1:age 20505
+</span><span class='line'>STAT items:1:evicted 0
+</span><span class='line'>STAT items:1:evicted_time 0
+</span><span class='line'>STAT items:1:outofmemory 0
+</span><span class='line'>STAT items:1:tailrepairs 0
+</span><span class='line'>
+</span><span class='line'> stats cachedump 1 100
+</span><span class='line'>ITEM foo [9 b; 1264464651 s]
+</span><span class='line'>ITEM bar [9 b; 1264464649 s]</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>memcached終了方法</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo killall memcached</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■dalli（memcachedクライアント）導入</h4>
+
+<h5>dalli導入方法</h5>
+
+<p>Gemfileに「gem &lsquo;dalli&#8217;」と一行追加し、bundle installを行う</p>
+
+<h4>■キャッシュストアに設定する方法</h4>
+
+<p>例としてproduction環境で使用する場合は、config/environments/production.rb に次の行を追加する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>config.cache_store = :dalli_store</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■セッションストアに設定する方法</h4>
+
+<p>config/initializers/session_store.rb に以下の行を追加</p>
+
+<p>例）以下はセッション情報を二週間保持する例<br/>
+注）Rails3のデフォルト設定では、ブラウザからのアクセスが切断された時点でセッションも破棄される</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>require 'action_dispatch/middleware/session/dalli_store'
+</span><span class='line'>Railsアプリ名::Application.config.session_store :dalli_store
+</span><span class='line'>Railsアプリ名::Application.config.session_options = {:cookie_only =&gt; false, :expire_after =&gt; 2.weeks}</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>■Railsコンソール上でのキャッシュ内容確認</h4>
+
+<h5>キャッシュ設定内容確認</h5>
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; Rails.cache
+</span><span class='line'> =&gt; #&lt;ActiveSupport::Cache::DalliStore:0x00000001e4cf68 @options={:compress=&gt;nil}, @raise_errors=false, @data=#&lt;Dalli::Client:0x00000001e4ce28 @servers=["localhost:11211"], @options={:compress=&gt;nil}, @ring=nil&gt;&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>Railsコンソール上でのsession_optionsの確認</h5>
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; Railsアプリ名::Application.config.session_options
+</span><span class='line'> =&gt; { :cookie_only=&gt;false , :memcache_server =&gt; [ 'localhost:11211']}</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>値の格納と取得</h5>
+
+<p>例）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; Rails.cache.write("test", {:message =&gt; 'Hello', :time =&gt; Time.now})
+</span><span class='line'> =&gt; true
+</span><span class='line'>&gt; Rails.cache.read("test")
+</span><span class='line'> =&gt; {:message=&gt;"Hello", :time=&gt;2010-09-15 13:26:09 +0900}
+</span><span class='line'>&gt; Rails.cache.clear
+</span><span class='line'> =&gt; [true]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上</p>
+
+<hr />
+
+<p>参考サイト:<br/>
+<a href="http://l-w-i.net/t/memcached/0install_001.txt">memcached導入手順</a><br/>
+<a href="http://l-w-i.net/t/memcached/command_001.txt">memcachedコマンド一覧</a><br/>
+<a href="http://d.hatena.ne.jp/wadap/20100125/1264435692">memcachedでキー一覧を取得したい時に</a><br/>
+<a href="http://www.trajectory.jp/tech/server/memcached.php">memcachedでパフォーマンス向上</a><br/>
+<a href="http://www.banana-systems.com/2010/09/rails3_memcached/">Rails3からmemcachedを利用する</a><br/>
+<a href="http://research.sakura.ad.jp/2010/05/18/kvs-memcached-cas/">memcachedプロトコルCAS操作について</a><br/>
+<a href="http://d.hatena.ne.jp/nobyu/20111225/1324805638">HerokuでMemcacheを使うには</a></p>
+
+<p><a href="http://d.hatena.ne.jp/ux00ff/20111128/1322495435">Ruby on Rails 3.1 でセッションを memcached に保存する</a><br/>
+<a href="http://d.hatena.ne.jp/ux00ff/20120417/1334643127">Rails 3.2 で Dalli を Session Store として利用する際の session_options の罠</a><br/>
+<a href="http://bucato.jp/2012/06/rails3-x%E7%B3%BB%E3%81%A7%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E7%8A%B6%E6%85%8B%E3%82%92%E4%BF%9D%E6%8C%81%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/">Rails3.x系でログイン状態を保持する方法</a><br/>
+<a href="http://d.hatena.ne.jp/shiba_yu36/20100907/1283820213">rails 3でmemcachedを利用する</a><br/>
+<a href="http://d.hatena.ne.jp/yune_kotomi/20101124/1290601189">Rails3系でセッション有効期限の設定</a><br/>
+<a href="http://d.hatena.ne.jp/willnet/20080531/1212239850">railsのクッキーとセッションについてまとめ</a></p>
+
+<p>その他:<br/>
+<a href="http://memo.yomukaku.net/entries/333">各種サーバ構成の速度ベンチマーク</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1294,406 +1560,6 @@ bootstrapとwill_paginateを併用すると、ページネイトのレイアウ�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/01/about-vim-settings/">About-vim-settings</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-01T23:51:00+09:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>9. vim各種プラグイン</h3>
-
-<ul>
-<li><h4>vim各種プラグイン</h4>
-
-<p>x vundle : プラグイン管理<br/>
-x neocomplcache : 単語補完機能<br/>
-x vim-ref : マニュアル参照機能<br/>
-n quickrun : vimからソースコード実行、これは不要か<br/>
-n rails.vim : vimからrails用コマンド実行、これも不要か</p></li>
-</ul>
-
-
-<p>まずはvundle導入</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle</span></code></pre></td></tr></table></div></figure>
-
-
-<p>.vimrc を編集</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ vim ~/.vimrc</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>"viとの互換性OFF
-</span><span class='line'>set nocompatible
-</span><span class='line'>"ファイル形式の検出を無効にする
-</span><span class='line'>filetype off
-</span><span class='line'>
-</span><span class='line'>"Vundleを初期化して
-</span><span class='line'>"Vundle自身もVundleで管理
-</span><span class='line'>set rtp+=~/.vim/bundle/vundle/
-</span><span class='line'>call vundle#rc()
-</span><span class='line'>Bundle 'gmarik/vundle'
-</span><span class='line'>
-</span><span class='line'>"プラグイン各種
-</span><span class='line'>Bundle 'Shougo/neocomplcache'
-</span><span class='line'>Bundle 'thinca/vim-ref'
-</span><span class='line'>"Bundle 'thinca/vim-quickrun'
-</span><span class='line'>"Bundle 'tpope/vim-rails' "rails.vim
-</span><span class='line'>
-</span><span class='line'>"ファイル形式検出、プラグイン、インデントをON
-</span><span class='line'>filetype plugin indent on</span></code></pre></td></tr></table></div></figure>
-
-
-<p>プラグイン各種のインストールを行う</p>
-
-<p> :BundleInstall</p>
-
-<p>インストールは以上で終了、引き続き設定を行う</p>
-
-<hr />
-
-<h3>9-1. neocomplcache設定</h3>
-
-<p>設定ファイル（~/.vim/bundle/neocomplcache/doc/neocomplcache.txt）よりコピペ
-以下の記述を.vimrcへ追加する</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>----------------------------------------
-</span><span class='line'>"*** for neocomplcache ***
-</span><span class='line'>" Disable AutoComplPop.
-</span><span class='line'>let g:acp_enableAtStartup = 0
-</span><span class='line'>" Use neocomplcache.
-</span><span class='line'>let g:neocomplcache_enable_at_startup = 1
-</span><span class='line'>" Use smartcase.
-</span><span class='line'>let g:neocomplcache_enable_smart_case = 1
-</span><span class='line'>" Use camel case completion.
-</span><span class='line'>let g:neocomplcache_enable_camel_case_completion = 1
-</span><span class='line'>" Use underbar completion.
-</span><span class='line'>let g:neocomplcache_enable_underbar_completion = 1
-</span><span class='line'>" Set minimum syntax keyword length.
-</span><span class='line'>let g:neocomplcache_min_syntax_length = 3
-</span><span class='line'>let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-</span><span class='line'>
-</span><span class='line'>" Define dictionary.
-</span><span class='line'>let g:neocomplcache_dictionary_filetype_lists = {
-</span><span class='line'>    \ 'default' : '',
-</span><span class='line'>    \ 'vimshell' : $HOME.'/.vimshell_hist',
-</span><span class='line'>    \ 'scheme' : $HOME.'/.gosh_completions'
-</span><span class='line'>        \ }
-</span><span class='line'>
-</span><span class='line'>" Define keyword.
-</span><span class='line'>if !exists('g:neocomplcache_keyword_patterns')
-</span><span class='line'>    let g:neocomplcache_keyword_patterns = {}
-</span><span class='line'>endif
-</span><span class='line'>let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
-</span><span class='line'>
-</span><span class='line'>" Plugin key-mappings.
-</span><span class='line'>inoremap &lt;expr&gt;&lt;C-g&gt;     neocomplcache#undo_completion()
-</span><span class='line'>inoremap &lt;expr&gt;&lt;C-l&gt;     neocomplcache#complete_common_string()
-</span><span class='line'>
-</span><span class='line'>" Recommended key-mappings.
-</span><span class='line'>" &lt;CR&gt;: close popup and save indent.
-</span><span class='line'>inoremap &lt;expr&gt;&lt;CR&gt;  neocomplcache#close_popup() . "\&lt;CR&gt;"
-</span><span class='line'>" &lt;TAB&gt;: completion.
-</span><span class='line'>inoremap &lt;expr&gt;&lt;TAB&gt;  pumvisible() ? "\&lt;C-n&gt;" : "\&lt;TAB&gt;"
-</span><span class='line'>" &lt;C-h&gt;, &lt;BS&gt;: close popup and delete backword char.
-</span><span class='line'>inoremap &lt;expr&gt;&lt;C-h&gt; neocomplcache#smart_close_popup()."\&lt;C-h&gt;"
-</span><span class='line'>inoremap &lt;expr&gt;&lt;BS&gt; neocomplcache#smart_close_popup()."\&lt;C-h&gt;"
-</span><span class='line'>inoremap &lt;expr&gt;&lt;C-y&gt;  neocomplcache#close_popup()
-</span><span class='line'>inoremap &lt;expr&gt;&lt;C-e&gt;  neocomplcache#cancel_popup()
-</span><span class='line'>
-</span><span class='line'>" For cursor moving in insert mode(Not recommended)
-</span><span class='line'>"inoremap &lt;expr&gt;&lt;Left&gt;  neocomplcache#close_popup() . "\&lt;Left&gt;"
-</span><span class='line'>"inoremap &lt;expr&gt;&lt;Right&gt; neocomplcache#close_popup() . "\&lt;Right&gt;"
-</span><span class='line'>"inoremap &lt;expr&gt;&lt;Up&gt;    neocomplcache#close_popup() . "\&lt;Up&gt;"
-</span><span class='line'>"inoremap &lt;expr&gt;&lt;Down&gt;  neocomplcache#close_popup() . "\&lt;Down&gt;"
-</span><span class='line'>" Or set this.
-</span><span class='line'>"let g:neocomplcache_enable_cursor_hold_i = 1
-</span><span class='line'>
-</span><span class='line'>"*** for neocomplcache ***
-</span><span class='line'>function InsertTabWrapper()
-</span><span class='line'>  if pumvisible()
-</span><span class='line'>    return "\&lt;c-n&gt;"
-</span><span class='line'>  endif
-</span><span class='line'>  let col = col('.') - 1
-</span><span class='line'>  if !col || getline('.')[col - 1] !~ '\k\|&lt;\|/'
-</span><span class='line'>    return "\&lt;tab&gt;"
-</span><span class='line'>  elseif exists('&omnifunc') && &omnifunc == ''
-</span><span class='line'>    return "\&lt;c-n&gt;"
-</span><span class='line'>  else
-</span><span class='line'>    return "\&lt;c-x&gt;\&lt;c-o&gt;"
-</span><span class='line'>  endif
-</span><span class='line'>endfunction
-</span><span class='line'>inoremap &lt;tab&gt; &lt;c-r&gt;=InsertTabWrapper()&lt;cr&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<hr />
-
-<h3>9-2. vim-ref設定</h3>
-
-<p>vimでw3mのPATHを通すため、以下の記述を.vimrcへ追加する</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>let $PATH = $PATH . ':/usr/bin/w3m'</span></code></pre></td></tr></table></div></figure>
-
-
-<p>vim上で「:echo $PATH」として、vimでw3mのPATHが通っているか確認する
-次にrubyリファレンスの取得と展開を行う</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd ~/Documents/Reference
-</span><span class='line'>$ wget http://doc.okkez.net/archives/201106/ruby-refm-1.9.2-dynamic-20110629.tar.gz
-</span><span class='line'>$ tar zxvf ruby-refm-1.9.2-dynamic-20110629.tar.gz
-</span><span class='line'>$ mv ruby-refm-1.9.2-dynamic-20110629 rubyrefm</span></code></pre></td></tr></table></div></figure>
-
-
-<p>refeファイル（コマンド）を作成する</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ vim /usr/local/bin/refe</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh
-</span><span class='line'>
-</span><span class='line'>exec ruby -Ke -I ~/Documents/Reference/rubyrefm/bitclust/lib ~/Documents/Reference/rubyrefm/bitclust/bin/refe.rb -d ~/Documents/Reference/rubyrefm/db-1_9_2 "$@"</span></code></pre></td></tr></table></div></figure>
-
-
-<p>refeファイル（コマンド）のパーミッションを変更する</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo chmod 755 /usr/local/bin/refe</span></code></pre></td></tr></table></div></figure>
-
-
-<p>以上でrubyのマニュアルを引きことが可能となる</p>
-
-<p>参考：<br/>
-<a href="http://d.hatena.ne.jp/holypp/20110703/1309711799  ">http://d.hatena.ne.jp/holypp/20110703/1309711799  </a>
-<a href="http://d.hatena.ne.jp/holypp/20110515/1305443997  ">http://d.hatena.ne.jp/holypp/20110515/1305443997  </a>
-<a href="http://d.hatena.ne.jp/diffshare/20111118/1321606902  ">http://d.hatena.ne.jp/diffshare/20111118/1321606902  </a>
-<a href="http://iiidevelop.blogspot.jp/2011/07/vimvundle.html  ">http://iiidevelop.blogspot.jp/2011/07/vimvundle.html  </a>
-<a href="http://slumbers99.blogspot.jp/2012/02/vim-vundle.html  ">http://slumbers99.blogspot.jp/2012/02/vim-vundle.html  </a>
-<a href="http://blog.blueblack.net/item_133">http://blog.blueblack.net/item_133</a> <br/>
-<a href="http://masterka.seesaa.net/article/161781923.html">http://masterka.seesaa.net/article/161781923.html</a></p>
-
-<hr />
-
-<h3>vim設定補追(2013/08/02)</h3>
-
-<p>上記プラグイン関連の設定以外の設定を以下に記す。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>"行番号設定
-</span><span class='line'>set number
-</span><span class='line'>
-</span><span class='line'>"タブ文字、行末など不可視文字を表示する
-</span><span class='line'>set list
-</span><span class='line'>
-</span><span class='line'>"インクリメンタルサーチON
-</span><span class='line'>set incsearch
-</span><span class='line'>
-</span><span class='line'>"閉じ括弧が入力されたとき、対応する括弧を表示する
-</span><span class='line'>set showmatch
-</span><span class='line'>
-</span><span class='line'>"検索時に大文字を含んでいたら大/小を区別
-</span><span class='line'>set smartcase
-</span><span class='line'>
-</span><span class='line'>"シフト移動幅
-</span><span class='line'>set shiftwidth=2
-</span><span class='line'>
-</span><span class='line'>"Insertモードで: &lt;Tab&gt; を挿入するのに、適切な数の空白を使う
-</span><span class='line'>set expandtab
-</span><span class='line'>
-</span><span class='line'>"新しい行を作ったときに高度な自動インデントを行う
-</span><span class='line'>set smartindent
-</span><span class='line'>
-</span><span class='line'>"行頭の余白内で Tab を打ち込むと、'shiftwidth' の数だけインデントする
-</span><span class='line'>set smarttab
-</span><span class='line'>
-</span><span class='line'>"ファイル内の &lt;Tab&gt; が対応する空白の数
-</span><span class='line'>"set tabstop=4
-</span><span class='line'>
-</span><span class='line'>"カーソルを行頭、行末で止まらないようにする
-</span><span class='line'>"set whichwrap=b,s,h,l,&lt;,&gt;,[,]
-</span><span class='line'>
-</span><span class='line'>"検索をファイルの先頭へループしない
-</span><span class='line'>set nowrapscan
-</span><span class='line'>
-</span><span class='line'>"色設定ON
-</span><span class='line'>syntax on
-</span><span class='line'>set background=dark
-</span><span class='line'>
-</span><span class='line'>"日本語全角記号を全角として扱うよう設定
-</span><span class='line'>set ambiwidth=double</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -1711,6 +1577,10 @@ n rails.vim : vimからrails用コマンド実行、これも不要か</p></li>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/12/31/haskell-development-environment/">haskell development environment</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/04/13/scalatra-introduction/">scalatra introduction</a>
       </li>
     
@@ -1726,15 +1596,11 @@ n rails.vim : vimからrails用コマンド実行、これも不要か</p></li>
         <a href="/blog/2013/12/07/bookmarks-2013-12/">bookmarks 2013/12</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/08/11/rails-optimization-points/">rails optimization points</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/act-as-paranoid' style='font-size: 103.52941176470588%'>act-as-paranoid(1)</a> <a href='/blog/categories/authentication' style='font-size: 110.58823529411765%'>authentication(3)</a> <a href='/blog/categories/bookmarks' style='font-size: 103.52941176470588%'>bookmarks(1)</a> <a href='/blog/categories/byebug' style='font-size: 103.52941176470588%'>byebug(1)</a> <a href='/blog/categories/cancan' style='font-size: 103.52941176470588%'>cancan(1)</a> <a href='/blog/categories/centos' style='font-size: 103.52941176470588%'>centos(1)</a> <a href='/blog/categories/chef-solo' style='font-size: 103.52941176470588%'>chef-solo(1)</a> <a href='/blog/categories/debian' style='font-size: 103.52941176470588%'>debian(1)</a> <a href='/blog/categories/devise' style='font-size: 103.52941176470588%'>devise(1)</a> <a href='/blog/categories/git' style='font-size: 110.58823529411765%'>git(3)</a> <a href='/blog/categories/heroku' style='font-size: 103.52941176470588%'>heroku(1)</a> <a href='/blog/categories/introduction' style='font-size: 145.88235294117646%'>introduction(13)</a> <a href='/blog/categories/knife-solo' style='font-size: 103.52941176470588%'>knife-solo(1)</a> <a href='/blog/categories/logrotate' style='font-size: 103.52941176470588%'>logrotate(1)</a> <a href='/blog/categories/memcached' style='font-size: 103.52941176470588%'>memcached(1)</a> <a href='/blog/categories/mysql' style='font-size: 103.52941176470588%'>mysql(1)</a> <a href='/blog/categories/nginx' style='font-size: 107.05882352941177%'>nginx(2)</a> <a href='/blog/categories/octopress' style='font-size: 103.52941176470588%'>octopress(1)</a> <a href='/blog/categories/play2' style='font-size: 103.52941176470588%'>play2(1)</a> <a href='/blog/categories/plugins' style='font-size: 131.76470588235293%'>plugins(9)</a> <a href='/blog/categories/postgresql' style='font-size: 107.05882352941177%'>postgresql(2)</a> <a href='/blog/categories/pry' style='font-size: 110.58823529411765%'>pry(3)</a> <a href='/blog/categories/rails' style='font-size: 160.0%'>rails(17)</a> <a href='/blog/categories/rspec' style='font-size: 103.52941176470588%'>rspec(1)</a> <a href='/blog/categories/ruby' style='font-size: 142.35294117647058%'>ruby(12)</a> <a href='/blog/categories/scala' style='font-size: 107.05882352941177%'>scala(2)</a> <a href='/blog/categories/scalatra' style='font-size: 103.52941176470588%'>scalatra(1)</a> <a href='/blog/categories/slim' style='font-size: 103.52941176470588%'>slim(1)</a> <a href='/blog/categories/sorcery' style='font-size: 103.52941176470588%'>sorcery(1)</a> <a href='/blog/categories/tmux' style='font-size: 103.52941176470588%'>tmux(1)</a> <a href='/blog/categories/tools' style='font-size: 103.52941176470588%'>tools(1)</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap(2)</a> <a href='/blog/categories/unicorn' style='font-size: 107.05882352941177%'>unicorn(2)</a> <a href='/blog/categories/vagrant' style='font-size: 103.52941176470588%'>vagrant(1)</a> <a href='/blog/categories/vim' style='font-size: 107.05882352941177%'>vim(2)</a> <a href='/blog/categories/virtualbox' style='font-size: 107.05882352941177%'>virtualbox(2)</a> <a href='/blog/categories/z-shell' style='font-size: 103.52941176470588%'>z-shell(1)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/act-as-paranoid' style='font-size: 103.52941176470588%'>act-as-paranoid(1)</a> <a href='/blog/categories/authentication' style='font-size: 110.58823529411765%'>authentication(3)</a> <a href='/blog/categories/bookmarks' style='font-size: 103.52941176470588%'>bookmarks(1)</a> <a href='/blog/categories/byebug' style='font-size: 103.52941176470588%'>byebug(1)</a> <a href='/blog/categories/cancan' style='font-size: 103.52941176470588%'>cancan(1)</a> <a href='/blog/categories/centos' style='font-size: 103.52941176470588%'>centos(1)</a> <a href='/blog/categories/chef-solo' style='font-size: 103.52941176470588%'>chef-solo(1)</a> <a href='/blog/categories/debian' style='font-size: 103.52941176470588%'>debian(1)</a> <a href='/blog/categories/devise' style='font-size: 103.52941176470588%'>devise(1)</a> <a href='/blog/categories/git' style='font-size: 110.58823529411765%'>git(3)</a> <a href='/blog/categories/haskell' style='font-size: 103.52941176470588%'>haskell(1)</a> <a href='/blog/categories/heroku' style='font-size: 103.52941176470588%'>heroku(1)</a> <a href='/blog/categories/introduction' style='font-size: 145.88235294117646%'>introduction(13)</a> <a href='/blog/categories/knife-solo' style='font-size: 103.52941176470588%'>knife-solo(1)</a> <a href='/blog/categories/logrotate' style='font-size: 103.52941176470588%'>logrotate(1)</a> <a href='/blog/categories/memcached' style='font-size: 103.52941176470588%'>memcached(1)</a> <a href='/blog/categories/mysql' style='font-size: 103.52941176470588%'>mysql(1)</a> <a href='/blog/categories/nginx' style='font-size: 107.05882352941177%'>nginx(2)</a> <a href='/blog/categories/octopress' style='font-size: 103.52941176470588%'>octopress(1)</a> <a href='/blog/categories/play2' style='font-size: 103.52941176470588%'>play2(1)</a> <a href='/blog/categories/plugins' style='font-size: 131.76470588235293%'>plugins(9)</a> <a href='/blog/categories/postgresql' style='font-size: 107.05882352941177%'>postgresql(2)</a> <a href='/blog/categories/pry' style='font-size: 110.58823529411765%'>pry(3)</a> <a href='/blog/categories/rails' style='font-size: 160.0%'>rails(17)</a> <a href='/blog/categories/rspec' style='font-size: 103.52941176470588%'>rspec(1)</a> <a href='/blog/categories/ruby' style='font-size: 142.35294117647058%'>ruby(12)</a> <a href='/blog/categories/scala' style='font-size: 107.05882352941177%'>scala(2)</a> <a href='/blog/categories/scalatra' style='font-size: 103.52941176470588%'>scalatra(1)</a> <a href='/blog/categories/slim' style='font-size: 103.52941176470588%'>slim(1)</a> <a href='/blog/categories/sorcery' style='font-size: 103.52941176470588%'>sorcery(1)</a> <a href='/blog/categories/tmux' style='font-size: 103.52941176470588%'>tmux(1)</a> <a href='/blog/categories/tools' style='font-size: 103.52941176470588%'>tools(1)</a> <a href='/blog/categories/twitter-bootstrap' style='font-size: 107.05882352941177%'>twitter-bootstrap(2)</a> <a href='/blog/categories/unicorn' style='font-size: 107.05882352941177%'>unicorn(2)</a> <a href='/blog/categories/vagrant' style='font-size: 103.52941176470588%'>vagrant(1)</a> <a href='/blog/categories/vim' style='font-size: 110.58823529411765%'>vim(3)</a> <a href='/blog/categories/virtualbox' style='font-size: 107.05882352941177%'>virtualbox(2)</a> <a href='/blog/categories/z-shell' style='font-size: 103.52941176470588%'>z-shell(1)</a> </span>
 </section>
 
 
